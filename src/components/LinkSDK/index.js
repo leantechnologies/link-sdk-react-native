@@ -12,6 +12,10 @@ const LinkSDK = forwardRef((props, ref) => {
 
     // useImperativeHandle allows the methods to be called outside of the component
     useImperativeHandle(ref, () => ({
+        // ALL of these functions **must** have the function passed in as a String
+        // ALL of these functions must set up postMessage function to enable callback
+
+        // initialise link flow
         link(customer_id) {
             setIsOpen(true)
             const call = `
@@ -31,6 +35,8 @@ const LinkSDK = forwardRef((props, ref) => {
 
             SDK.current.injectJavaScript(call)
         },
+
+        // initialise reconnect flow
         reconnect(reconnect_id) {
             setIsOpen(true)
             const call = `
@@ -49,6 +55,8 @@ const LinkSDK = forwardRef((props, ref) => {
 
             SDK.current.injectJavaScript(call)
         },
+
+        // initialise CPS flow
         createPaymentSource(customer_id) {
             setIsOpen(true)
             const call = `
@@ -67,6 +75,8 @@ const LinkSDK = forwardRef((props, ref) => {
 
             SDK.current.injectJavaScript(call)
         },
+
+        // initialise pay flow
         pay(payment_intent_id) {
             setIsOpen(true)
             const call = `
@@ -87,7 +97,7 @@ const LinkSDK = forwardRef((props, ref) => {
         }
     }));
 
-    // The callback fired internally by the SDK to propagate to the user supplied callback.
+    // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
     const internalCallback = (data) => {
         setTimeout(() => setIsOpen(false), 300)
         if (props.callback) {
