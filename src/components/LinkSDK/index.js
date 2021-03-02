@@ -1,6 +1,6 @@
 import React, { useRef, useImperativeHandle, useState, forwardRef } from 'react'
 import WebView from 'react-native-webview'
-import { Dimensions, View, Button, StyleSheet } from 'react-native'
+import { Dimensions, View, StyleSheet } from 'react-native'
 
 
 const LinkSDK = forwardRef((props, ref) => {

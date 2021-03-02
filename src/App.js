@@ -25,9 +25,7 @@ export default function App() {
       />
       <LinkSDK 
         ref={Lean}
-        method="link"
         appToken="4028f6df76b9e6350176ccff97520017"
-        customerId="6865354f-aadb-4cd6-a4c9-215498b06447"
         callback={(data) => console.log("DATA SENT TO CALLBACK:", data)}
         sandbox
       />
