@@ -21,4 +21,6 @@ target 'linksdkreactnative' do
   #  post_install do |installer|
   #    flipper_post_install(installer)
   #  end
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
 end
