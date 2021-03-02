@@ -1,0 +1,12 @@
+{
+  "name": "link-sdk-react-native",
+  "displayName": "link-sdk-react-native",
+  "expo": {
+    "name": "link-sdk-react-native",
+    "slug": "link-sdk-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
