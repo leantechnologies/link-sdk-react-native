@@ -16,82 +16,100 @@ const LinkSDK = forwardRef((props, ref) => {
         // ALL of these functions must set up postMessage function to enable callback
 
         // initialise link flow
-        link(customer_id) {
+        link(opts) {
             setIsOpen(true)
+            const keys = Object.keys(opts)
+
             const call = `
             function postResponse(status) {
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
-            Lean.link({
-            app_token: "${props.appToken}",
-            customer_id: "${customer_id}",
-            permissions: ["identity", "accounts", "transactions", "balance"], 
-            sandbox: ${props.sandbox},
-            callback: postResponse
-            })`
-
-            console.log(call)
+            try {
+                Lean.link({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ status: "ERROR", message: e })
+            }
+            `
 
             SDK.current.injectJavaScript(call)
         },
 
         // initialise reconnect flow
-        reconnect(reconnect_id) {
+        reconnect(opts) {
             setIsOpen(true)
+            const keys = Object.keys(opts)
+
             const call = `
             function postResponse(status) {
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
-            Lean.reconnect({
-                app_token: "${props.appToken}",
-                reconnect_id: "${reconnect_id}",
-                sandbox: ${props.sandbox},
-                callback: postResponse
-            })`
-
-            console.log(call)
+            try {
+                Lean.reconnect({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ status: "ERROR", message: e })
+            }
+            `
 
             SDK.current.injectJavaScript(call)
         },
 
         // initialise CPS flow
-        createPaymentSource(customer_id) {
+        createPaymentSource(opts) {
             setIsOpen(true)
+            const keys = Object.keys(opts)
+
             const call = `
             function postResponse(status) {
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
-            Lean.createPaymentSource({
-                app_token: "${props.appToken}",
-                customer_id: "${customer_id}",
-                sandbox: ${props.sandbox},
-                callback: postResponse
-            })`
-
-            console.log(call)
-
+            try {
+                Lean.createPaymentSource({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ status: "ERROR", message: e })
+            }
+            `
             SDK.current.injectJavaScript(call)
         },
 
         // initialise pay flow
-        pay(payment_intent_id) {
+        pay(opts) {
             setIsOpen(true)
+            const keys = Object.keys(opts)
+
             const call = `
             function postResponse(status) {
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
-            Lean.pay({
-                app_token: "${props.appToken}",
-                payment_intent_id: "${payment_intent_id}",
-                sandbox: ${props.sandbox},
-                callback: postResponse
-            })`
-
-            console.log(call)
+            try {
+                Lean.pay({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ status: "ERROR", message: e })
+            }
+            `
 
             SDK.current.injectJavaScript(call)
         }
@@ -116,7 +134,7 @@ const LinkSDK = forwardRef((props, ref) => {
                 ref={SDK}
                 style={styles.WebView}
                 originWhitelist={['*']}
-                source={{ html: require('./base.js')() }}
+                source={{ baseUrl: "https://leantech.me", html: require('./base.js')(props.version) }}
                 javaScriptEnabledAndroid={true}
                 onMessage={(event)=>{
                     internalCallback(event.nativeEvent.data);
@@ -133,18 +151,26 @@ const styles = StyleSheet.create({
         left: 0,
         top: 0,
         width: '100%',
-        height: '100%'
+        height: '100%',
+        zIndex: 2
     },
     containerClosed: {
         display: 'none',
-        position: 'absolute',
+        position: 'relative',
         left: 0,
         top: 0,
         width: '100%',
-        height: '100%'
+        height: '100%',
+        zIndex: 2
     },
     WebView: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',  
       backgroundColor: 'transparent',
+      zIndex: 100
     },
   });
 
