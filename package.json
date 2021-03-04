@@ -1,5 +1,5 @@
 {
-  "main": "index.js",
+  "main": "src/LinkSDK/index.js",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -7,7 +7,7 @@
     "start": "react-native start",
     "test": "jest"
   },
-  "dependencies": {
+  "peerDependencies": {
     "expo": "~40.0.0",
     "expo-splash-screen": "~0.8.0",
     "expo-status-bar": "~1.0.3",
@@ -19,7 +19,9 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-screens": "~2.15.0",
     "react-native-unimodules": "~0.12.0",
-    "react-native-web": "~0.13.12",
+    "react-native-web": "~0.13.12"
+  },
+  "dependencies": {
     "react-native-webview": "^11.2.3"
   },
   "devDependencies": {
@@ -31,5 +33,31 @@
   "jest": {
     "preset": "react-native"
   },
-  "private": true
+  "private": true,
+  "name": "lean-sdk-react-native",
+  "version": "1.0.0",
+  "description": "A React Native wrapper for Lean's LinkSDK",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leantechnologies/link-sdk-react-native.git"
+  },
+  "keywords": [
+    "fintech",
+    "finance",
+    "MENA",
+    "Saudi",
+    "Arabia",
+    "API",
+    "banking",
+    "Open",
+    "Banking",
+    "UAE",
+    "Dubai"
+  ],
+  "author": "a-tomlinson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leantechnologies/link-sdk-react-native/issues"
+  },
+  "homepage": "https://github.com/leantechnologies/link-sdk-react-native#readme"
 }
