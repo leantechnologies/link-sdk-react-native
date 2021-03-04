@@ -13,7 +13,7 @@ export default function App() {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() => Lean.current.link({
-          customer_id: "6865354f-aadb-4cd6-a4c9-215498b06447",
+          customer_id: "CUSTOMER_ID",
           permissions: ["identity", "accounts", "balance", "transactions"],
           bank_identifier: "LEAN_MB1",
         },
@@ -25,7 +25,7 @@ export default function App() {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() => Lean.current.reconnect({
-          reconnect_id: "d878280f-a3a0-4fd1-98f3-9335b32e97fe"
+          reconnect_id: "RECONNECT_ID"
         },
         )}
       >
@@ -35,7 +35,7 @@ export default function App() {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() => Lean.current.createPaymentSource({ 
-          customer_id: "6865354f-aadb-4cd6-a4c9-215498b06447" 
+          customer_id: "CUSTOMER_ID" 
         })}
       >
         <Text style={styles.cta_text}>Create Payment Source</Text>
@@ -44,7 +44,7 @@ export default function App() {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() => Lean.current.pay({ 
-          payment_intent_id: "6865354f-aadb-4cd6-a4c9-215498b06447" 
+          payment_intent_id: "PAYMENT_INTENT_ID" 
         })}
       >
         <Text style={styles.cta_text}>Pay</Text>
@@ -53,7 +53,7 @@ export default function App() {
       {/* The actual component that will need to be present for end users */}
       <LinkSDK 
         ref={Lean}
-        appToken="4028f6df76b9e6350176ccff97520017"
+        appToken="YOUR_APP_TOKEN"
         callback={(data) => console.log("DATA SENT TO CALLBACK:", data)}
         version="1.0.0"
         sandbox
