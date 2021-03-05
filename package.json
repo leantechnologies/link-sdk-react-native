@@ -34,7 +34,7 @@
     "preset": "react-native"
   },
   "private": true,
-  "name": "lean-sdk-react-native",
+  "name": "lean-react-native",
   "version": "1.0.0",
   "description": "A React Native wrapper for Lean's LinkSDK",
   "repository": {
