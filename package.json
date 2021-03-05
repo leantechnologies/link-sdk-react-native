@@ -36,7 +36,7 @@
   "jest": {
     "preset": "react-native"
   },
-  "private": true,
+  "private": false,
   "name": "lean-react-native",
   "version": "1.0.0",
   "description": "A React Native wrapper for Lean's LinkSDK",
