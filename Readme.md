@@ -2,6 +2,25 @@
 
 The React Native Wrapper for LinkSDK allows you to do all of the functions that can be achieved with the LinkSDK on web, from linking bank accounts to initiating payments.
 
+## Installation
+
+Install `lean-sdk-react-native`
+
+```
+npm install --save lean-sdk-react-native
+```
+
+If you don't already have `react-native-webview` added to your project you should also install this
+
+```
+npm install --save react-native-webview
+```
+
+Go to your ios folder and run
+```
+pod install
+```
+
 ## Usage
 The Wrapper uses a `ref` to access internal functions.
 
