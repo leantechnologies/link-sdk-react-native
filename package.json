@@ -1,5 +1,5 @@
 {
-  "main": "src/LinkSDK/index.js",
+  "main": "src/components/LinkSDK/index.js",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
