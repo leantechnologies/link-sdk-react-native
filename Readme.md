@@ -24,7 +24,7 @@ const App = () => {
             <LinkSDK
                 ref={Lean}
                 appToken="MY_APP_TOKEN"
-                version="1.0.0"
+                version="{version_number}"
                 sandbox
             />
         </View>
