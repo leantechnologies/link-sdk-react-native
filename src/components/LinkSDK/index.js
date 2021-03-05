@@ -33,7 +33,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: e })
+                postResponse({ status: "ERROR", message: "Lean not initialized" })
             }
             `
 
@@ -58,7 +58,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: e })
+                postResponse({ status: "ERROR", message: "Lean not initialized" })
             }
             `
 
@@ -83,7 +83,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: e })
+                postResponse({ status: "ERROR", message: "Lean not initialized" })
             }
             `
             SDK.current.injectJavaScript(call)
@@ -107,7 +107,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: e })
+                postResponse({ status: "ERROR", message: "Lean not initialized" })
             }
             `
 
