@@ -34,6 +34,8 @@ const App = () => {
 export default App
 ```
 
+---
+
 ## API Reference
 
 | Prop     | Required | Description                                                                                            |
@@ -63,8 +65,10 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 | customer_id      | True     | The Customer you want to connect                                                                       |
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
 
+---
 
 ### Reconnect
+
 ```
     Lean.current.reconnect({ 
         reconnect_id: "RECONNECT_ID"
@@ -75,7 +79,10 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 |------------------|----------|--------------------------------------------------------------------------------------------------------|
 | reconnect_id     | True     | The reconnect_id returned from the Lean API                                                            |
 
+---
+
 ### createPaymentSource
+
 ```
     Lean.current.createPaymentSource({ 
         customer_id: "CUSTOMER_ID",
@@ -88,8 +95,10 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 | customer_id      | True     | The Customer you want to create a payment source for                                                   |
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
 
+---
 
 ### pay
+
 ```
     Lean.current.pay({ 
         payment_intent_id: "PAYMENT_INTENT_ID",
