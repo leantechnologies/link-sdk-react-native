@@ -21,6 +21,7 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+.buckconfig
 
 # Specific Files
 app.json
@@ -28,6 +29,13 @@ babel.config.js
 index.js
 metro.config.js
 src/App.js
+.watchmanconfig
+.prettierrc.js
+.eslintrc.js
+.flowconfig
+.gitattributes
+.gitignore
+index.js
 
 
 

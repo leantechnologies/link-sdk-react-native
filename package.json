@@ -1,44 +1,7 @@
 {
   "main": "src/components/LinkSDK/index.js",
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "start": "react-native start",
-    "test": "jest"
-  },
-  "peerDependencies": {
-    "react": "^16.13.1",
-    "react-native": "^0.63.4",
-    "react-native-webview": "^11.2.3"
-  },
-  "dependencies": {
-    "expo": "^40.0.1"
-  },
-  "devDependencies": {
-    "@babel/core": "~7.9.0",
-    "babel-jest": "~25.2.6",
-    "expo": "~40.0.0",
-    "expo-splash-screen": "~0.8.0",
-    "expo-status-bar": "~1.0.3",
-    "expo-updates": "~0.4.0",
-    "jest": "~25.2.6",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "~0.63.4",
-    "react-native-gesture-handler": "~1.8.0",
-    "react-native-reanimated": "~1.13.0",
-    "react-native-screens": "~2.15.0",
-    "react-native-unimodules": "~0.12.0",
-    "react-native-web": "^0.15.0",
-    "react-test-renderer": "~16.13.1"
-  },
-  "jest": {
-    "preset": "react-native"
-  },
-  "private": false,
-  "name": "lean-sdk-react-native",
-  "version": "1.0.1",
+  "name": "lean-react-native",
+  "version": "0.0.1",
   "description": "A React Native wrapper for Lean's LinkSDK",
   "repository": {
     "type": "git",
@@ -62,5 +25,36 @@
   "bugs": {
     "url": "https://github.com/leantechnologies/link-sdk-react-native/issues"
   },
-  "homepage": "https://github.com/leantechnologies/link-sdk-react-native#readme"
+  "homepage": "https://github.com/leantechnologies/link-sdk-react-native#readme",
+  "private": false,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-native-webview": "^11.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.5.1",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-test-renderer": "16.13.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-native": "^0.63.4",
+    "react-native-webview": "^11.2.3"
+  }
 }

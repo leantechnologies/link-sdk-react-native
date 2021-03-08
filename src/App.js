@@ -1,12 +1,25 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+
 import React, { useRef } from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import LinkSDK from './components/LinkSDK'
 
-export default function App() {
+const App = () => {
   // Create a ref so we can use the SDK component
   const Lean = useRef(null)
 
-  // Simple view to demo functionality
+   // Simple view to demo functionality
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 24, marginBottom: 24}}>Lean React Native Demo</Text>
@@ -60,7 +73,7 @@ export default function App() {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -81,3 +94,5 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+export default App;
