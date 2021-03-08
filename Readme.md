@@ -4,10 +4,10 @@ The React Native Wrapper for LinkSDK allows you to do all of the functions that 
 
 ## Installation
 
-Install `lean-sdk-react-native`
+Install `lean-react-native`
 
 ```
-npm install --save lean-sdk-react-native
+npm install --save lean-react-native
 ```
 
 If you don't already have `react-native-webview` added to your project you should also install this
