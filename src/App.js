@@ -6,12 +6,13 @@
  * @flow strict-local
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import LinkSDK from './components/LinkSDK'
 
@@ -19,16 +20,30 @@ const App = () => {
   // Create a ref so we can use the SDK component
   const Lean = useRef(null)
 
+  // variables for text entry
+  const [ appToken, updateAppToken ] = useState(null) 
+  const [ customerID, updateCustomerID ] = useState(null) 
+
    // Simple view to demo functionality
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 24, marginBottom: 24}}>Lean React Native Demo</Text>
+      <TextInput
+        placeholder="App Token"
+        value={appToken}
+        onChangeText={updateAppToken}
+      />
+      <TextInput
+        placeholder="Customer ID"
+        value={customerID}
+        onChangeText={updateCustomerID}
+      />
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() => Lean.current.link({
-          customer_id: "CUSTOMER_ID",
+          customer_id: customerID,
           permissions: ["identity", "accounts", "balance", "transactions"],
-          bank_identifier: "LEAN_MB1",
+          // bank_identifier: "LEAN_MB1",
         },
         )}
       >
@@ -66,10 +81,10 @@ const App = () => {
       {/* The actual component that will need to be present for end users */}
       <LinkSDK 
         ref={Lean}
-        appToken="YOUR_APP_TOKEN"
+        appToken={appToken}
         callback={(data) => console.log("DATA SENT TO CALLBACK:", data)}
-        version="1.0.0"
-        sandbox
+        // version="1.0.0"
+        // sandbox
       />
     </View>
   );
