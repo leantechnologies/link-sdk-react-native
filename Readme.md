@@ -129,3 +129,21 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 |---------------------|----------|----------------------------------------------------------------------------------------------------------------|
 | payment_intent_id   | True     | The Customer you want to create a payment source for                                                           |
 | account_id          | False    | Allows you to use a specific account for a customer payment source (available at payment_source.account[n].id) |
+
+## Callbacks
+
+By providing a callback into the component, the LinkSDK will report back with an object in the following format:
+
+```
+{
+    method: "LINK",
+    status: "SUCCESS",
+    message: "Some message about the state of the application
+}
+```
+
+| Attribute           | Type    | Description                                                                                                    |
+|---------------------|---------|----------------------------------------------------------------------------------------------------------------|
+| method              | ENUM    | The flow that initatied the call. `LINK`, `RECONNECT`, `CREATE_PAYMENT_SOURCE` and `PAY`                       |
+| status              | ENUM    | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong                       |
+| message             | string  | Further details on the status                                                                                  |
