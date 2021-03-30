@@ -22,6 +22,7 @@ const LinkSDK = forwardRef((props, ref) => {
 
             const call = `
             function postResponse(status) {
+                status.method = "LINK"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
@@ -33,7 +34,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: "Lean not initialized" })
+                postResponse({ method: "LINK", status: "ERROR", message: "Lean not initialized" })
             }
             `
 
@@ -47,6 +48,7 @@ const LinkSDK = forwardRef((props, ref) => {
 
             const call = `
             function postResponse(status) {
+                status.method = "RECONNECT"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
@@ -58,7 +60,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: "Lean not initialized" })
+                postResponse({ method: "RECONNECT", status: "ERROR", message: "Lean not initialized" })
             }
             `
 
@@ -72,6 +74,7 @@ const LinkSDK = forwardRef((props, ref) => {
 
             const call = `
             function postResponse(status) {
+                status.method = "CREATE_PAYMENT_SOURCE"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
@@ -83,7 +86,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: "Lean not initialized" })
+                postResponse({ method: "CREATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
             }
             `
             SDK.current.injectJavaScript(call)
@@ -96,6 +99,7 @@ const LinkSDK = forwardRef((props, ref) => {
 
             const call = `
             function postResponse(status) {
+                status.method = "PAY"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
             }
 
@@ -107,7 +111,7 @@ const LinkSDK = forwardRef((props, ref) => {
                     callback: postResponse
                 })
             } catch (e) {
-                postResponse({ status: "ERROR", message: "Lean not initialized" })
+                postResponse({ method: "PAY", status: "ERROR", message: "Lean not initialized" })
             }
             `
 
@@ -121,7 +125,6 @@ const LinkSDK = forwardRef((props, ref) => {
         if (props.callback) {
             props.callback(JSON.parse(data))
         }
-        console.log(JSON.parse(data))
     }
 
     return (
