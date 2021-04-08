@@ -1,7 +1,7 @@
 {
   "main": "src/components/LinkSDK/index.js",
   "name": "lean-react-native",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A React Native wrapper for Lean's LinkSDK",
   "repository": {
     "type": "git",
@@ -47,14 +47,10 @@
     "eslint": "^6.5.1",
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.13.1",
+    "react-native-webview": "^11.2.3"
   },
   "jest": {
     "preset": "react-native"
-  },
-  "dependencies": {
-    "react": "^16.13.1",
-    "react-native": "^0.63.4",
-    "react-native-webview": "^11.2.3"
   }
 }
