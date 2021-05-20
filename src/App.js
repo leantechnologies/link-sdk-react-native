@@ -68,15 +68,6 @@ const App = () => {
       >
         <Text style={styles.cta_text}>Create Payment Source</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() => Lean.current.pay({ 
-          payment_intent_id: "PAYMENT_INTENT_ID" 
-        })}
-      >
-        <Text style={styles.cta_text}>Pay</Text>
-      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.cta_container}
@@ -84,6 +75,15 @@ const App = () => {
             customer_id: "CUSTOMER_ID",
             payment_source_id: "PAYMENT_SOURCE_ID",
             payment_destination_id: "PAYMENT_DESTINATION_ID"
+        })}
+      >
+        <Text style={styles.cta_text}>Update Payment Source</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={styles.cta_container}
+        onPress={() => Lean.current.pay({ 
+          payment_intent_id: "PAYMENT_INTENT_ID" 
         })}
       >
         <Text style={styles.cta_text}>Pay</Text>
