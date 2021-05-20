@@ -116,6 +116,24 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 
 ---
 
+### updatePaymentSource
+
+```
+    Lean.current.updatePaymentSource({ 
+        customer_id: "CUSTOMER_ID",
+        payment_source_id: "PAYMENT_SOURCE_ID",
+        payment_destination_id: "PAYMENT_DESTINATION_ID"
+    })
+```
+
+| Parameter              | Required | Description                                                                                            |
+|------------------------|----------|--------------------------------------------------------------------------------------------------------|
+| customer_id            | True     | The Customer you want to create a payment source for                                                   |
+| payment_source_id      | True     | The Payment Source you want to update                                                                  |
+| payment_destination_id | True     | The Payment Destination you want to add                                                                |
+
+---
+
 ### pay
 
 ```

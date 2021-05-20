@@ -78,6 +78,17 @@ const App = () => {
         <Text style={styles.cta_text}>Pay</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={styles.cta_container}
+        onPress={() => Lean.current.updatePaymentSource({ 
+            customer_id: "CUSTOMER_ID",
+            payment_source_id: "PAYMENT_SOURCE_ID",
+            payment_destination_id: "PAYMENT_DESTINATION_ID"
+        })}
+      >
+        <Text style={styles.cta_text}>Pay</Text>
+      </TouchableOpacity>
+
       {/* The actual component that will need to be present for end users */}
       <LinkSDK 
         ref={Lean}

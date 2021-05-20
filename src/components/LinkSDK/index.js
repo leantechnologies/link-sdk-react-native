@@ -116,6 +116,32 @@ const LinkSDK = forwardRef((props, ref) => {
             `
 
             SDK.current.injectJavaScript(call)
+        },
+
+        // updatePaymentSource flow
+        updatePaymentSource(opts) {
+            setIsOpen(true)
+            const keys = Object.keys(opts)
+
+            const call = `
+            function postResponse(status) {
+                status.method = "UPDATE_PAYMENT_SOURCE"
+                window.ReactNativeWebView.postMessage(JSON.stringify(status))
+            }
+
+            try {
+                Lean.updatePaymentSource({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ method: "UPDATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
+            }
+            `
+
+            SDK.current.injectJavaScript(call)
         }
     }));
 
