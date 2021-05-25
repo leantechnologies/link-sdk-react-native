@@ -165,3 +165,19 @@ By providing a callback into the component, the LinkSDK will report back with an
 | method              | ENUM    | The flow that initatied the call. `LINK`, `RECONNECT`, `CREATE_PAYMENT_SOURCE` and `PAY`                       |
 | status              | ENUM    | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong                       |
 | message             | string  | Further details on the status                                                                                  |
+
+## Troubleshooting
+
+### Webview crashes on Android
+
+You can disable hardware acceleration on the webview by passing android specific props into the webview:
+
+```
+<LinkSDK
+    webViewProps={{
+        androidHardwareAccelerationDisabled: true,
+    }}
+    appToken: "YOUR_APP_TOKEN"
+    sandbox: false
+>
+```
