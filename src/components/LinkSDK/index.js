@@ -160,6 +160,7 @@ const LinkSDK = forwardRef((props, ref) => {
             width={Dimensions.get('window').width}
         >
             <WebView
+                {...props.webViewProps}
                 ref={SDK}
                 style={styles.WebView}
                 originWhitelist={['*']}
@@ -172,6 +173,10 @@ const LinkSDK = forwardRef((props, ref) => {
         </View>
     )
 })
+
+LinkSDK.defaultProps = {
+  webViewProps: {}
+}
 
 const styles = StyleSheet.create({
     container: {
