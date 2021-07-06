@@ -1,6 +1,6 @@
 import React, { useRef, useImperativeHandle, useState, forwardRef } from 'react'
-import WebView from 'react-native-webview'
-import { Dimensions, View, StyleSheet } from 'react-native'
+import { WebView } from 'react-native-webview'
+import { Dimensions, View, StyleSheet, Linking } from 'react-native'
 
 
 const LinkSDK = forwardRef((props, ref) => {
@@ -165,6 +165,14 @@ const LinkSDK = forwardRef((props, ref) => {
                 style={styles.WebView}
                 originWhitelist={['*']}
                 source={{ baseUrl: "https://leantech.me", html: require('./base.js')(props.version) }}
+                onShouldStartLoadWithRequest={event => {
+                    if (event.url !== "https://leantech.me/") {
+                        console.log("hello --------------", event.url)
+                        Linking.openURL(event.url)
+                        return false
+                    }
+                    return true
+                }}
                 javaScriptEnabledAndroid={true}
                 onMessage={(event)=>{
                     internalCallback(event.nativeEvent.data);
