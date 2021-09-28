@@ -47,7 +47,19 @@ const App = () => {
         },
         )}
       >
-        <Text style={styles.cta_text}>Link Account</Text>
+        <Text style={styles.cta_text}>Link</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.cta_container}
+        onPress={() => Lean.current.connect({
+          customer_id: customerID,
+          permissions: ["identity", "accounts", "balance", "transactions", "payments"],
+          // bank_identifier: "LEAN_MB1",
+        },
+        )}
+      >
+        <Text style={styles.cta_text}>Connect</Text>
       </TouchableOpacity>
       
       <TouchableOpacity
