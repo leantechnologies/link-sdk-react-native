@@ -70,11 +70,36 @@ export default App
 
 The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `pay`.
 
-### link
+### connect
+
+Use connect when you want to create an `Entity` and a `Payment Source` for use with the Data and Payments APIs.
 
 ```
-    Lean.current.link({ 
+    Lean.current.link({
         customer_id: "YOUR_CUSTOMER_ID",
+        permissions: ["identity","accounts","balance","transactions", "payments"],
+        bank_identifier: "LEAN_MB1",
+        payment_destination_id: "PAYMENT_DEST_ID"
+    })
+```
+
+| Parameter        | Required | Description                                                                                            |
+|------------------|----------|--------------------------------------------------------------------------------------------------------|
+| customer_id      | True     | The Customer you want to connect                                                                       |
+| bank_identifier  | False    | Skips the bank selection screen                                                                        |
+| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions` or `payments`         |
+| payment_destination_id | False | The payment destination you want to create a beneficiary with |
+
+---
+
+### link
+
+Use link when you want to create an `Entity` for use with the Data API.
+
+```
+    Lean.current.link({
+        customer_id: "YOUR_CUSTOMER_ID",
+        permissions: ["identity","accounts","balance","transactions"],
         bank_identifier: "LEAN_MB1"
     })
 ```
@@ -83,13 +108,16 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 |------------------|----------|--------------------------------------------------------------------------------------------------------|
 | customer_id      | True     | The Customer you want to connect                                                                       |
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
+| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`                       |
 
 ---
 
 ### Reconnect
 
+Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
+
 ```
-    Lean.current.reconnect({ 
+    Lean.current.reconnect({
         reconnect_id: "RECONNECT_ID"
     })
 ```
@@ -101,6 +129,8 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 ---
 
 ### createPaymentSource
+
+Use createPaymentSource to create a `Payment Source` for use the Payments API.
 
 ```
     Lean.current.createPaymentSource({ 
@@ -117,6 +147,8 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 ---
 
 ### updatePaymentSource
+
+Use updatePaymentSource to create a new beneficiary within an existing `Payment Source`.
 
 ```
     Lean.current.updatePaymentSource({ 
@@ -136,6 +168,8 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 
 ### pay
 
+Use pay to initiate a payment against a `Payment Intent`.
+
 ```
     Lean.current.pay({ 
         payment_intent_id: "PAYMENT_INTENT_ID",
@@ -148,6 +182,8 @@ The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `
 | payment_intent_id   | True     | The Customer you want to create a payment source for                                                           |
 | account_id          | False    | Allows you to use a specific account for a customer payment source (available at payment_source.account[n].id) |
 
+---
+
 ## Callbacks
 
 By providing a callback into the component, the LinkSDK will report back with an object in the following format:
@@ -156,7 +192,13 @@ By providing a callback into the component, the LinkSDK will report back with an
 {
     method: "LINK",
     status: "SUCCESS",
-    message: "Some message about the state of the application
+    message: "Some message about the state of the application",
+    exit_point: "SUCCESS",
+    secondary_status: "SUCCESS",
+    bank: {
+        bank_identifier: "DIB_UAE",
+        is_supported: true
+    }
 }
 ```
 
@@ -165,6 +207,10 @@ By providing a callback into the component, the LinkSDK will report back with an
 | method              | ENUM    | The flow that initatied the call. `LINK`, `RECONNECT`, `CREATE_PAYMENT_SOURCE` and `PAY`                       |
 | status              | ENUM    | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong                       |
 | message             | string  | Further details on the status                                                                                  |
+| exit_point | String | The screen the user was on when they closed the SDK |
+| secondary_status | String | Useful when `ERROR` is the status - correlates to the ERROR reason if known. |
+| bank.bank_identifer | String | The Lean identifier for the bank the user was trying to connect to |
+| bank.is_supported | Bool | Whether the bank is supported by Lean |
 
 ## Troubleshooting
 

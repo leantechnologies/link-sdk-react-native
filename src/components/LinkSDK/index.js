@@ -15,6 +15,32 @@ const LinkSDK = forwardRef((props, ref) => {
         // ALL of these functions **must** have the function passed in as a String
         // ALL of these functions must set up postMessage function to enable callback
 
+        // initialise connect flow
+        connect(opts) {
+            setIsOpen(true)
+            const keys = Object.keys(opts)
+
+            const call = `
+            function postResponse(status) {
+                status.method = "CONNECT"
+                window.ReactNativeWebView.postMessage(JSON.stringify(status))
+            }
+
+            try {
+                Lean.connect({
+                    ${keys.map((key) => `${key}: ${JSON.stringify(opts[key])}`)},
+                    app_token: "${props.appToken}",
+                    sandbox: ${props.sandbox},
+                    callback: postResponse
+                })
+            } catch (e) {
+                postResponse({ method: "CONNECT", status: "ERROR", message: "Lean not initialized" })
+            }
+            `
+
+            SDK.current.injectJavaScript(call)
+        },
+
         // initialise link flow
         link(opts) {
             setIsOpen(true)
