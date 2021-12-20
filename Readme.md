@@ -230,10 +230,8 @@ You can disable hardware acceleration on the webview by passing android specific
 
 ### JDK version issues on Android
 
-You may get gradle errors if you have a different JDK on the development system
-compared to the local JDK delivered with the Android SDK.  The solution is
-to set set JAVA_HOME in gradlew or gradlew.bat to point to the
-SDK JDK path.  On Windows:
+You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set set JAVA_HOME in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
+
 ```
 SET JAVA_HOME="\Program Files\Android\Android Studio\jre"
 ``` 
