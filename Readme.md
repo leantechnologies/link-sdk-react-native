@@ -68,7 +68,27 @@ export default App
 
 ## Methods
 
-The LinkSDK supports 4 methods. `link`, `reconnect`, `createPaymentSource` and `pay`.
+The LinkSDK supports 6 methods. `link`, `connect`, `reconnect`, `createPaymentSource`, `updatePaymentSource`, and `pay`.
+
+### link
+
+Use link when you want to create an `Entity` for use with the Data API.
+
+```
+    Lean.current.link({
+        customer_id: "YOUR_CUSTOMER_ID",
+        permissions: ["identity","accounts","balance","transactions"],
+        bank_identifier: "LEAN_MB1"
+    })
+```
+
+| Parameter        | Required | Description                                                                                            |
+|------------------|----------|--------------------------------------------------------------------------------------------------------|
+| customer_id      | True     | The Customer you want to connect                                                                       |
+| bank_identifier  | False    | Skips the bank selection screen                                                                        |
+| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`                       |
+
+---
 
 ### connect
 
@@ -92,27 +112,7 @@ Use connect when you want to create an `Entity` and a `Payment Source` for use w
 
 ---
 
-### link
-
-Use link when you want to create an `Entity` for use with the Data API.
-
-```
-    Lean.current.link({
-        customer_id: "YOUR_CUSTOMER_ID",
-        permissions: ["identity","accounts","balance","transactions"],
-        bank_identifier: "LEAN_MB1"
-    })
-```
-
-| Parameter        | Required | Description                                                                                            |
-|------------------|----------|--------------------------------------------------------------------------------------------------------|
-| customer_id      | True     | The Customer you want to connect                                                                       |
-| bank_identifier  | False    | Skips the bank selection screen                                                                        |
-| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`                       |
-
----
-
-### Reconnect
+### reconnect
 
 Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
 
