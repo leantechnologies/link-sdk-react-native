@@ -95,7 +95,7 @@ Use link when you want to create an `Entity` for use with the Data API.
 Use connect when you want to create an `Entity` and a `Payment Source` for use with the Data and Payments APIs.
 
 ```
-    Lean.current.link({
+    Lean.current.connect({
         customer_id: "YOUR_CUSTOMER_ID",
         permissions: ["identity","accounts","balance","transactions", "payments"],
         bank_identifier: "LEAN_MB1",
