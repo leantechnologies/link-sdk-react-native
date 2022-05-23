@@ -64,6 +64,8 @@ export default App
 | callback | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed) |
 | version  | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                    |
 | sandbox  | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                         |
+| containerStyle  | False    | Custom styles passed to the opened container                                                    |
+| containerClosedStyle  | False    | Custom styles passed to the closed container                                              |
 
 
 ## Methods

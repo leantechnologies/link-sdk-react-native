@@ -179,9 +179,12 @@ const LinkSDK = forwardRef((props, ref) => {
         }
     }
 
+    const openedContainerStyle = [styles.container, props.containerStyle];
+    const closedContainerStyle = [styles.containerClosed, props.containerClosedStyle];
+
     return (
         <View
-            style={isOpen ? styles.container : styles.containerClosed}
+            style={isOpen ? openedContainerStyle : closedContainerStyle}
             height={Dimensions.get('window').height}
             width={Dimensions.get('window').width}
         >
@@ -209,7 +212,9 @@ const LinkSDK = forwardRef((props, ref) => {
 })
 
 LinkSDK.defaultProps = {
-  webViewProps: {}
+  webViewProps: {},
+  containerStyle: {},
+  containerClosedStyle: {}
 }
 
 const styles = StyleSheet.create({
