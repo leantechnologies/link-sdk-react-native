@@ -116,6 +116,7 @@ const App = () => {
         appToken={appToken}
         callback={(data) => console.log('DATA SENT TO CALLBACK:', data)}
         // version="1.0.0"
+        // country="ArabEmirates"
         // sandbox
       />
     </View>

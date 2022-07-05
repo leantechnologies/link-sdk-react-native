@@ -202,7 +202,10 @@ const LinkSDK = forwardRef((props, ref) => {
         originWhitelist={['*']}
         source={{
           baseUrl: 'https://leantech.me',
-          html: require('./base.js')(props.version),
+          html: require('./base.js')({
+            version: props.version,
+            country: props.country,
+          }),
         }}
         onShouldStartLoadWithRequest={(event) => {
           if (event.url !== 'https://leantech.me/') {
