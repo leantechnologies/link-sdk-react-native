@@ -44,6 +44,7 @@ const App = () => {
                 ref={Lean}
                 appToken="MY_APP_TOKEN"
                 version="{version_number}"
+                country="{country_of_operation}"
                 sandbox
             />
         </View>
@@ -57,13 +58,14 @@ export default App
 
 ## API Reference
 
-| Prop     | Required | Description                                                                                            |
-|----------|----------|--------------------------------------------------------------------------------------------------------|
-| ref      | True     | The reference for the LinkSDK component                                                                |
-| appToken | True     | The App Token can be retrieved from your Lean App Dashboard                                            |
-| callback | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed) |
-| version  | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                    |
-| sandbox  | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                         |
+| Prop     | Required | Description                                                                                                    |
+|----------|----------|----------------------------------------------------------------------------------------------------------------|
+| ref      | True     | The reference for the LinkSDK component                                                                        |
+| appToken | True     | The App Token can be retrieved from your Lean App Dashboard                                                    |
+| callback | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed)         |
+| version  | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                            |
+| country  | False    | Which country you are operating in (defaults to `ArabEmirates`) (options are `SaudiArabia` and `ArabEmirates`) |
+| sandbox  | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                                 |
 
 
 ## Methods
