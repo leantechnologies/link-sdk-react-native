@@ -32,8 +32,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    success_redirect_url: "${props.successRedirectUrl}",
-                    fail_redirect_url: "${props.failRedirectUrl}",
+                    success_redirect_url: "${props.successRedirectUrl || ''}",
+                    fail_redirect_url: "${props.failRedirectUrl || ''}",
                     callback: postResponse
                 })
             } catch (e) {
