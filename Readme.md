@@ -58,14 +58,16 @@ export default App
 
 ## API Reference
 
-| Prop     | Required | Description                                                                                                    |
-|----------|----------|----------------------------------------------------------------------------------------------------------------|
-| ref      | True     | The reference for the LinkSDK component                                                                        |
-| appToken | True     | The App Token can be retrieved from your Lean App Dashboard                                                    |
-| callback | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed)         |
-| version  | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                            |
-| country  | False    | Which country you are operating in (defaults to `ArabEmirates`) (options are `SaudiArabia` and `ArabEmirates`) |
-| sandbox  | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                                 |
+| Prop               | Required | Description                                                                                                    |
+|--------------------|----------|----------------------------------------------------------------------------------------------------------------|
+| ref                | True     | The reference for the LinkSDK component                                                                        |
+| appToken           | True     | The App Token can be retrieved from your Lean App Dashboard                                                    |
+| callback           | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed)         |
+| version            | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                            |
+| country            | False    | Which country you are operating in (defaults to `ArabEmirates`) (options are `SaudiArabia` and `ArabEmirates`) |
+| successRedirectUrl | False    | The URL which an open banking flow would redirect to on success. Only required for KSA open banking flows      |
+| failRedirectUrl    | False    | The URL which an open banking flow would redirect to on failure. Only required for KSA open banking flows      |
+| sandbox            | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                                 |
 
 
 ## Methods
