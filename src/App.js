@@ -46,6 +46,8 @@ const App = () => {
           Lean.current.link({
             customer_id: customerID,
             permissions: ['identity', 'accounts', 'balance', 'transactions'], // bank_identifier: "LEAN_MB1",
+            success_redirect_url: "https://www.google.com",
+            fail_redirect_url: "https://www.twitter.com"
           })
         }>
         <Text style={styles.cta_text}>Link</Text>
@@ -116,9 +118,7 @@ const App = () => {
         appToken={appToken}
         callback={(data) => console.log('DATA SENT TO CALLBACK:', data)}
         // version="1.0.0"
-        // country="ArabEmirates"
-        // successRedirectUrl=""
-        // failRedirectUrl=""
+        // country="SaudiArabia"
         // sandbox
       />
     </View>

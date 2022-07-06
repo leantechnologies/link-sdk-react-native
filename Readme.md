@@ -65,8 +65,6 @@ export default App
 | callback           | False    | A function that you want the SDK to callback to upon closing of the SDK (whether successful or failed)         |
 | version            | False    | Which version of the LinkSDK you want to load (defaults to @latest)                                            |
 | country            | False    | Which country you are operating in (defaults to `ArabEmirates`) (options are `SaudiArabia` and `ArabEmirates`) |
-| successRedirectUrl | False    | The URL which an open banking flow would redirect to on success. Only required for KSA open banking flows      |
-| failRedirectUrl    | False    | The URL which an open banking flow would redirect to on failure. Only required for KSA open banking flows      |
 | sandbox            | False    | Whether the LinkSDK is in sandbox or not (defaults to `False`)                                                 |
 
 
@@ -82,7 +80,9 @@ Use link when you want to create an `Entity` for use with the Data API.
     Lean.current.link({
         customer_id: "YOUR_CUSTOMER_ID",
         permissions: ["identity","accounts","balance","transactions"],
-        bank_identifier: "LEAN_MB1"
+        bank_identifier: "LEAN_MB1", //optional
+        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
     })
 ```
 
@@ -91,6 +91,8 @@ Use link when you want to create an `Entity` for use with the Data API.
 | customer_id      | True     | The Customer you want to connect                                                                       |
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
 | permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`                       |
+| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
+| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
 
 ---
 
@@ -103,7 +105,9 @@ Use connect when you want to create an `Entity` and a `Payment Source` for use w
         customer_id: "YOUR_CUSTOMER_ID",
         permissions: ["identity","accounts","balance","transactions", "payments"],
         bank_identifier: "LEAN_MB1",
-        payment_destination_id: "PAYMENT_DEST_ID"
+        payment_destination_id: "PAYMENT_DEST_ID",
+        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
     })
 ```
 
@@ -113,6 +117,8 @@ Use connect when you want to create an `Entity` and a `Payment Source` for use w
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
 | permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions` or `payments`         |
 | payment_destination_id | False | The payment destination you want to create a beneficiary with |
+| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
+| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
 
 ---
 
@@ -129,6 +135,8 @@ Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
 | Parameter        | Required | Description                                                                                            |
 |------------------|----------|--------------------------------------------------------------------------------------------------------|
 | reconnect_id     | True     | The reconnect_id returned from the Lean API                                                            |
+| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
+| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
 
 ---
 
@@ -139,7 +147,9 @@ Use createPaymentSource to create a `Payment Source` for use the Payments API.
 ```
     Lean.current.createPaymentSource({ 
         customer_id: "CUSTOMER_ID",
-        bank_identifier: "LEAN_MB1"
+        bank_identifier: "LEAN_MB1",
+        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
     })
 ```
 
@@ -147,6 +157,8 @@ Use createPaymentSource to create a `Payment Source` for use the Payments API.
 |------------------|----------|--------------------------------------------------------------------------------------------------------|
 | customer_id      | True     | The Customer you want to create a payment source for                                                   |
 | bank_identifier  | False    | Skips the bank selection screen                                                                        |
+| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
+| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
 
 ---
 

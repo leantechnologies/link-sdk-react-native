@@ -211,7 +211,6 @@ const LinkSDK = forwardRef((props, ref) => {
         }}
         onShouldStartLoadWithRequest={(event) => {
           if (event.url !== 'https://leantech.me/') {
-            console.log('hello --------------', event.url);
             Linking.openURL(event.url);
             return false;
           }
