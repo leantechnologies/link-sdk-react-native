@@ -211,6 +211,9 @@ const LinkSDK = forwardRef((props, ref) => {
         }}
         onShouldStartLoadWithRequest={(event) => {
           if (event.url !== 'https://leantech.me/') {
+            SDK.current.injectJavaScript(`
+              postResponse({ method: "LINK", status: "SUCCESS", message: "User redirected to bank" })
+            `)
             Linking.openURL(event.url);
             return false;
           }
