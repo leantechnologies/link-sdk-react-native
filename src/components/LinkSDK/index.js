@@ -1,6 +1,6 @@
-import React, {useRef, useImperativeHandle, useState, forwardRef} from 'react';
-import {WebView} from 'react-native-webview';
-import {Dimensions, View, StyleSheet, Linking} from 'react-native';
+import React, { useRef, useImperativeHandle, useState, forwardRef } from 'react';
+import { WebView } from 'react-native-webview';
+import { Dimensions, View, StyleSheet, Linking } from 'react-native';
 
 const LinkSDK = forwardRef((props, ref) => {
   // create a ref for injectJavaScript to use
@@ -10,13 +10,13 @@ const LinkSDK = forwardRef((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // useImperativeHandle allows the methods to be called outside of the component
+  const [injectedJavascript, setInjectedJavascript] = useState("");
   useImperativeHandle(ref, () => ({
     // ALL of these functions **must** have the function passed in as a String
     // ALL of these functions must set up postMessage function to enable callback
 
     // initialise connect flow
     connect(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
 
       const call = `
@@ -28,8 +28,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.connect({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -38,13 +38,12 @@ const LinkSDK = forwardRef((props, ref) => {
                 postResponse({ method: "CONNECT", status: "ERROR", message: "Lean not initialized" })
             }
             `;
-
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
 
     // initialise link flow
     link(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
 
       const call = `
@@ -56,8 +55,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.link({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -67,7 +66,8 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
 
     // initialise reconnect flow
@@ -84,8 +84,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.reconnect({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -95,12 +95,12 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
 
     // initialise CPS flow
     createPaymentSource(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
 
       const call = `
@@ -112,8 +112,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.createPaymentSource({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -122,12 +122,12 @@ const LinkSDK = forwardRef((props, ref) => {
                 postResponse({ method: "CREATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
             }
             `;
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
 
     // initialise pay flow
     pay(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
 
       const call = `
@@ -139,8 +139,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.pay({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -150,12 +150,12 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
 
     // updatePaymentSource flow
     updatePaymentSource(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
 
       const call = `
@@ -167,8 +167,8 @@ const LinkSDK = forwardRef((props, ref) => {
             try {
                 Lean.updatePaymentSource({
                     ${keys.map(
-                      (key) => `${key}: ${JSON.stringify(opts[key])}`,
-                    )},
+        (key) => `${key}: ${JSON.stringify(opts[key])}`,
+      )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
                     callback: postResponse
@@ -178,7 +178,8 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      setInjectedJavascript(call);
+      setIsOpen(true);
     },
   }));
 
@@ -190,16 +191,20 @@ const LinkSDK = forwardRef((props, ref) => {
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <View
       style={isOpen ? styles.container : styles.containerClosed}
-      height={Dimensions.get('window').height}
-      width={Dimensions.get('window').width}>
+      height={Dimensions.get('window').height - (props.offsetTop || 0)}
+      width={Dimensions.get('window').width}
+    >
       <WebView
         {...props.webViewProps}
         ref={SDK}
         style={styles.WebView}
         originWhitelist={['*']}
+        injectedJavaScript={injectedJavascript}
         source={{
           baseUrl: 'https://leantech.me',
           html: require('./base.js')({
@@ -234,15 +239,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-  },
-  containerClosed: {
-    display: 'none',
-    position: 'relative',
     left: 0,
     top: 0,
     width: '100%',
