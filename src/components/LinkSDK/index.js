@@ -1,84 +1,93 @@
-import React, {useRef, useState, forwardRef} from 'react';
-import {WebView} from 'react-native-webview';
+import React, {useState, forwardRef, useImperativeHandle} from 'react';
 import {Dimensions, View, StyleSheet} from 'react-native';
+import {WebView} from 'react-native-webview';
+
 import LeanWebClient from './LeanWebClient';
 import Lean from './Lean';
+import Logger from './Logger';
 
-const LinkSDK = forwardRef((props) => {
-  // create a ref for injectJavaScript to use
-  const SDK = useRef(null);
-
+const LinkSDK = forwardRef((props, ref) => {
   // create state to manage SDK visibility
   const [isOpen, setIsOpen] = useState(false);
 
   // Dynamically set URL for start SDK methods
-  const [initializationURL, setInitializationURL] = useState(false);
-
-  // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
-  const responseCallbackHandler = (data) => {
-    setTimeout(() => setIsOpen(false), 300);
-    if (props.callback) {
-      props.callback(JSON.parse(data));
-    }
-  };
+  const [initializationURL, setInitializationURL] = useState('');
 
   const lean = new Lean({
     appToken: props.appToken,
-    isSandbox: props.sandbox || false,
+    env: props.env || 'production',
     country: props.country || 'ae',
     language: props.language || 'en',
-    version: props.version || 'latest',
+    isSandbox: props.sandbox || false,
     showLogs: props.showLogs || false,
-    env: props.env || 'production',
+    version: props.version || 'latest',
+    customization: props.customization || null,
   });
 
-  // Setup Lean object as ref
-  SDK.current = {
-    link: (config) => {
+  useImperativeHandle(ref, () => ({
+    link: config => {
+      setIsOpen(true);
       setInitializationURL(lean.link(config));
     },
-    connect: (config) => {
+    connect: config => {
+      Logger.info('config', config);
+      Logger.info('initializationURL', lean.connect(config));
+      setIsOpen(true);
       setInitializationURL(lean.connect(config));
     },
-    reconnect: (config) => {
+    reconnect: config => {
+      setIsOpen(true);
       setInitializationURL(lean.reconnect(config));
     },
-    createBeneficiary: (config) => {
+    createBeneficiary: config => {
+      setIsOpen(true);
       setInitializationURL(lean.createBeneficiary(config));
     },
-    createPaymentSource: (config) => {
+    createPaymentSource: config => {
+      setIsOpen(true);
       setInitializationURL(lean.createPaymentSource(config));
     },
-    updatePaymentSource: (config) => {
+    updatePaymentSource: config => {
+      setIsOpen(true);
       setInitializationURL(lean.updatePaymentSource(config));
     },
-    pay: (config) => {
+    pay: config => {
+      setIsOpen(true);
       setInitializationURL(lean.pay(config));
     },
+  }));
+
+  // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
+  const responseCallbackHandler = data => {
+    setTimeout(() => setIsOpen(false), 300);
+    if (props.callback) {
+      props.callback(data);
+    }
   };
 
-  return (
+  return isOpen ? (
     <View
-      style={isOpen ? styles.container : styles.containerClosed}
+      style={styles.container}
       height={Dimensions.get('window').height}
       width={Dimensions.get('window').width}>
       <WebView
         {...props.webViewProps}
-        style={styles.WebView}
+        style={styles.webView}
         originWhitelist={['*']}
         source={{uri: initializationURL}}
-        onShouldStartLoadWithRequest={(event) => {
+        onShouldStartLoadWithRequest={request =>
           LeanWebClient.handleOverrideUrlLoading(
-            event.url,
+            request,
             responseCallbackHandler,
-          );
-        }}
+          )
+        }
+        cacheEnabled={false}
         javaScriptEnabledAndroid={true}
         onLoadStart={LeanWebClient.onPageStarted}
         onLoadEnd={LeanWebClient.onPageFinished}
       />
     </View>
-  );
+  ) : null;
 });
 
 LinkSDK.defaultProps = {
@@ -95,16 +104,7 @@ const styles = StyleSheet.create({
     height: '100%',
     zIndex: 2,
   },
-  containerClosed: {
-    display: 'none',
-    position: 'relative',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-  },
-  WebView: {
+  webView: {
     position: 'absolute',
     top: 0,
     left: 0,

@@ -1,4 +1,6 @@
+import {URL, URLSearchParams} from 'react-native-url-polyfill';
 import {Linking} from 'react-native';
+
 import Logger from './Logger';
 
 class LeanWebClient {
@@ -19,23 +21,37 @@ class LeanWebClient {
     return {
       status: urlParams.get('status'),
       message: urlParams.get('message'),
-      lastApiResponse: urlParams.get('last_api_response'),
-      exitPoint: urlParams.get('exit_point'),
-      secondaryStatus: urlParams.get('secondary_status'),
+      last_api_response: urlParams.get('last_api_response'),
+      exit_point: urlParams.get('exit_point'),
+      secondary_status: urlParams.get('secondary_status'),
       bank: {
-        bankId: urlParams.get('bank_identifier'),
-        isSupported: Boolean(urlParams.get('bank_is_supported')),
+        bank_identifier: urlParams.get('bank_identifier'),
+        is_supported: Boolean(urlParams.get('bank_is_supported')),
       },
     };
   }
 
-  static handleOverrideUrlLoading(url, callback) {
+  static handleOverrideUrlLoading(request, callback) {
+    Logger.info('handleOverrideUrlLoading', request.url);
+
+    if (request.url.startsWith('file://')) {
+      return false;
+    }
+
+    if (request.url.includes('https://cdn.leantech.me/link/loader')) {
+      return true;
+    }
+
+    Logger.info('handleOverrideUrlLoading', 'got here ============>');
+
     if (callback) {
       // Set value for response listener
       this.responseListener = callback;
     }
 
-    const urlObject = new URL(url);
+    const urlObject = new URL(request.url);
+
+    Logger.info('handleOverrideUrlLoading :::: protocol', urlObject.protocol);
     /**
      * Standard redirect URI from hosted HTML has three parts
      * scheme   - <scheme>://<host>?response_data :: leanlink | https | http
@@ -56,23 +72,27 @@ class LeanWebClient {
             isSupported: null,
           },
         });
-      } else {
-        // Send response back caller for proper handling
-        this.onRedirectResponse(this.getResponseFromParams(url));
+
+        // Do not override URL loading
+        return false;
       }
 
-      // Override URL loading
-      return true;
+      // Send response back caller for proper handling
+      this.onRedirectResponse(this.getResponseFromParams(request.url));
+
+      // Do not override URL loading
+      return false;
     }
 
     // Open all URLs in default web browser
-    Linking.openURL(url);
+    Linking.openURL(request.url);
+
     // Do not override URL loading
     return false;
   }
 
   static onRedirectResponse(response) {
-    Logger.info(`Response received: ${response}`);
+    Logger.info('Response received', response);
     this.responseListener(response);
   }
 }

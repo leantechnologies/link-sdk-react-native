@@ -3,29 +3,28 @@ import Logger from './Logger';
 
 class Lean {
   constructor({
-    appToken,
-    isSandbox,
+    env,
     version,
     country,
+    appToken,
     language,
     showLogs,
-    env,
+    isSandbox,
+    customization,
   }) {
-    this.appToken = appToken;
-    this.isSandbox = isSandbox;
+    this.env = env;
     this.version = version;
     this.country = country;
     this.language = language;
-    this.env = env;
+    this.appToken = appToken;
+    this.isSandbox = isSandbox;
+    this.customization = customization;
+    this.baseURL = `https://cdn.leantech.me/link/loader/prod/${this.country}/${this.version}/lean-sdk.html`;
 
     Logger.showLogs = showLogs;
   }
 
   //  ================    Members and helper methods    ================    //
-
-  baseURL = 'https://lean-loader-test.s3.amazonaws.com/lean-sdk.html';
-
-  // Prod URL "https://cdn.leantech.me/link/loader/prod/$country/$version/lean-sdk.html"
 
   get baseUrl() {
     return this.baseURL
@@ -46,22 +45,24 @@ class Lean {
     }
 
     for (const permission of permissions) {
-      permissionsParams.concat(`&${Params.PERMISSIONS}=${permission}`);
+      permissionsParams = permissionsParams.concat(
+        `&${Params.PERMISSIONS}=${permission}`,
+      );
     }
 
     return permissionsParams;
   }
 
-  convertCustomizationToURLString(customization) {
+  convertCustomizationToURLString() {
     let customizationParams = '';
 
-    if (!Object.keys(customization).length) {
+    if (this.customization && !Object.keys(this.customization).length) {
       return customizationParams;
     }
 
-    for (const customizationOption in customization) {
+    for (const customizationOption in this.customization) {
       customizationParams.concat(
-        `&${Params.CUSTOMIZATION}=${customizationOption}+${customization[customizationOption]}`,
+        `&${Params.CUSTOMIZATION}=${customizationOption}+${this.customization[customizationOption]}`,
       );
     }
 
@@ -71,15 +72,14 @@ class Lean {
   //  ================    Link methods    ================    //
 
   link({
-    customerId,
-    bankIdentifier,
+    customer_id,
     permissions,
-    customization,
-    failRedirectUrl,
-    successRedirectUrl,
+    bank_identifier,
+    fail_redirect_url,
+    success_redirect_url,
   }) {
-    if (!customerId) {
-      throw new Error('Validation Error: customerId is required');
+    if (!customer_id) {
+      throw new Error('Validation Error: customer_id is required');
     }
 
     if (!Array.isArray(permissions) || !permissions?.length) {
@@ -103,30 +103,28 @@ class Lean {
     }
 
     const permissionsParams = this.convertPermissionsToURLString(permissions);
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.LINK}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customerId}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(permissionsParams)
       .concat(customizationParams);
 
     // only include properties that are set
-    if (bankIdentifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bankIdentifier}`);
+    if (bank_identifier) {
+      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 
@@ -134,18 +132,17 @@ class Lean {
   }
 
   connect({
-    customerId,
-    bankIdentifier,
-    paymentDestinationId,
-    permissions,
-    customization,
     accessTo,
     accessFrom,
-    failRedirectUrl,
-    successRedirectUrl,
+    permissions,
+    customer_id,
+    bank_identifier,
+    fail_redirect_url,
+    success_redirect_url,
+    payment_destination_id,
   }) {
-    if (!customerId) {
-      throw new Error('Validation Error: customerId is required');
+    if (!customer_id) {
+      throw new Error('Validation Error: customer_id is required');
     }
 
     if (!permissions) {
@@ -163,24 +160,22 @@ class Lean {
     }
 
     const permissionsParams = this.convertPermissionsToURLString(permissions);
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.CONNECT}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customerId}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(permissionsParams)
       .concat(customizationParams);
 
     // only include properties that are set
-    if (bankIdentifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bankIdentifier}`);
+    if (bank_identifier) {
+      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
     }
 
-    if (paymentDestinationId) {
+    if (payment_destination_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${paymentDestinationId}`,
+        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
@@ -192,29 +187,27 @@ class Lean {
       initializationURL.concat(`&${Params.ACCESS_FROM}=${accessFrom}`);
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 
     return initializationURL;
   }
 
-  reconnect({reconnectId, customization}) {
+  reconnect({reconnectId}) {
     if (!reconnectId) {
       throw new Error('Validation Error: reconnectId is required');
     }
 
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     return this.baseUrl
       .concat(`&method=${Methods.RECONNECT}`)
@@ -223,47 +216,45 @@ class Lean {
   }
 
   createBeneficiary({
-    customerId,
-    paymentSourceId,
-    paymentDestinationId,
-    customization,
-    failRedirectUrl,
-    successRedirectUrl,
+    customer_id,
+    payment_source_id,
+    fail_redirect_url,
+    success_redirect_url,
+    payment_destination_id,
   }) {
-    if (!customerId) {
-      throw new Error('Validation Error: customerId is required');
+    if (!customer_id) {
+      throw new Error('Validation Error: customer_id is required');
     }
 
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.CREATE_BENEFICIARY}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customerId}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    if (paymentSourceId) {
+    // only include properties that are set
+    if (payment_source_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_SOURCE_ID}=${paymentSourceId}`,
+        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
       );
     }
 
-    if (paymentDestinationId) {
+    if (payment_destination_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${paymentDestinationId}`,
+        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 
@@ -271,45 +262,43 @@ class Lean {
   }
 
   createPaymentSource({
-    customerId,
-    bankIdentifier,
-    paymentDestinationId,
-    customization,
-    failRedirectUrl,
-    successRedirectUrl,
+    customer_id,
+    bank_identifier,
+    fail_redirect_url,
+    success_redirect_url,
+    payment_destination_id,
   }) {
-    if (!customerId) {
-      throw new Error('Validation Error: customerId is required');
+    if (!customer_id) {
+      throw new Error('Validation Error: customer_id is required');
     }
 
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.CREATE_PAYMENT_SOURCE}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customerId}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    if (bankIdentifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bankIdentifier}`);
+    // only include properties that are set
+    if (bank_identifier) {
+      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
     }
 
-    if (paymentDestinationId) {
+    if (payment_destination_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${paymentDestinationId}`,
+        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 
@@ -317,47 +306,45 @@ class Lean {
   }
 
   updatePaymentSource({
-    customerId,
-    paymentSourceId,
-    paymentDestinationId,
-    customization,
-    failRedirectUrl,
-    successRedirectUrl,
+    customer_id,
+    payment_source_id,
+    fail_redirect_url,
+    success_redirect_url,
+    payment_destination_id,
   }) {
-    if (!customerId) {
-      throw new Error('Validation Error: customerId is required');
+    if (!customer_id) {
+      throw new Error('Validation Error: customer_id is required');
     }
 
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.UPDATE_PAYMENT_SOURCE}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customerId}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    if (paymentDestinationId) {
+    // only include properties that are set
+    if (payment_destination_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${paymentDestinationId}`,
+        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
-    if (paymentSourceId) {
+    if (payment_source_id) {
       initializationURL.concat(
-        `&${Params.PAYMENT_SOURCE_ID}=${paymentSourceId}`,
+        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
       );
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 
@@ -365,43 +352,41 @@ class Lean {
   }
 
   pay({
-    paymentIntentId,
-    accountId,
-    showBalances,
-    customization,
-    failRedirectUrl,
-    successRedirectUrl,
+    account_id,
+    show_balances,
+    fail_redirect_url,
+    payment_intent_id,
+    success_redirect_url,
   }) {
-    if (!paymentIntentId) {
-      throw new Error('Validation Error: paymentIntentId is required');
+    if (!payment_intent_id) {
+      throw new Error('Validation Error: payment_intent_id is required');
     }
 
-    const customizationParams = this.convertCustomizationToURLString(
-      customization,
-    );
+    const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.PAY}`)
-      .concat(`&${Params.PAYMENT_INTENT_ID}=${paymentIntentId}`)
+      .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
       .concat(customizationParams);
 
-    if (accountId) {
-      initializationURL.concat(`&${Params.ACCOUNT_ID}=${accountId}`);
+    // only include properties that are set
+    if (account_id) {
+      initializationURL.concat(`&${Params.ACCOUNT_ID}=${account_id}`);
     }
 
-    if (showBalances) {
-      initializationURL.concat(`&${Params.SHOW_BALANCES}=${showBalances}`);
+    if (show_balances) {
+      initializationURL.concat(`&${Params.SHOW_BALANCES}=${show_balances}`);
     }
 
-    if (failRedirectUrl) {
+    if (fail_redirect_url) {
       initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${failRedirectUrl}`,
+        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
-    if (successRedirectUrl) {
+    if (success_redirect_url) {
       initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${successRedirectUrl}`,
+        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
 

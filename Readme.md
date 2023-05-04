@@ -1,6 +1,6 @@
 # Link SDK React Native Wrapper
 
-The React Native Wrapper for LinkSDK allows you to do all of the functions that can be achieved with the LinkSDK on web, from linking bank accounts to initiating payments.
+The React Native Wrapper for LinkSDK allows you to do all the functions that can be achieved with the LinkSDK on web, from linking bank accounts to initiating payments.
 
 ## Installation
 
@@ -86,13 +86,13 @@ Use link when you want to create an `Entity` for use with the Data API.
     })
 ```
 
-| Parameter        | Required | Description                                                                                            |
-|------------------|----------|--------------------------------------------------------------------------------------------------------|
-| customer_id      | True     | The Customer you want to connect                                                                       |
-| bank_identifier  | False    | Skips the bank selection screen                                                                        |
-| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`                       |
-| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
-| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
+| Parameter            | Required | Description                                                                         |
+|----------------------|----------|-------------------------------------------------------------------------------------|
+| customer_id          | True     | The Customer you want to connect                                                    |
+| bank_identifier      | False    | Skips the bank selection screen                                                     |
+| permissions          | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions`    |
+| success_redirect_url | False    | The URI you want to redirect to after an open banking connection has been completed |
+| fail_redirect_url    | False    | The URI you want to redirect to after an open banking connection has failed         |
 
 ---
 
@@ -111,14 +111,14 @@ Use connect when you want to create an `Entity` and a `Payment Source` for use w
     })
 ```
 
-| Parameter        | Required | Description                                                                                            |
-|------------------|----------|--------------------------------------------------------------------------------------------------------|
-| customer_id      | True     | The Customer you want to connect                                                                       |
-| bank_identifier  | False    | Skips the bank selection screen                                                                        |
-| permissions      | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions` or `payments`         |
-| payment_destination_id | False | The payment destination you want to create a beneficiary with |
-| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
-| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
+| Parameter              | Required | Description                                                                                    |
+|------------------------|----------|------------------------------------------------------------------------------------------------|
+| customer_id            | True     | The Customer you want to connect                                                               |
+| bank_identifier        | False    | Skips the bank selection screen                                                                |
+| permissions            | True     | An array of permissions can be `identity`, `balance`, `accounts`, `transactions` or `payments` |
+| payment_destination_id | False    | The payment destination you want to create a beneficiary with                                  |
+| success_redirect_url   | False    | The URI you want to redirect to after an open banking connection has been completed            |
+| fail_redirect_url      | False    | The URI you want to redirect to after an open banking connection has failed                    |
 
 ---
 
@@ -132,11 +132,11 @@ Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
     })
 ```
 
-| Parameter        | Required | Description                                                                                            |
-|------------------|----------|--------------------------------------------------------------------------------------------------------|
-| reconnect_id     | True     | The reconnect_id returned from the Lean API                                                            |
-| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
-| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
+| Parameter            | Required | Description                                                                         |
+|----------------------|----------|-------------------------------------------------------------------------------------|
+| reconnect_id         | True     | The reconnect_id returned from the Lean API                                         |
+| success_redirect_url | False    | The URI you want to redirect to after an open banking connection has been completed |
+| fail_redirect_url    | False    | The URI you want to redirect to after an open banking connection has failed         |
 
 ---
 
@@ -153,12 +153,12 @@ Use createPaymentSource to create a `Payment Source` for use the Payments API.
     })
 ```
 
-| Parameter        | Required | Description                                                                                            |
-|------------------|----------|--------------------------------------------------------------------------------------------------------|
-| customer_id      | True     | The Customer you want to create a payment source for                                                   |
-| bank_identifier  | False    | Skips the bank selection screen                                                                        |
-| success_redirect_url      | False     | The URI you want to redirect to after an open banking connection has been completed          |
-| fail_redirect_url      | False     | The URI you want to redirect to after an open banking connection has failed                     |
+| Parameter            | Required | Description                                                                         |
+|----------------------|----------|-------------------------------------------------------------------------------------|
+| customer_id          | True     | The Customer you want to create a payment source for                                |
+| bank_identifier      | False    | Skips the bank selection screen                                                     |
+| success_redirect_url | False    | The URI you want to redirect to after an open banking connection has been completed |
+| fail_redirect_url    | False    | The URI you want to redirect to after an open banking connection has failed         |
 
 ---
 
@@ -218,15 +218,15 @@ By providing a callback into the component, the LinkSDK will report back with an
 }
 ```
 
-| Attribute           | Type    | Description                                                                                                    |
-|---------------------|---------|----------------------------------------------------------------------------------------------------------------|
-| method              | ENUM    | The flow that initatied the call. `LINK`, `RECONNECT`, `CREATE_PAYMENT_SOURCE` and `PAY`                       |
-| status              | ENUM    | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong                       |
-| message             | string  | Further details on the status                                                                                  |
-| exit_point | String | The screen the user was on when they closed the SDK |
-| secondary_status | String | Useful when `ERROR` is the status - correlates to the ERROR reason if known. |
-| bank.bank_identifer | String | The Lean identifier for the bank the user was trying to connect to |
-| bank.is_supported | Bool | Whether the bank is supported by Lean |
+| Attribute            | Type   | Description                                                                                                                               |
+|----------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| method               | ENUM   | The flow that initiated the call. `LINK`, `RECONNECT`, `CREATE_PAYMENT_SOURCE` and `PAY`                                                  |
+| status               | ENUM   | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong |
+| message              | string | Further details on the status                                                                                                             |
+| exit_point           | String | The screen the user was on when they closed the SDK                                                                                       |
+| secondary_status     | String | Useful when `ERROR` is the status - correlates to the ERROR reason if known.                                                              |
+| bank.bank_identifier | String | The Lean identifier for the bank the user was trying to connect to                                                                        |
+| bank.is_supported    | Bool   | Whether the bank is supported by Lean                                                                                                     |
 
 ## Troubleshooting
 
@@ -246,7 +246,7 @@ You can disable hardware acceleration on the webview by passing android specific
 
 ### JDK version issues on Android
 
-You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set set JAVA_HOME in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
+You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set JAVA_HOME in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
 
 ```
 SET JAVA_HOME="\Program Files\Android\Android Studio\jre"

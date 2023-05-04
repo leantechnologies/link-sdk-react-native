@@ -1,9 +1,9 @@
 class Logger {
   static showLogs = false;
 
-  static info(msg: String) {
+  static info(msg = '', extra = '') {
     if (Logger.showLogs) {
-      console.info('LeanSdk', msg);
+      console.info('LeanSdk', msg, extra);
     }
   }
 
