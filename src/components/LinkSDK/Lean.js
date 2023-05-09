@@ -61,7 +61,7 @@ class Lean {
     }
 
     for (const customizationOption in this.customization) {
-      customizationParams.concat(
+      customizationParams = customizationParams.concat(
         `&${Params.CUSTOMIZATION}=${customizationOption}+${this.customization[customizationOption]}`,
       );
     }
@@ -113,17 +113,19 @@ class Lean {
 
     // only include properties that are set
     if (bank_identifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
     }
 
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
@@ -170,31 +172,37 @@ class Lean {
 
     // only include properties that are set
     if (bank_identifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
     }
 
     if (payment_destination_id) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
     if (accessTo) {
-      initializationURL.concat(`&${Params.ACCESS_TO}=${accessTo}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TO}=${accessTo}`,
+      );
     }
 
     if (accessFrom) {
-      initializationURL.concat(`&${Params.ACCESS_FROM}=${accessFrom}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_FROM}=${accessFrom}`,
+      );
     }
 
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
@@ -202,16 +210,16 @@ class Lean {
     return initializationURL;
   }
 
-  reconnect({reconnectId}) {
-    if (!reconnectId) {
-      throw new Error('Validation Error: reconnectId is required');
+  reconnect({reconnect_id}) {
+    if (!reconnect_id) {
+      throw new Error('Validation Error: reconnect_id is required');
     }
 
     const customizationParams = this.convertCustomizationToURLString();
 
     return this.baseUrl
       .concat(`&method=${Methods.RECONNECT}`)
-      .concat(`&${Params.RECONNECT_ID}=${reconnectId}`)
+      .concat(`&${Params.RECONNECT_ID}=${reconnect_id}`)
       .concat(customizationParams);
   }
 
@@ -234,27 +242,27 @@ class Lean {
       .concat(customizationParams);
 
     // only include properties that are set
-    if (payment_source_id) {
-      initializationURL.concat(
-        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
-      );
-    }
-
-    if (payment_destination_id) {
-      initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
-      );
-    }
-
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
+      );
+    }
+
+    if (payment_source_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
+      );
+    }
+
+    if (payment_destination_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
@@ -281,23 +289,25 @@ class Lean {
 
     // only include properties that are set
     if (bank_identifier) {
-      initializationURL.concat(`&${Params.BANK_IDENTIFIER}=${bank_identifier}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
     }
 
     if (payment_destination_id) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
@@ -325,25 +335,25 @@ class Lean {
 
     // only include properties that are set
     if (payment_destination_id) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
       );
     }
 
     if (payment_source_id) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
       );
     }
 
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
@@ -371,21 +381,25 @@ class Lean {
 
     // only include properties that are set
     if (account_id) {
-      initializationURL.concat(`&${Params.ACCOUNT_ID}=${account_id}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCOUNT_ID}=${account_id}`,
+      );
     }
 
     if (show_balances) {
-      initializationURL.concat(`&${Params.SHOW_BALANCES}=${show_balances}`);
+      initializationURL = initializationURL.concat(
+        `&${Params.SHOW_BALANCES}=${show_balances}`,
+      );
     }
 
     if (fail_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
       );
     }
 
     if (success_redirect_url) {
-      initializationURL.concat(
+      initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
       );
     }
