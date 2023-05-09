@@ -42,8 +42,6 @@ class LeanWebClient {
       return true;
     }
 
-    Logger.info('handleOverrideUrlLoading', 'got here ============>');
-
     if (callback) {
       // Set value for response listener
       this.responseListener = callback;
@@ -51,7 +49,6 @@ class LeanWebClient {
 
     const urlObject = new URL(request.url);
 
-    Logger.info('handleOverrideUrlLoading :::: protocol', urlObject.protocol);
     /**
      * Standard redirect URI from hosted HTML has three parts
      * scheme   - <scheme>://<host>?response_data :: leanlink | https | http
