@@ -122,8 +122,18 @@ const App = () => {
           console.log('DATA SENT TO CALLBACK:', data)
         }
         showLogs
-        // version="1.0.0"
-        // country="SaudiArabia"
+        customization={{
+          dialog_mode: 'uncontained',
+          theme_color: 'rgb(0,152,172)',
+          button_text_color: 'white',
+          button_border_radius: '15',
+          link_color: 'rgb(0,152,172)',
+          overlay_color: 'rgb(175,182,182)',
+        }}
+        // sandbox
+        // env="development"
+        // version="latest"
+        // country="ae | sa"
       />
     </View>
   );
