@@ -232,9 +232,10 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&fail_redirect_url=https://dev.leantech.me/success&success_redirect_url=https://dev.leantech.me/fail';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&fail_redirect_url=https://dev.leantech.me/success&success_redirect_url=https://dev.leantech.me/fail';
 
       const initializationURL = lean.createPaymentSource({
+        bank_identifier: 'LEANMB1_SAU',
         customer_id: '726715d7-222f-4087-bcce-2832135e4981',
         fail_redirect_url: 'https://dev.leantech.me/success',
         success_redirect_url: 'https://dev.leantech.me/fail',
