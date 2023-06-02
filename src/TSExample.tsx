@@ -123,7 +123,7 @@ const App = () => {
         }
         showLogs
         customization={{
-          dialog_mode: 'uncontained',
+          // dialog_mode: 'uncontained',
           theme_color: 'rgb(0,152,172)',
           button_text_color: 'white',
           button_border_radius: '15',
