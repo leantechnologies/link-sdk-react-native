@@ -202,6 +202,8 @@ const LinkSDK = forwardRef((props, ref) => {
         ref={SDK}
         style={styles.WebView}
         originWhitelist={['*']}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
         source={{
           baseUrl: 'https://leantech.me',
           html: require('./base.js')({
