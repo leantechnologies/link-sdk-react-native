@@ -75,6 +75,8 @@ const LinkSDK = forwardRef((props, ref) => {
         style={styles.webView}
         originWhitelist={['*']}
         source={{uri: initializationURL}}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
         onShouldStartLoadWithRequest={request =>
           LeanWebClient.handleOverrideUrlLoading(
             request,
