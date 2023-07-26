@@ -26,8 +26,9 @@ export const Config = {
   COUNTRY: 'country',
   LANGUAGE: 'language',
   APP_TOKEN: 'app_token',
-  IMPLEMENTATION: 'implementation',
   SHOW_LOGS: 'show_logs',
+  IMPLEMENTATION: 'implementation',
+  IMPLEMENTATION_CONFIG: 'implementation_config',
 };
 
 export const Params = {

@@ -1,5 +1,8 @@
+import {Platform} from 'react-native';
 import {Config, Methods, Params, UserPermissions} from './constants';
 import Logger from './Logger';
+
+const pkg = require('../../../package.json');
 
 class Lean {
   constructor({
@@ -29,12 +32,32 @@ class Lean {
   get baseUrl() {
     return this.baseURL
       .concat(`?${Config.IMPLEMENTATION}=webview-hosted-html`)
+      .concat(this.implementationParams)
       .concat(`&${Config.APP_TOKEN}=${this.appToken}`)
       .concat(`&${Config.SANDBOX}=${this.isSandbox}`)
       .concat(`&${Config.LANGUAGE}=${this.language}`)
       .concat(`&${Config.VERSION}=${this.version}`)
       .concat(`&${Config.COUNTRY}=${this.country}`)
       .concat(`&${Config.ENV}=${this.env}`);
+  }
+
+  get implementationParams() {
+    const implementation = {
+      platform: 'mobile',
+      sdk: 'react_native',
+      os: Platform.OS,
+      sdk_version: pkg.version,
+    };
+
+    let implementationParams = '';
+
+    for (const key in implementation) {
+      implementationParams = implementationParams.concat(
+        `&${Config.IMPLEMENTATION_CONFIG}=${key}+${implementation[key]}`,
+      );
+    }
+
+    return implementationParams;
   }
 
   convertPermissionsToURLString(permissions) {
