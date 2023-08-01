@@ -11,6 +11,10 @@ const LinkSDK = forwardRef((props, ref) => {
 
   // create state to manage SDK visibility
   const [isOpen, setIsOpen] = useState(false);
+  const openLinkSDK = (flowScript) => {
+    setInjectedJavascript(flowScript);
+    setIsOpen(true);
+  };
 
   // useImperativeHandle allows the methods to be called outside of the component
   useImperativeHandle(ref, () => ({
@@ -20,7 +24,7 @@ const LinkSDK = forwardRef((props, ref) => {
     // initialise connect flow
     connect(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "CONNECT"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -40,14 +44,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
 
     // initialise link flow
     link(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "LINK"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -67,14 +70,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
 
     // initialise reconnect flow
     reconnect(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "RECONNECT"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -94,14 +96,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
 
     // initialise CPS flow
     createPaymentSource(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "CREATE_PAYMENT_SOURCE"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -121,14 +122,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
 
     // initialise pay flow
     pay(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "PAY"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -148,14 +148,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
 
     // updatePaymentSource flow
     updatePaymentSource(opts) {
       const keys = Object.keys(opts);
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "UPDATE_PAYMENT_SOURCE"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -175,8 +174,7 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      setInjectedJavascript(call);
-      setIsOpen(true);
+      openLinkSDK(flowScript);
     },
   }));
 
