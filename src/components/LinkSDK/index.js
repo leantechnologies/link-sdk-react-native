@@ -6,10 +6,15 @@ const COUNTRY__SA = 'SaudiArabia';
 
 const LinkSDK = forwardRef((props, ref) => {
   // create a ref for injectJavaScript to use
+  const [injectedJavascript, setInjectedJavascript] = useState('');
   const SDK = useRef(null);
 
   // create state to manage SDK visibility
   const [isOpen, setIsOpen] = useState(false);
+  const openLinkSDK = (flowScript) => {
+    setInjectedJavascript(flowScript);
+    setIsOpen(true);
+  };
 
   // useImperativeHandle allows the methods to be called outside of the component
   useImperativeHandle(ref, () => ({
@@ -18,10 +23,8 @@ const LinkSDK = forwardRef((props, ref) => {
 
     // initialise connect flow
     connect(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "CONNECT"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -41,15 +44,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      openLinkSDK(flowScript);
     },
 
     // initialise link flow
     link(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "LINK"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -69,15 +70,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      openLinkSDK(flowScript);
     },
 
     // initialise reconnect flow
     reconnect(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "RECONNECT"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -97,15 +96,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      openLinkSDK(flowScript);
     },
 
     // initialise CPS flow
     createPaymentSource(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "CREATE_PAYMENT_SOURCE"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -124,15 +121,14 @@ const LinkSDK = forwardRef((props, ref) => {
                 postResponse({ method: "CREATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
             }
             `;
-      SDK.current.injectJavaScript(call);
+
+      openLinkSDK(flowScript);
     },
 
     // initialise pay flow
     pay(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "PAY"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -152,15 +148,13 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      openLinkSDK(flowScript);
     },
 
     // updatePaymentSource flow
     updatePaymentSource(opts) {
-      setIsOpen(true);
       const keys = Object.keys(opts);
-
-      const call = `
+      const flowScript = `
             function postResponse(status) {
                 status.method = "UPDATE_PAYMENT_SOURCE"
                 window.ReactNativeWebView.postMessage(JSON.stringify(status))
@@ -180,7 +174,7 @@ const LinkSDK = forwardRef((props, ref) => {
             }
             `;
 
-      SDK.current.injectJavaScript(call);
+      openLinkSDK(flowScript);
     },
   }));
 
@@ -192,9 +186,13 @@ const LinkSDK = forwardRef((props, ref) => {
     }
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <View
-      style={isOpen ? styles.container : styles.containerClosed}
+      style={styles.container}
       height={Dimensions.get('window').height}
       width={Dimensions.get('window').width}>
       <WebView
@@ -204,6 +202,7 @@ const LinkSDK = forwardRef((props, ref) => {
         originWhitelist={['*']}
         allowsInlineMediaPlayback={true}
         mediaPlaybackRequiresUserAction={false}
+        injectedJavaScript={injectedJavascript}
         source={{
           baseUrl: 'https://leantech.me',
           html: require('./base.js')({
@@ -240,15 +239,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-  },
-  containerClosed: {
-    display: 'none',
-    position: 'relative',
     left: 0,
     top: 0,
     width: '100%',
