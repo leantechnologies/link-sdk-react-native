@@ -1,6 +1,8 @@
-import React, {useRef, useImperativeHandle, useState, forwardRef} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import {Dimensions, Linking, Platform, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
-import {Dimensions, View, StyleSheet, Linking} from 'react-native';
+
+const pkg = require('../../../package.json');
 
 const COUNTRY__SA = 'SaudiArabia';
 
@@ -14,6 +16,13 @@ const LinkSDK = forwardRef((props, ref) => {
   const openLinkSDK = (flowScript) => {
     setInjectedJavascript(flowScript);
     setIsOpen(true);
+  };
+
+  const implementation = {
+    platform: 'mobile',
+    sdk: 'react_native',
+    os: Platform.OS,
+    sdk_version: pkg.version,
   };
 
   // useImperativeHandle allows the methods to be called outside of the component
@@ -37,7 +46,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "CONNECT", status: "ERROR", message: "Lean not initialized" })
@@ -63,7 +73,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "LINK", status: "ERROR", message: "Lean not initialized" })
@@ -89,7 +100,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "RECONNECT", status: "ERROR", message: "Lean not initialized" })
@@ -115,7 +127,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "CREATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
@@ -141,7 +154,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "PAY", status: "ERROR", message: "Lean not initialized" })
@@ -167,7 +181,8 @@ const LinkSDK = forwardRef((props, ref) => {
                     )},
                     app_token: "${props.appToken}",
                     sandbox: ${props.sandbox},
-                    callback: postResponse
+                    callback: postResponse,
+                    implementation: ${implementation}
                 })
             } catch (e) {
                 postResponse({ method: "UPDATE_PAYMENT_SOURCE", status: "ERROR", message: "Lean not initialized" })
