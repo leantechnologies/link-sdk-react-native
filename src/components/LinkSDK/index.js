@@ -18,13 +18,13 @@ const LinkSDK = forwardRef((props, ref) => {
     setIsOpen(true);
   };
 
-  const implementation = {
+  const implementation = JSON.stringify({
     platform: 'mobile',
     sdk: 'react_native',
     os: Platform.OS,
     sdk_version: pkg.version,
     is_version_pinned: props.version !== 'latest',
-  };
+  });
 
   // useImperativeHandle allows the methods to be called outside of the component
   useImperativeHandle(ref, () => ({
