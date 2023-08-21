@@ -26,7 +26,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "build:ios": "fastlane ios build_ios",
+    "build:android": "fastlane android build_android"
   },
   "dependencies": {
     "react": "18.2.0",

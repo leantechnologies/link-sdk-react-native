@@ -1,0 +1,33 @@
+fastlane_version '2.53.1'
+
+# before_all do
+#     ensure_git_branch
+#     ensure_git_status_clean
+#     git_pull
+# end
+
+platform :ios do
+    desc "Build iOS .ipa"
+
+    lane :build_ios do
+        setup_ci if ENV['CI']
+        gym(scheme: 'linkreactnative', workspace: './ios/linkreactnative.xcworkspace')
+
+        # sync_code_signing
+        # disable_automatic_code_signing(path: "./ios/linkreactnative.xcodeproj")
+        # build_app(scheme: "linkreactnative", export_method: "ad-hoc", workspace: './ios/linkreactnative.xcworkspace')
+        # enable_automatic_code_signing(path: "./ios/linkreactnative.xcodeproj")
+    end
+end
+
+platform :android do
+    desc "Build Android .apk"
+
+    lane :build_android do
+        setup_ci if ENV['CI']
+        gradle(task: 'clean', project_dir: 'android/')
+        gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
+    end
+end
+
+# fastlane produce -u sdks+ios@leantech.me -a org.reactjs.native.example.linkreactnative
