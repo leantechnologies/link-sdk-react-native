@@ -15,6 +15,7 @@ jobs:
       - run: npm install
       - run: npm run build:android
 
+      # Upload the APK to the build number folder
       - uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -22,14 +23,20 @@ jobs:
           aws-region: 'us-east-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           file-path: 'android/app/build/outputs/apk/release/app-release.apk'
-          output-file-url: 'true'
           destination-dir: '/'
+          bucket-root: ${{ format('build.{0}', github.run_number) }}
 
-      - name: Print file URL
-        run: echo '${{ steps.upload.outputs.file-url }}'
+      # Upload the APK to latest folder overriding the previous APK
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
+          destination-dir: '/'
+          bucket-root: '/latest'
 
-      - name: Print file QR code
-        run: echo '${{ steps.upload.outputs.file-url }}' > file-url.txt
 
   ios_build:
     if: false # disable iOS builds until we have a valid Apple Developer account
