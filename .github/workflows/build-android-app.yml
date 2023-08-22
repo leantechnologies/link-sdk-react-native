@@ -24,7 +24,7 @@ jobs:
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           file-path: 'android/app/build/outputs/apk/release/app-release.apk'
           destination-dir: '/'
-          bucket-root: ${{ format('build.{0}', github.run_number) }}
+          bucket-root: ${{ format('/native-wrappers/react-native/android/build.{0}', github.run_number) }}
 
       # Upload the APK to latest folder overriding the previous APK
       - uses: hkusu/s3-upload-action@v2
@@ -35,7 +35,7 @@ jobs:
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           file-path: 'android/app/build/outputs/apk/release/app-release.apk'
           destination-dir: '/'
-          bucket-root: '/latest'
+          bucket-root: '/native-wrappers/react-native/android/latest'
 
 
   ios_build:
@@ -46,7 +46,24 @@ jobs:
       - run: npm install
       - run: npm run build:ios
 
-      - uses: actions/upload-artifact@v2
+      # Upload the IPA to the build number folder
+      - uses: hkusu/s3-upload-action@v2
         with:
-          name: ios-build
-          path: ios/build/Build/Products/Release-iphoneos/ExpoKitApp.app
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
+          destination-dir: '/'
+          bucket-root: ${{ format('/native-wrappers/react-native/ios/build.{0}', github.run_number) }}
+
+      # Upload the IPA to latest folder overriding the previous IPA
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: '' # @TODO: get the IPA file path
+          destination-dir: '/'
+          bucket-root: '/native-wrappers/react-native/ios/latest'
