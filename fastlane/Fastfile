@@ -26,7 +26,7 @@ platform :android do
     lane :build_android do
         setup_ci if ENV['CI']
         gradle(task: 'clean', project_dir: 'android/')
-        gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
+        gradle(task: 'assemble', build_type: 'Debug', project_dir: 'android/')
     end
 end
 
