@@ -23,7 +23,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: 'android/app/build/outputs/apk/debug/app-debug.apk'
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/react-native/android/build.{0}', github.run_number) }}
 
@@ -34,7 +34,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: 'android/app/build/outputs/apk/debug/app-debug.apk'
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
           destination-dir: '/'
           bucket-root: '/link/webview/react-native/android/latest'
 
