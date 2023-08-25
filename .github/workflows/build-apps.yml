@@ -16,8 +16,8 @@ jobs:
       - run: npm install
       - run: npm run build:android
 
-      # Upload the APK to the build number folder
-      - uses: hkusu/s3-upload-action@v2
+      - name: ${{ format('Upload APK to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -27,8 +27,8 @@ jobs:
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/react-native/android/build.{0}', github.run_number) }}
 
-      # Upload the APK to latest folder overriding the previous APK
-      - uses: hkusu/s3-upload-action@v2
+      - name: Upload APK to /latest directory overriding previous APK
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -38,7 +38,7 @@ jobs:
           destination-dir: '/'
           bucket-root: '/link/webview/react-native/android/latest'
 
-      - name: Invalidate CloudFront
+      - name: Invalidate CloudFront cache
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
@@ -57,8 +57,8 @@ jobs:
       - run: npm install
       - run: npm run build:ios
 
-      # Upload the IPA to the build number folder
-      - uses: hkusu/s3-upload-action@v2
+      - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -68,8 +68,8 @@ jobs:
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/react-native/ios/build.{0}', github.run_number) }}
 
-      # Upload the IPA to latest folder overriding the previous IPA
-      - uses: hkusu/s3-upload-action@v2
+      - name: Upload IPA to /latest directory overriding previous IPA
+        uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -79,7 +79,7 @@ jobs:
           destination-dir: '/'
           bucket-root: '/link/webview/react-native/ios/latest'
 
-      - name: Invalidate CloudFront
+      - name: Invalidate CloudFront cache
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
