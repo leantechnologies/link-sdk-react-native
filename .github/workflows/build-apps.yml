@@ -62,9 +62,19 @@ jobs:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - run: bundle install
-      - run: npm install
-      - run: npm run build:ios
+      - name: Setup Fastlane
+        run: bundle install
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install pod dependencies
+        run: |
+          cd ios
+          bundle exec pod install
+
+      - name: Build IPA
+        run: npm run build:ios
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
