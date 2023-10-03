@@ -65,6 +65,8 @@ jobs:
       - run: bundle install
       - run: npm install
       - run: npm run build:ios
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
       - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
         uses: hkusu/s3-upload-action@v2
