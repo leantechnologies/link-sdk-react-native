@@ -49,7 +49,6 @@ jobs:
 
 
   ios_build:
-    if: false # disable iOS builds until we have a valid Apple Developer account
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -64,7 +63,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: '' # @TODO: get the IPA file path
+          file-path: 'ios/build/app-release.ipa'
           destination-dir: '/'
           bucket-root: ${{ format('/link/webview/react-native/ios/build.{0}', github.run_number) }}
 
@@ -75,7 +74,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-west-2'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
-          file-path: '' # @TODO: get the IPA file path
+          file-path: 'ios/build/app-release.ipa'
           destination-dir: '/'
           bucket-root: '/link/webview/react-native/ios/latest'
 

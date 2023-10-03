@@ -1,22 +1,27 @@
 fastlane_version '2.53.1'
 
-# before_all do
-#     ensure_git_branch
-#     ensure_git_status_clean
-#     git_pull
-# end
+before_all do
+    ENV["FASTLANE_DONT_STORE_PASSWORD"] = "1"
+end
 
 platform :ios do
     desc "Build iOS .ipa"
 
     lane :build_ios do
         setup_ci if ENV['CI']
-        gym(scheme: 'linkreactnative', workspace: './ios/linkreactnative.xcworkspace')
+        match(type: "development")
 
-        # sync_code_signing
-        # disable_automatic_code_signing(path: "./ios/linkreactnative.xcodeproj")
-        # build_app(scheme: "linkreactnative", export_method: "ad-hoc", workspace: './ios/linkreactnative.xcworkspace')
-        # enable_automatic_code_signing(path: "./ios/linkreactnative.xcodeproj")
+        build_app(
+          clean: true,
+          silent: true,
+          skip_package_pkg: true,
+          configuration: "Release",
+          scheme: "linkreactnative",
+          output_name: "app-release.ipa",
+          export_method: "development",
+          output_directory: "./ios/build",
+          workspace: "./ios/linkreactnative.xcworkspace",
+        )
     end
 end
 
@@ -29,5 +34,3 @@ platform :android do
         gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
     end
 end
-
-# fastlane produce -u sdks+ios@leantech.me -a org.reactjs.native.example.linkreactnative
