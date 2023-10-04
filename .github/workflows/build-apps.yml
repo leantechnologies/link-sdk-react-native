@@ -2,7 +2,7 @@ name: build-apps
 on:
   push:
     branches:
-      - 'v2' # @TODO: change branch to master after release of v2
+      - 'v2'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -67,6 +67,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Cache cocoapods
+        uses: actions/cache@v3
+        with:
+          path: /ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
       - name: Install pod dependencies
         run: |
