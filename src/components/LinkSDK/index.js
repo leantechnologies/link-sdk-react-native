@@ -1,5 +1,5 @@
-import React, {useState, forwardRef, useImperativeHandle} from 'react';
-import {Dimensions, View, StyleSheet} from 'react-native';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
