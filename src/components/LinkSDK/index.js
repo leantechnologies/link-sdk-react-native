@@ -4,7 +4,6 @@ import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
 import Lean from './Lean';
-import Logger from './Logger';
 
 const LinkSDK = forwardRef((props, ref) => {
   // create state to manage SDK visibility
@@ -30,8 +29,6 @@ const LinkSDK = forwardRef((props, ref) => {
       setInitializationURL(lean.link(config));
     },
     connect: config => {
-      Logger.info('config', config);
-      Logger.info('initializationURL', lean.connect(config));
       setIsOpen(true);
       setInitializationURL(lean.connect(config));
     },
