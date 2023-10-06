@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {Dimensions, Linking, Platform, StyleSheet, View} from 'react-native';
+import {Linking, Platform, StyleSheet, Modal} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 const pkg = require('../../../package.json');
@@ -207,10 +207,7 @@ const LinkSDK = forwardRef((props, ref) => {
   }
 
   return (
-    <View
-      style={styles.container}
-      height={Dimensions.get('window').height}
-      width={Dimensions.get('window').width}>
+    <Modal visible={isOpen} transparent>
       <WebView
         {...props.webViewProps}
         ref={SDK}
@@ -243,7 +240,7 @@ const LinkSDK = forwardRef((props, ref) => {
           internalCallback(event.nativeEvent.data);
         }}
       />
-    </View>
+    </Modal>
   );
 });
 
@@ -252,15 +249,6 @@ LinkSDK.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-  },
   WebView: {
     position: 'absolute',
     top: 0,
