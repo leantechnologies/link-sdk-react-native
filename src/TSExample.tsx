@@ -1,53 +1,54 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useRef, useState} from 'react';
 import {
-  StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   TextInput,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
+
 import LinkSDK from './components/LinkSDK';
+
+interface LeanMethods {
+  link: (p: object) => void;
+  connect: (p: object) => void;
+  reconnect: (p: object) => void;
+  createPaymentSource: (p: object) => void;
+  updatePaymentSource: (p: object) => void;
+  pay: (p: object) => void;
+}
 
 const App = () => {
   // Create a ref so we can use the SDK component
-  const Lean = useRef(null);
+  const Lean = useRef<LeanMethods>();
 
   // variables for text entry
-  const [appToken, updateAppToken] = useState(null);
-  const [customerID, updateCustomerID] = useState(null);
+  const [appToken, updateAppToken] = useState('');
+  const [customerID, updateCustomerID] = useState('');
 
-  // Simple view to demo functionality
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 24, marginBottom: 24}}>
-        Lean React Native Demo
-      </Text>
+      <Text style={styles.text}>Lean React Native Demo</Text>
       <TextInput
-        placeholder="App Token"
         value={appToken}
+        placeholder="App Token"
+        style={styles.text_input}
         onChangeText={updateAppToken}
       />
       <TextInput
-        placeholder="Customer ID"
         value={customerID}
+        placeholder="Customer ID"
+        style={styles.text_input}
         onChangeText={updateCustomerID}
       />
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.link({
+          Lean?.current?.link({
             customer_id: customerID,
             permissions: ['identity', 'accounts', 'balance', 'transactions'], // bank_identifier: "LEAN_MB1",
-            success_redirect_url: "https://www.google.com",
-            fail_redirect_url: "https://www.twitter.com"
+            success_redirect_url: 'https://www.google.com',
+            fail_redirect_url: 'https://www.twitter.com',
           })
         }>
         <Text style={styles.cta_text}>Link</Text>
@@ -56,7 +57,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.connect({
+          Lean?.current?.connect({
             customer_id: customerID,
             permissions: [
               'identity',
@@ -73,7 +74,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.reconnect({
+          Lean?.current?.reconnect({
             reconnect_id: 'RECONNECT_ID',
           })
         }>
@@ -83,7 +84,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.createPaymentSource({
+          Lean?.current?.createPaymentSource({
             customer_id: 'CUSTOMER_ID',
           })
         }>
@@ -93,7 +94,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.updatePaymentSource({
+          Lean?.current?.updatePaymentSource({
             customer_id: 'CUSTOMER_ID',
             payment_source_id: 'PAYMENT_SOURCE_ID',
             payment_destination_id: 'PAYMENT_DESTINATION_ID',
@@ -105,7 +106,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.cta_container}
         onPress={() =>
-          Lean.current.pay({
+          Lean?.current?.pay({
             payment_intent_id: 'PAYMENT_INTENT_ID',
           })
         }>
@@ -115,11 +116,24 @@ const App = () => {
       {/* The actual component that will need to be present for end users */}
       <LinkSDK
         ref={Lean}
+        // @ts-ignore
         appToken={appToken}
-        callback={(data) => console.log('DATA SENT TO CALLBACK:', data)}
-        // version="1.0.0"
-        // country="SaudiArabia"
+        callback={(data: unknown) =>
+          console.log('DATA SENT TO CALLBACK:', data)
+        }
+        showLogs
+        customization={{
+          // dialog_mode: 'uncontained',
+          theme_color: 'rgb(0,152,172)',
+          button_text_color: 'white',
+          button_border_radius: '15',
+          link_color: 'rgb(0,152,172)',
+          overlay_color: 'rgb(175,182,182)',
+        }}
         // sandbox
+        // env="development"
+        // version="latest"
+        // country="ae | sa"
       />
     </View>
   );
@@ -142,6 +156,14 @@ const styles = StyleSheet.create({
   cta_text: {
     color: '#0080FF',
     fontSize: 18,
+  },
+  text: {
+    fontSize: 24,
+    marginBottom: 24,
+  },
+  text_input: {
+    fontSize: 16,
+    marginBottom: 16,
   },
 });
 

@@ -1,0 +1,36 @@
+fastlane_version '2.53.1'
+
+before_all do
+    ENV["FASTLANE_DONT_STORE_PASSWORD"] = "1"
+end
+
+platform :ios do
+    desc "Build iOS .ipa"
+
+    lane :build_ios do
+        setup_ci if ENV['CI']
+        match(type: "development")
+
+        build_app(
+          clean: true,
+          silent: true,
+          skip_package_pkg: true,
+          configuration: "Release",
+          scheme: "linkreactnative",
+          output_name: "app-release.ipa",
+          export_method: "development",
+          output_directory: "./ios/build",
+          workspace: "./ios/linkreactnative.xcworkspace",
+        )
+    end
+end
+
+platform :android do
+    desc "Build Android .apk"
+
+    lane :build_android do
+        setup_ci if ENV['CI']
+        gradle(task: 'clean', project_dir: 'android/')
+        gradle(task: 'assemble', build_type: 'Release', project_dir: 'android/')
+    end
+end

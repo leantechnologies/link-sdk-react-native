@@ -1,0 +1,118 @@
+name: build-apps
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android_build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'liberica'
+          java-version: '17'
+      - run: bundle install
+      - run: npm install
+      - run: npm run build:android
+
+      - name: ${{ format('Upload APK to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/react-native/android/build.{0}', github.run_number) }}
+
+      - name: Upload APK to /latest directory overriding previous APK
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'android/app/build/outputs/apk/release/app-release.apk'
+          destination-dir: '/'
+          bucket-root: '/link/webview/react-native/android/latest'
+
+      - name: Invalidate CloudFront cache
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: "/link/webview/react-native/android/*"
+          AWS_REGION: "eu-west-2"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+  ios_build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: MrSquaare/ssh-setup-action@v3
+        with:
+          host: github.com
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Setup Fastlane
+        run: bundle install
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cache cocoapods
+        uses: actions/cache@v3
+        with:
+          path: /ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install pod dependencies
+        run: |
+          cd ios
+          bundle exec pod install
+
+      - name: Build IPA
+        run: npm run build:ios
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+      - name: ${{ format('Upload IPA to /build.{0} directory', github.run_number) }}
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'ios/build/app-release.ipa'
+          destination-dir: '/'
+          bucket-root: ${{ format('/link/webview/react-native/ios/build.{0}', github.run_number) }}
+
+      - name: Upload IPA to /latest directory overriding previous IPA
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'eu-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'ios/build/app-release.ipa'
+          destination-dir: '/'
+          bucket-root: '/link/webview/react-native/ios/latest'
+
+      - name: Invalidate CloudFront cache
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_ID }}
+          PATHS: "/link/webview/react-native/ios/*"
+          AWS_REGION: "eu-west-2"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
