@@ -47,6 +47,7 @@ class Lean {
       sdk: 'react_native',
       os: Platform.OS,
       sdk_version: pkg.version,
+      is_version_pinned: this.version !== 'latest',
     };
 
     let implementationParams = '';
