@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Modal, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
@@ -62,11 +62,8 @@ const LinkSDK = forwardRef((props, ref) => {
     }
   };
 
-  return isOpen ? (
-    <View
-      style={styles.container}
-      height={Dimensions.get('window').height}
-      width={Dimensions.get('window').width}>
+  return (
+    <Modal visible={isOpen} transparent>
       <WebView
         {...props.webViewProps}
         style={styles.webView}
@@ -85,8 +82,8 @@ const LinkSDK = forwardRef((props, ref) => {
         onLoadStart={LeanWebClient.onPageStarted}
         onLoadEnd={LeanWebClient.onPageFinished}
       />
-    </View>
-  ) : null;
+    </Modal>
+  );
 });
 
 LinkSDK.defaultProps = {
@@ -94,15 +91,6 @@ LinkSDK.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 2,
-  },
   webView: {
     position: 'absolute',
     top: 0,
