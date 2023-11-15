@@ -22,7 +22,7 @@ class Lean {
     this.appToken = appToken;
     this.isSandbox = isSandbox;
     this.customization = customization;
-    this.baseURL = `https://cdn.leantech.me/link/loader/prod/${this.country}/${this.version}/lean-sdk.html`;
+    this.baseURL = `https://cdn.leantech.me/link/loader/prod/${this.country}/latest/lean-sdk.html`;
 
     Logger.showLogs = showLogs;
   }
