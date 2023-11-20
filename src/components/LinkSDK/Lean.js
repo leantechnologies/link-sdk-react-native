@@ -162,6 +162,7 @@ class Lean {
     accessFrom,
     permissions,
     customer_id,
+    end_user_id,
     bank_identifier,
     fail_redirect_url,
     success_redirect_url,
@@ -198,6 +199,12 @@ class Lean {
     if (bank_identifier) {
       initializationURL = initializationURL.concat(
         `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
+    }
+
+    if (end_user_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.END_USER_ID}=${end_user_id}`,
       );
     }
 
@@ -340,6 +347,7 @@ class Lean {
   }
 
   updatePaymentSource({
+    end_user_id,
     customer_id,
     payment_source_id,
     fail_redirect_url,
@@ -370,6 +378,12 @@ class Lean {
       );
     }
 
+    if (end_user_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.END_USER_ID}=${end_user_id}`,
+      );
+    }
+
     if (fail_redirect_url) {
       initializationURL = initializationURL.concat(
         `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
@@ -387,26 +401,47 @@ class Lean {
 
   pay({
     account_id,
+    end_user_id,
     show_balances,
     fail_redirect_url,
     payment_intent_id,
     success_redirect_url,
+    bulk_payment_intent_id,
   }) {
-    if (!payment_intent_id) {
-      throw new Error('Validation Error: payment_intent_id is required');
+    if (!payment_intent_id && !bulk_payment_intent_id) {
+      throw new Error(
+        'Validation Error: payment_intent_id or bulk_payment_intent_id is required',
+      );
     }
 
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.PAY}`)
-      .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
       .concat(customizationParams);
 
     // only include properties that are set
+    if (payment_intent_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`,
+      );
+    }
+
+    if (bulk_payment_intent_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.BULK_PAYMENT_INTENT_ID}=${bulk_payment_intent_id}`,
+      );
+    }
+
     if (account_id) {
       initializationURL = initializationURL.concat(
         `&${Params.ACCOUNT_ID}=${account_id}`,
+      );
+    }
+
+    if (end_user_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.END_USER_ID}=${end_user_id}`,
       );
     }
 
