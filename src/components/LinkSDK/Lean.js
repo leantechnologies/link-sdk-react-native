@@ -158,8 +158,8 @@ class Lean {
   }
 
   connect({
-    accessTo,
-    accessFrom,
+    access_to,
+    access_from,
     permissions,
     customer_id,
     end_user_id,
@@ -214,15 +214,15 @@ class Lean {
       );
     }
 
-    if (accessTo) {
+    if (access_to) {
       initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TO}=${accessTo}`,
+        `&${Params.ACCESS_TO}=${access_to}`,
       );
     }
 
-    if (accessFrom) {
+    if (access_from) {
       initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_FROM}=${accessFrom}`,
+        `&${Params.ACCESS_FROM}=${access_from}`,
       );
     }
 
