@@ -49,7 +49,7 @@ describe('Lean SDK', () => {
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions';
 
       const initializationURL = lean.link({
         customer_id: config.customerId,
@@ -61,7 +61,7 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&bank_identifier=LEANMB1_SAU&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&bank_identifier=LEANMB1_SAU&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = lean.link({
         customer_id: config.customerId,
@@ -116,7 +116,7 @@ describe('Lean SDK', () => {
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions';
 
       const initializationURL = lean.connect({
         customer_id: config.customerId,
@@ -128,7 +128,7 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_to=10-10-2023&access_from=10-05-2023&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&end_user_id=626715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_to=10-10-2023&access_from=10-05-2023&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = lean.connect({
         customer_id: config.customerId,
@@ -139,8 +139,9 @@ describe('Lean SDK', () => {
           'transactions',
           'payments',
         ],
-        accessTo: '10-10-2023',
-        accessFrom: '10-05-2023',
+        access_to: '10-10-2023',
+        access_from: '10-05-2023',
+        end_user_id: '626715d7-222f-4087-bcce-2832135e4981',
         bank_identifier: 'LEANMB1_SAU',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
@@ -160,7 +161,7 @@ describe('Lean SDK', () => {
 
     it('returns the correct URL when called', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=reconnect&reconnect_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=reconnect&reconnect_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.reconnect({
         reconnect_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -183,7 +184,7 @@ describe('Lean SDK', () => {
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createBeneficiary&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createBeneficiary&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.createBeneficiary({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -194,7 +195,7 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createBeneficiary&customer_id=726715d7-222f-4087-bcce-2832135e4981&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&payment_source_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createBeneficiary&customer_id=726715d7-222f-4087-bcce-2832135e4981&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&payment_source_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.createBeneficiary({
         customer_id: '726715d7-222f-4087-bcce-2832135e4981',
@@ -221,7 +222,7 @@ describe('Lean SDK', () => {
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.createPaymentSource({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -232,7 +233,7 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=createPaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&bank_identifier=LEANMB1_SAU&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = lean.createPaymentSource({
         bank_identifier: 'LEANMB1_SAU',
@@ -260,7 +261,7 @@ describe('Lean SDK', () => {
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=updatePaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=updatePaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.updatePaymentSource({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -271,10 +272,11 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=updatePaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&payment_source_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=updatePaymentSource&customer_id=726715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&payment_source_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&end_user_id=626715d7-222f-4087-bcce-2832135e4981&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = lean.updatePaymentSource({
         customer_id: '726715d7-222f-4087-bcce-2832135e4981',
+        end_user_id: '626715d7-222f-4087-bcce-2832135e4981',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
         payment_source_id: '8b3b7960-c4a1-41da-8ad0-5df36cf67540',
@@ -292,12 +294,14 @@ describe('Lean SDK', () => {
           show_balances: true,
           account_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         }),
-      ).toThrowError('Validation Error: payment_intent_id is required');
+      ).toThrowError(
+        'Validation Error: payment_intent_id or bulk_payment_intent_id is required',
+      );
     });
 
     it('partial params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0';
 
       const initializationURL = lean.pay({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -308,11 +312,12 @@ describe('Lean SDK', () => {
 
     it('all params: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&show_balances=true&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&end_user_id=626715d7-222f-4087-bcce-2832135e4981&show_balances=true&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = lean.pay({
         show_balances: true,
         account_id: '8b3b7960-c4a1-41da-8ad0-5df36cf67540',
+        end_user_id: '626715d7-222f-4087-bcce-2832135e4981',
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
@@ -343,7 +348,7 @@ describe('Lean SDK', () => {
 
     it('customization: returns the correct URL', () => {
       const expectedUrl =
-        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&customization=dialog_mode+uncontained&customization=theme_color+rgb(0,152,172)&customization=button_text_color+white&customization=button_border_radius+15&customization=link_color+rgb(0,152,172)&customization=overlay_color+rgb(175,182,182)&bank_identifier=LEANMB1_SAU&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
+        'https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+3.0.1&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=link&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&customization=dialog_mode+uncontained&customization=theme_color+rgb(0,152,172)&customization=button_text_color+white&customization=button_border_radius+15&customization=link_color+rgb(0,152,172)&customization=overlay_color+rgb(175,182,182)&bank_identifier=LEANMB1_SAU&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success';
 
       const initializationURL = leanWithCustomization.link({
         customer_id: config.customerId,

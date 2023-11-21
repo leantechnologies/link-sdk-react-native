@@ -34,6 +34,8 @@ export const Config = {
 export const Params = {
   INITIALIZATION_URL: 'initialization_url',
   PAYMENT_INTENT_ID: 'payment_intent_id',
+  PAYMENT_INTENT_IDS: 'payment_intent_ids',
+  BULK_PAYMENT_INTENT_ID: 'bulk_payment_intent_id',
   SHOW_BALANCES: 'show_balances',
   RECONNECT_ID: 'reconnect_id',
   CUSTOMER_ID: 'customer_id',
@@ -48,6 +50,8 @@ export const Params = {
   ACCESS_TO: 'access_to',
   ACCESS_FROM: 'access_from',
   ACCOUNT_TYPE: 'account_type',
+  END_USER_ID: 'end_user_id',
+  ENTITY_ID: 'entity_id',
 };
 
 export const Methods = {
