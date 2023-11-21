@@ -49,6 +49,7 @@ export const Params = {
   SUCCESS_REDIRECT_URL: 'success_redirect_url',
   ACCESS_TO: 'access_to',
   ACCESS_FROM: 'access_from',
+  ACCOUNT_TYPE: 'account_type',
   END_USER_ID: 'end_user_id',
   ENTITY_ID: 'entity_id',
 };

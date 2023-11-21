@@ -167,6 +167,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    account_type,
   }) {
     if (!customer_id) {
       throw new Error('Validation Error: customer_id is required');
@@ -235,6 +236,12 @@ class Lean {
     if (success_redirect_url) {
       initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
+      );
+    }
+
+    if (account_type) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCOUNT_TYPE}=${account_type}`,
       );
     }
 
