@@ -6,25 +6,26 @@ The React Native Wrapper for LinkSDK allows you to do all the functions that can
 
 Install `lean-react-native`
 
-```
+```shell
 npm install --save lean-react-native
 ```
 
 If you don't already have `react-native-webview` added to your project you should also install this
 
-```
+```shell
 npm install --save react-native-webview
 ```
 
-Go to your ios folder and run
-```
+Navigate to your project's **ios** directory and run
+
+```shell
 pod install
 ```
 
 ## Usage
 The Wrapper uses a `ref` to access internal functions.
 
-```
+```jsx
 import React, { useRef } from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
 import LinkSDK from 'lean-react-native'
@@ -35,7 +36,7 @@ const App = () => {
     return (
         <View>
             <TouchableOpacity 
-                onPress={() => Lean.current.link({ customer_id: "CUSTOMER_ID" })}
+                onPress={() => Lean.current.link({ customer_id: "CUSTOMER_ID" }) }
             >
                 <Text>Link Account</Text>
             </TouchableOpacity>
@@ -76,14 +77,14 @@ The LinkSDK supports 6 methods. `link`, `connect`, `reconnect`, `createPaymentSo
 
 Use link when you want to create an `Entity` for use with the Data API.
 
-```
-    Lean.current.link({
-        customer_id: "YOUR_CUSTOMER_ID",
-        permissions: ["identity","accounts","balance","transactions"],
-        bank_identifier: "LEAN_MB1", //optional
-        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
-        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
-    })
+```js
+Lean.current.link({
+    customer_id: "YOUR_CUSTOMER_ID",
+    permissions: ["identity","accounts","balance","transactions"],
+    bank_identifier: "LEAN_MB1", // optional
+    success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+    fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
+})
 ```
 
 | Parameter            | Required | Description                                                                         |
@@ -100,15 +101,15 @@ Use link when you want to create an `Entity` for use with the Data API.
 
 Use connect when you want to create an `Entity` and a `Payment Source` for use with the Data and Payments APIs.
 
-```
-    Lean.current.connect({
-        customer_id: "YOUR_CUSTOMER_ID",
-        permissions: ["identity","accounts","balance","transactions", "payments"],
-        bank_identifier: "LEAN_MB1",
-        payment_destination_id: "PAYMENT_DEST_ID",
-        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
-        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
-    })
+```js
+Lean.current.connect({
+    customer_id: "YOUR_CUSTOMER_ID",
+    permissions: ["identity","accounts","balance","transactions", "payments"],
+    bank_identifier: "LEAN_MB1",
+    payment_destination_id: "PAYMENT_DEST_ID",
+    success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+    fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
+})
 ```
 
 | Parameter              | Required | Description                                                                                    |
@@ -126,10 +127,10 @@ Use connect when you want to create an `Entity` and a `Payment Source` for use w
 
 Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
 
-```
-    Lean.current.reconnect({
-        reconnect_id: "RECONNECT_ID"
-    })
+```js
+Lean.current.reconnect({
+    reconnect_id: "RECONNECT_ID"
+})
 ```
 
 | Parameter            | Required | Description                                                                         |
@@ -144,13 +145,13 @@ Use reconnect when a call to an `Entity` returns `RECONNECT_REQUIRED`.
 
 Use createPaymentSource to create a `Payment Source` for use the Payments API.
 
-```
-    Lean.current.createPaymentSource({ 
-        customer_id: "CUSTOMER_ID",
-        bank_identifier: "LEAN_MB1",
-        success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
-        fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
-    })
+```js
+Lean.current.createPaymentSource({ 
+    customer_id: "CUSTOMER_ID",
+    bank_identifier: "LEAN_MB1",
+    success_redirect_url: "myapp://www.myapp.com/success", // required for Open Banking banks
+    fail_redirect_url: "myapp://www.myapp.com/success" // required for Open Banking banks
+})
 ```
 
 | Parameter            | Required | Description                                                                         |
@@ -166,12 +167,12 @@ Use createPaymentSource to create a `Payment Source` for use the Payments API.
 
 Use updatePaymentSource to create a new beneficiary within an existing `Payment Source`.
 
-```
-    Lean.current.updatePaymentSource({ 
-        customer_id: "CUSTOMER_ID",
-        payment_source_id: "PAYMENT_SOURCE_ID",
-        payment_destination_id: "PAYMENT_DESTINATION_ID"
-    })
+```js
+Lean.current.updatePaymentSource({ 
+    customer_id: "CUSTOMER_ID",
+    payment_source_id: "PAYMENT_SOURCE_ID",
+    payment_destination_id: "PAYMENT_DESTINATION_ID"
+})
 ```
 
 | Parameter              | Required | Description                                                                                            |
@@ -186,11 +187,11 @@ Use updatePaymentSource to create a new beneficiary within an existing `Payment 
 
 Use pay to initiate a payment against a `Payment Intent`.
 
-```
-    Lean.current.pay({ 
-        payment_intent_id: "PAYMENT_INTENT_ID",
-        account_id: "ACCOUNT_ID"
-    })
+```js
+Lean.current.pay({ 
+    payment_intent_id: "PAYMENT_INTENT_ID",
+    account_id: "ACCOUNT_ID"
+})
 ```
 
 | Parameter           | Required | Description                                                                                                    |
@@ -204,7 +205,7 @@ Use pay to initiate a payment against a `Payment Intent`.
 
 By providing a callback into the component, the LinkSDK will report back with an object in the following format:
 
-```
+```js
 {
     method: "LINK",
     status: "SUCCESS",
@@ -234,20 +235,21 @@ By providing a callback into the component, the LinkSDK will report back with an
 
 You can disable hardware acceleration on the webview by passing android specific props into the webview:
 
-```
+```jsx
 <LinkSDK
-    webViewProps={{
-        androidHardwareAccelerationDisabled: true,
-    }}
-    appToken: "YOUR_APP_TOKEN"
-    sandbox: false
->
+    ref={Lean}
+    webViewProps={{ androidHardwareAccelerationDisabled: true }} // 👈🏻
+    appToken="MY_APP_TOKEN"
+    version="{version_number}"
+    country="{country_of_operation}"
+    sandbox={false}
+/>
 ```
 
 ### JDK version issues on Android
 
 You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set JAVA_HOME in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
 
-```
+```shell
 SET JAVA_HOME="\Program Files\Android\Android Studio\jre"
-``` 
+```
