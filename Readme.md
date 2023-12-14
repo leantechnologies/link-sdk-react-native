@@ -197,7 +197,7 @@ Lean.current.pay({
 | Parameter           | Required | Description                                                                                                    |
 |---------------------|----------|----------------------------------------------------------------------------------------------------------------|
 | payment_intent_id   | True     | The Customer you want to create a payment source for                                                           |
-| account_id          | False    | Allows you to use a specific account for a customer payment source (available at payment_source.account[n].id) |
+| account_id          | False    | Allows you to use a specific account for a customer payment source (available at `payment_source.account[n].id`) |
 
 ---
 
@@ -248,7 +248,7 @@ You can disable hardware acceleration on the webview by passing android specific
 
 ### JDK version issues on Android
 
-You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set JAVA_HOME in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
+You may get gradle errors if you have a different JDK on the development system compared to the local JDK delivered with the Android SDK. The solution is to set `JAVA_HOME` in gradlew or gradlew.bat to point to the SDK JDK path. On Windows:
 
 ```shell
 SET JAVA_HOME="\Program Files\Android\Android Studio\jre"
