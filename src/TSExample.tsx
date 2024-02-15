@@ -130,8 +130,8 @@ const App = () => {
           link_color: 'rgb(0,152,172)',
           overlay_color: 'rgb(175,182,182)',
         }}
-        // sandbox
-        // env="development"
+        sandbox
+        env="staging"
         // version="latest"
         // country="ae | sa"
       />
