@@ -82,7 +82,7 @@ const App = () => {
 
             <TouchableOpacity
               style={styles.cta_container}
-              // disabled={!appToken || !link_customerID || !link_bankIdentifier}
+              disabled={!appToken || !link_customerID}
               onPress={() =>
                 Lean?.current?.link({
                   customer_id: link_customerID,
@@ -125,12 +125,7 @@ const App = () => {
 
             <TouchableOpacity
               style={styles.cta_container}
-              disabled={
-                !appToken ||
-                !connect_customerID ||
-                !connect_bankIdentifier ||
-                !connect_paymentDestinationID
-              }
+              disabled={!appToken || !connect_customerID}
               onPress={() =>
                 Lean?.current?.connect({
                   customer_id: connect_customerID,
@@ -235,7 +230,7 @@ const App = () => {
 
             <TouchableOpacity
               style={styles.cta_container}
-              disabled={!accountId || !paymentIntentID}
+              disabled={!appToken || !paymentIntentID}
               onPress={() =>
                 Lean?.current?.pay({
                   account_id: accountId,
