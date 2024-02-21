@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {Config, Methods, Params, UserPermissions} from './constants';
+import {Config, Methods, Params} from './constants';
 import Logger from './Logger';
 
 const pkg = require('../../../package.json');
@@ -102,30 +102,6 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
-    if (!Array.isArray(permissions) || !permissions?.length) {
-      throw new Error('Validation Error: permissions is required');
-    }
-
-    if (permissions.includes(UserPermissions.PAYMENTS)) {
-      throw new Error(
-        "Validation Error: 'payments' permission is not supported for link",
-      );
-    }
-
-    if (
-      (permissions.includes(UserPermissions.BALANCE) ||
-        permissions.includes(UserPermissions.TRANSACTIONS)) &&
-      !permissions.includes(UserPermissions.ACCOUNTS)
-    ) {
-      throw new Error(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -169,24 +145,6 @@ class Lean {
     payment_destination_id,
     account_type,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
-    if (!permissions) {
-      throw new Error('Validation Error: permissions is required');
-    }
-
-    if (
-      (permissions.includes(UserPermissions.BALANCE) ||
-        permissions.includes(UserPermissions.TRANSACTIONS)) &&
-      !permissions.includes(UserPermissions.ACCOUNTS)
-    ) {
-      throw new Error(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -249,10 +207,6 @@ class Lean {
   }
 
   reconnect({reconnect_id}) {
-    if (!reconnect_id) {
-      throw new Error('Validation Error: reconnect_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     return this.baseUrl
@@ -268,10 +222,6 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -314,10 +264,6 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -361,10 +307,6 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -415,12 +357,6 @@ class Lean {
     success_redirect_url,
     bulk_payment_intent_id,
   }) {
-    if (!payment_intent_id && !bulk_payment_intent_id) {
-      throw new Error(
-        'Validation Error: payment_intent_id or bulk_payment_intent_id is required',
-      );
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
