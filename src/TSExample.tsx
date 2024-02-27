@@ -1,10 +1,14 @@
 import React, {useRef, useState} from 'react';
 import {
-  View,
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Switch,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 import LinkSDK from './components/LinkSDK';
@@ -22,148 +26,295 @@ const App = () => {
   // Create a ref so we can use the SDK component
   const Lean = useRef<LeanMethods>();
 
-  // variables for text entry
   const [appToken, updateAppToken] = useState('');
+  // Link
+  const [link_customerID, updateLinkCustomerID] = useState('');
+  const [link_bankIdentifier, updateLinkBankIdentifier] = useState('');
+
+  // Connect
+  const [connect_customerID, updateConnectCustomerID] = useState('');
+  const [connect_bankIdentifier, updateConnectBankIdentifier] = useState('');
+  const [connect_paymentDestinationID, updateConnectPaymentDestinationID] =
+    useState('');
+
+  // Reconnect
+  const [reconnectID, updateReconnectID] = useState('');
+
+  // Create Beneficiary
   const [customerID, updateCustomerID] = useState('');
+  const [paymentSourceID, updatePaymentSourceID] = useState('');
+  const [paymentDestinationID, updatePaymentDestinationID] = useState('');
+
+  // Pay
+  const [isShowBalances, setIsShowBalances] = useState(false);
+  const [accountId, updateAccountId] = useState('');
+  const [paymentIntentID, updatePaymentIntentID] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Lean React Native Demo</Text>
-      <TextInput
-        value={appToken}
-        placeholder="App Token"
-        style={styles.text_input}
-        onChangeText={updateAppToken}
-      />
-      <TextInput
-        value={customerID}
-        placeholder="Customer ID"
-        style={styles.text_input}
-        onChangeText={updateCustomerID}
-      />
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.link({
-            customer_id: customerID,
-            permissions: ['identity', 'accounts', 'balance', 'transactions'], // bank_identifier: "LEAN_MB1",
-            success_redirect_url: 'https://www.google.com',
-            fail_redirect_url: 'https://www.twitter.com',
-          })
-        }>
-        <Text style={styles.cta_text}>Link</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.wrapper}>
+      <View style={styles.container}>
+        <Text style={styles.text}>LeanSDK React Native Demo</Text>
 
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.connect({
-            customer_id: customerID,
-            permissions: [
-              'identity',
-              'accounts',
-              'balance',
-              'transactions',
-              'payments',
-            ], // bank_identifier: "LEAN_MB1",
-          })
-        }>
-        <Text style={styles.cta_text}>Connect</Text>
-      </TouchableOpacity>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.group}>
+            <TextInput
+              value={appToken}
+              placeholder="App Token"
+              style={styles.text_input}
+              onChangeText={updateAppToken}
+            />
+          </View>
 
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.reconnect({
-            reconnect_id: 'RECONNECT_ID',
-          })
-        }>
-        <Text style={styles.cta_text}>Reconnect</Text>
-      </TouchableOpacity>
+          <View style={styles.group}>
+            <TextInput
+              value={link_customerID}
+              placeholder="Customer ID"
+              style={styles.text_input}
+              onChangeText={updateLinkCustomerID}
+            />
 
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.createPaymentSource({
-            customer_id: 'CUSTOMER_ID',
-          })
-        }>
-        <Text style={styles.cta_text}>Create Payment Source</Text>
-      </TouchableOpacity>
+            <TextInput
+              placeholder="Bank Identifier"
+              value={link_bankIdentifier}
+              style={styles.text_input}
+              onChangeText={updateLinkBankIdentifier}
+            />
 
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.updatePaymentSource({
-            customer_id: 'CUSTOMER_ID',
-            payment_source_id: 'PAYMENT_SOURCE_ID',
-            payment_destination_id: 'PAYMENT_DESTINATION_ID',
-          })
-        }>
-        <Text style={styles.cta_text}>Update Payment Source</Text>
-      </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cta_container}
+              disabled={!appToken || !link_customerID}
+              onPress={() =>
+                Lean?.current?.link({
+                  customer_id: link_customerID,
+                  permissions: [
+                    'identity',
+                    'accounts',
+                    'balance',
+                    'transactions',
+                  ],
+                  bank_identifier: link_bankIdentifier,
+                  success_redirect_url: 'https://www.google.com',
+                  fail_redirect_url: 'https://www.twitter.com',
+                })
+              }>
+              <Text style={styles.cta_text}>Link</Text>
+            </TouchableOpacity>
+          </View>
 
-      <TouchableOpacity
-        style={styles.cta_container}
-        onPress={() =>
-          Lean?.current?.pay({
-            payment_intent_id: 'PAYMENT_INTENT_ID',
-          })
-        }>
-        <Text style={styles.cta_text}>Pay</Text>
-      </TouchableOpacity>
+          <View style={styles.group}>
+            <TextInput
+              value={connect_customerID}
+              placeholder="Customer ID"
+              style={styles.text_input}
+              onChangeText={updateConnectCustomerID}
+            />
 
-      {/* The actual component that will need to be present for end users */}
-      <LinkSDK
-        ref={Lean}
-        // @ts-ignore
-        appToken={appToken}
-        callback={(data: unknown) =>
-          console.log('DATA SENT TO CALLBACK:', data)
-        }
-        showLogs
-        customization={{
-          // dialog_mode: 'uncontained',
-          theme_color: 'rgb(0,152,172)',
-          button_text_color: 'white',
-          button_border_radius: '15',
-          link_color: 'rgb(0,152,172)',
-          overlay_color: 'rgb(175,182,182)',
-        }}
-        sandbox
-        env="staging"
-        // version="latest"
-        // country="ae | sa"
-      />
-    </View>
+            <TextInput
+              placeholder="Bank Identifier"
+              value={connect_bankIdentifier}
+              style={styles.text_input}
+              onChangeText={updateConnectBankIdentifier}
+            />
+
+            <TextInput
+              placeholder="Payment Destination ID"
+              value={connect_paymentDestinationID}
+              style={styles.text_input}
+              onChangeText={updateConnectPaymentDestinationID}
+            />
+
+            <TouchableOpacity
+              style={styles.cta_container}
+              disabled={!appToken || !connect_customerID}
+              onPress={() =>
+                Lean?.current?.connect({
+                  customer_id: connect_customerID,
+                  permissions: [
+                    'identity',
+                    'accounts',
+                    'balance',
+                    'transactions',
+                    'payments',
+                  ],
+                  bank_identifier: connect_bankIdentifier,
+                  payment_destination_id: connect_paymentDestinationID,
+                })
+              }>
+              <Text style={styles.cta_text}>Connect</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.group}>
+            <TextInput
+              placeholder="Reconnect ID"
+              value={reconnectID}
+              style={styles.text_input}
+              onChangeText={updateReconnectID}
+            />
+
+            <TouchableOpacity
+              style={styles.cta_container}
+              disabled={!appToken || !reconnectID}
+              onPress={() =>
+                Lean?.current?.reconnect({
+                  reconnect_id: reconnectID,
+                })
+              }>
+              <Text style={styles.cta_text}>Reconnect</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.group}>
+            <TextInput
+              value={customerID}
+              placeholder="Customer ID"
+              style={styles.text_input}
+              onChangeText={updateCustomerID}
+            />
+            <TextInput
+              placeholder="Payment Source ID"
+              value={paymentSourceID}
+              style={styles.text_input}
+              onChangeText={updatePaymentSourceID}
+            />
+            <TextInput
+              placeholder="Payment Destination ID"
+              value={paymentDestinationID}
+              style={styles.text_input}
+              onChangeText={updatePaymentDestinationID}
+            />
+
+            <TouchableOpacity
+              style={styles.cta_container}
+              disabled={
+                !appToken ||
+                !customerID ||
+                !paymentSourceID ||
+                !paymentDestinationID
+              }
+              onPress={() =>
+                Lean?.current?.updatePaymentSource({
+                  customer_id: customerID,
+                  payment_source_id: paymentSourceID,
+                  payment_destination_id: paymentDestinationID,
+                })
+              }>
+              <Text style={styles.cta_text}>Create Beneficiary</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.group}>
+            <View style={styles.switchContainer}>
+              <Text>Show Balances</Text>
+              <Switch
+                style={styles.switch}
+                onValueChange={() =>
+                  setIsShowBalances(previousState => !previousState)
+                }
+                value={isShowBalances}
+              />
+            </View>
+
+            <TextInput
+              value={accountId}
+              placeholder="Account ID"
+              style={styles.text_input}
+              onChangeText={updateAccountId}
+            />
+            <TextInput
+              placeholder="Payment Intent ID"
+              value={paymentIntentID}
+              style={styles.text_input}
+              onChangeText={updatePaymentIntentID}
+            />
+
+            <TouchableOpacity
+              style={styles.cta_container}
+              disabled={!appToken || !paymentIntentID}
+              onPress={() =>
+                Lean?.current?.pay({
+                  account_id: accountId,
+                  show_balances: isShowBalances,
+                  payment_intent_id: paymentIntentID,
+                })
+              }>
+              <Text style={styles.cta_text}>Pay</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* The actual component that will need to be present for end users */}
+          <LinkSDK
+            ref={Lean}
+            // @ts-ignore
+            appToken={appToken}
+            callback={(data: unknown) => {
+              console.log('DATA SENT TO CALLBACK:', data);
+              Alert.alert('Callback data', `${JSON.stringify(data)}`);
+            }}
+            showLogs
+            customization={{
+              // dialog_mode: 'uncontained',
+              theme_color: 'rgb(0,152,172)',
+              button_text_color: 'white',
+              button_border_radius: '15',
+              link_color: 'rgb(0,152,172)',
+              overlay_color: 'rgb(175,182,182)',
+            }}
+            sandbox
+            env="staging"
+            // version="latest"
+            // country="ae | sa"
+          />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+  },
+  group: {
+    padding: 20,
+    backgroundColor: '#F4F5F5',
+    marginBottom: 14,
   },
   cta_container: {
-    marginBottom: 16,
-    backgroundColor: '#F4F5F5',
+    backgroundColor: '#0080FF',
     padding: 8,
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 6,
   },
   cta_text: {
-    color: '#0080FF',
+    color: '#ffffff',
     fontSize: 18,
+    textAlign: 'center',
   },
   text: {
-    fontSize: 24,
+    fontSize: 20,
     marginBottom: 24,
   },
   text_input: {
     fontSize: 16,
     marginBottom: 16,
+    borderStyle: 'solid',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  switch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
 });
 
