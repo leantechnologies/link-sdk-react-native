@@ -180,7 +180,7 @@ const App = () => {
               onChangeText={updateCustomerID}
             />
             <TextInput
-              id = 'createBeneficiaryPaymentSourceId'
+              id = "createBeneficiaryPaymentSourceId"
               placeholder="Payment Source ID"
               value={paymentSourceID}
               style={styles.text_input}
@@ -227,7 +227,7 @@ const App = () => {
             </View>
 
             <TextInput
-              id = 'payAccountId'
+              id = "payAccountId"
               value={accountId}
               placeholder="Account ID"
               style={styles.text_input}
