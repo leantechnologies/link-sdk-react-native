@@ -58,7 +58,7 @@ const App = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.group}>
             <TextInput
-              id = "appToken"
+              id="appToken"
               value={appToken}
               placeholder="App Token"
               style={styles.text_input}
@@ -68,7 +68,7 @@ const App = () => {
 
           <View style={styles.group}>
             <TextInput
-              id = "linkCustomerId"
+              id="linkCustomerId"
               value={link_customerID}
               placeholder="Customer ID"
               style={styles.text_input}
@@ -76,7 +76,7 @@ const App = () => {
             />
 
             <TextInput
-              id = "linkBankIdentifier"
+              id="linkBankIdentifier"
               placeholder="Bank Identifier"
               value={link_bankIdentifier}
               style={styles.text_input}
@@ -106,7 +106,7 @@ const App = () => {
 
           <View style={styles.group}>
             <TextInput
-              id = "connectCustomerId"
+              id="connectCustomerId"
               value={connect_customerID}
               placeholder="Customer ID"
               style={styles.text_input}
@@ -114,7 +114,7 @@ const App = () => {
             />
 
             <TextInput
-              id = "connectBankIdentifier"
+              id="connectBankIdentifier"
               placeholder="Bank Identifier"
               value={connect_bankIdentifier}
               style={styles.text_input}
@@ -122,7 +122,7 @@ const App = () => {
             />
 
             <TextInput
-              id = "connectPaymentDestinationId"
+              id="connectPaymentDestinationId"
               placeholder="Payment Destination ID"
               value={connect_paymentDestinationID}
               style={styles.text_input}
@@ -152,7 +152,7 @@ const App = () => {
 
           <View style={styles.group}>
             <TextInput
-              id = "reconnectId"
+              id="reconnectId"
               placeholder="Reconnect ID"
               value={reconnectID}
               style={styles.text_input}
@@ -174,20 +174,20 @@ const App = () => {
           <View style={styles.group}>
             <TextInput
               value={customerID}
-              id = "createBeneficiaryCustomerId"
+              id="createBeneficiaryCustomerId"
               placeholder="Customer ID"
               style={styles.text_input}
               onChangeText={updateCustomerID}
             />
             <TextInput
-              id = "createBeneficiaryPaymentSourceId"
+              id="createBeneficiaryPaymentSourceId"
               placeholder="Payment Source ID"
               value={paymentSourceID}
               style={styles.text_input}
               onChangeText={updatePaymentSourceID}
             />
             <TextInput
-              id = "createBeneficiaryPaymentDestinationId"
+              id="createBeneficiaryPaymentDestinationId"
               placeholder="Payment Destination ID"
               value={paymentDestinationID}
               style={styles.text_input}
@@ -221,20 +221,20 @@ const App = () => {
                 onValueChange={() =>
                   setIsShowBalances(previousState => !previousState)
                 }
-                id = "showBalancesToggle"
+                id="showBalancesToggle"
                 value={isShowBalances}
               />
             </View>
 
             <TextInput
-              id = "payAccountId"
+              id="payAccountId"
               value={accountId}
               placeholder="Account ID"
               style={styles.text_input}
               onChangeText={updateAccountId}
             />
             <TextInput
-              id = "paymentIntentId"
+              id="paymentIntentId"
               placeholder="Payment Intent ID"
               value={paymentIntentID}
               style={styles.text_input}
