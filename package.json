@@ -20,7 +20,7 @@
     "UAE",
     "Dubai"
   ],
-  "private": false,
+  "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -55,6 +55,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "packageManager": "yarn@3.6.4"
+  }
 }
