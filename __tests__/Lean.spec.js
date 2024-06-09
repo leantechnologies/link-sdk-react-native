@@ -1,5 +1,7 @@
 import Lean from '../src/components/LinkSDK/Lean';
 import {config} from './fixtures/config';
+// Note: import explicitly to use the types shipped with jest.
+import {it} from '@jest/globals';
 
 const pkg = require('../package.json');
 
