@@ -1,7 +1,7 @@
 {
   "main": "src/components/LinkSDK/index.js",
   "name": "lean-react-native",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "A React Native wrapper for Lean's LinkSDK",
   "repository": {
     "type": "git",
