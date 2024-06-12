@@ -34,7 +34,7 @@ class LeanWebClient {
   static handleOverrideUrlLoading(request, callback) {
     Logger.info('handleOverrideUrlLoading', request.url);
 
-    if (request.url.startsWith('file://')) {
+    if (request.url.startsWith('file://') || request.url === 'about:blank') {
       return false;
     }
 
