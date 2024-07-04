@@ -52,6 +52,7 @@ export const Params = {
   ACCOUNT_TYPE: 'account_type',
   END_USER_ID: 'end_user_id',
   ENTITY_ID: 'entity_id',
+  ACCESS_TOKEN: 'access_token',
 };
 
 export const Methods = {

@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {Config, Methods, Params, UserPermissions} from './constants';
+import {Config, Methods, Params} from './constants';
 import Logger from './Logger';
 
 const pkg = require('../../../package.json');
@@ -101,31 +101,8 @@ class Lean {
     bank_identifier,
     fail_redirect_url,
     success_redirect_url,
+    access_token,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
-    if (!Array.isArray(permissions) || !permissions?.length) {
-      throw new Error('Validation Error: permissions is required');
-    }
-
-    if (permissions.includes(UserPermissions.PAYMENTS)) {
-      throw new Error(
-        "Validation Error: 'payments' permission is not supported for link",
-      );
-    }
-
-    if (
-      (permissions.includes(UserPermissions.BALANCE) ||
-        permissions.includes(UserPermissions.TRANSACTIONS)) &&
-      !permissions.includes(UserPermissions.ACCOUNTS)
-    ) {
-      throw new Error(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -139,6 +116,12 @@ class Lean {
     if (bank_identifier) {
       initializationURL = initializationURL.concat(
         `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -168,25 +151,8 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
     account_type,
+    access_token,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
-    if (!permissions) {
-      throw new Error('Validation Error: permissions is required');
-    }
-
-    if (
-      (permissions.includes(UserPermissions.BALANCE) ||
-        permissions.includes(UserPermissions.TRANSACTIONS)) &&
-      !permissions.includes(UserPermissions.ACCOUNTS)
-    ) {
-      throw new Error(
-        "Validation Error: Must have 'accounts' permission if requesting 'balance' and/or 'transactions' permission",
-      );
-    }
-
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -212,6 +178,12 @@ class Lean {
     if (payment_destination_id) {
       initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -248,17 +220,21 @@ class Lean {
     return initializationURL;
   }
 
-  reconnect({reconnect_id}) {
-    if (!reconnect_id) {
-      throw new Error('Validation Error: reconnect_id is required');
-    }
-
+  reconnect({reconnect_id, access_token}) {
     const customizationParams = this.convertCustomizationToURLString();
 
-    return this.baseUrl
+    let initializationURL = this.baseUrl
       .concat(`&method=${Methods.RECONNECT}`)
       .concat(`&${Params.RECONNECT_ID}=${reconnect_id}`)
       .concat(customizationParams);
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
+      );
+    }
+
+    return initializationURL;
   }
 
   createBeneficiary({
@@ -267,11 +243,8 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -289,6 +262,12 @@ class Lean {
     if (success_redirect_url) {
       initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -313,11 +292,8 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -329,6 +305,12 @@ class Lean {
     if (bank_identifier) {
       initializationURL = initializationURL.concat(
         `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -360,11 +342,8 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
-    if (!customer_id) {
-      throw new Error('Validation Error: customer_id is required');
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -373,6 +352,12 @@ class Lean {
       .concat(customizationParams);
 
     // only include properties that are set
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
+      );
+    }
+
     if (payment_destination_id) {
       initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
@@ -414,13 +399,8 @@ class Lean {
     payment_intent_id,
     success_redirect_url,
     bulk_payment_intent_id,
+    access_token,
   }) {
-    if (!payment_intent_id && !bulk_payment_intent_id) {
-      throw new Error(
-        'Validation Error: payment_intent_id or bulk_payment_intent_id is required',
-      );
-    }
-
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -437,6 +417,12 @@ class Lean {
     if (bulk_payment_intent_id) {
       initializationURL = initializationURL.concat(
         `&${Params.BULK_PAYMENT_INTENT_ID}=${bulk_payment_intent_id}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
