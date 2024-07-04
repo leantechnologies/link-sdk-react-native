@@ -101,6 +101,7 @@ class Lean {
     bank_identifier,
     fail_redirect_url,
     success_redirect_url,
+    access_token,
   }) {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
@@ -115,6 +116,12 @@ class Lean {
     if (bank_identifier) {
       initializationURL = initializationURL.concat(
         `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -144,6 +151,7 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
     account_type,
+    access_token,
   }) {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
@@ -170,6 +178,12 @@ class Lean {
     if (payment_destination_id) {
       initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -206,13 +220,21 @@ class Lean {
     return initializationURL;
   }
 
-  reconnect({reconnect_id}) {
+  reconnect({reconnect_id, access_token}) {
     const customizationParams = this.convertCustomizationToURLString();
 
-    return this.baseUrl
+    let initializationURL = this.baseUrl
       .concat(`&method=${Methods.RECONNECT}`)
       .concat(`&${Params.RECONNECT_ID}=${reconnect_id}`)
       .concat(customizationParams);
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
+      );
+    }
+
+    return initializationURL;
   }
 
   createBeneficiary({
@@ -221,6 +243,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -239,6 +262,12 @@ class Lean {
     if (success_redirect_url) {
       initializationURL = initializationURL.concat(
         `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -263,6 +292,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -275,6 +305,12 @@ class Lean {
     if (bank_identifier) {
       initializationURL = initializationURL.concat(
         `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
@@ -306,6 +342,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    access_token,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -315,6 +352,12 @@ class Lean {
       .concat(customizationParams);
 
     // only include properties that are set
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
+      );
+    }
+
     if (payment_destination_id) {
       initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
@@ -356,6 +399,7 @@ class Lean {
     payment_intent_id,
     success_redirect_url,
     bulk_payment_intent_id,
+    access_token,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -373,6 +417,12 @@ class Lean {
     if (bulk_payment_intent_id) {
       initializationURL = initializationURL.concat(
         `&${Params.BULK_PAYMENT_INTENT_ID}=${bulk_payment_intent_id}`,
+      );
+    }
+
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
       );
     }
 
