@@ -23,6 +23,9 @@ class LeanWebClient {
       message: urlParams.get('message'),
       last_api_response: urlParams.get('last_api_response'),
       exit_point: urlParams.get('exit_point'),
+      exit_intent_point: urlParams.get('exit_intent_point'),
+      exit_survey_reason: urlParams.get('exit_survey_reason'),
+      lean_correlation_id: urlParams.get('lean_correlation_id'),
       secondary_status: urlParams.get('secondary_status'),
       bank: {
         bank_identifier: urlParams.get('bank_identifier'),
@@ -30,7 +33,9 @@ class LeanWebClient {
       },
     };
   }
-
+  
+  
+  
   static handleOverrideUrlLoading(request, callback) {
     Logger.info('handleOverrideUrlLoading', request.url);
 
@@ -63,6 +68,9 @@ class LeanWebClient {
           message: 'Link closed after redirect',
           lastApiResponse: null,
           exitPoint: null,
+          exitIntentPoint: null,
+          exitSurveyReason: null,
+          leanCorrelationId: null,
           secondaryStatus: null,
           bank: {
             bankId: null,
