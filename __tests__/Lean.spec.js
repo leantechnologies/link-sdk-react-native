@@ -1,3 +1,4 @@
+import {it} from '@jest/globals';
 import Lean from '../src/components/LinkSDK/Lean';
 import {config} from './fixtures/config';
 
