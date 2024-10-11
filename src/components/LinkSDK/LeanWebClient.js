@@ -33,17 +33,15 @@ class LeanWebClient {
       },
     };
   }
-  
-  
-  
-  static handleOverrideUrlLoading(request, callback) {
-    Logger.info('handleOverrideUrlLoading', request.url);
 
-    if (request.url.startsWith('file://') || request.url === 'about:blank') {
+  static handleOverrideUrlLoading(event, callback) {
+    Logger.info('handleOverrideUrlLoading', event.url);
+
+    if (event.url.startsWith('file://') || event.url === 'about:blank') {
       return false;
     }
 
-    if (request.url.includes('https://cdn.leantech.me/link/loader')) {
+    if (event.url.includes('https://cdn.leantech.me/link/loader')) {
       return true;
     }
 
@@ -52,7 +50,7 @@ class LeanWebClient {
       this.responseListener = callback;
     }
 
-    const urlObject = new URL(request.url);
+    const urlObject = new URL(event.url);
 
     /**
      * Standard redirect URI from hosted HTML has three parts
@@ -83,14 +81,14 @@ class LeanWebClient {
       }
 
       // Send response back caller for proper handling
-      this.onRedirectResponse(this.getResponseFromParams(request.url));
+      this.onRedirectResponse(this.getResponseFromParams(event.url));
 
       // Do not override URL loading
       return false;
     }
 
     // Open all URLs in default web browser
-    Linking.openURL(request.url);
+    Linking.openURL(event.url);
 
     // Do not override URL loading
     return false;

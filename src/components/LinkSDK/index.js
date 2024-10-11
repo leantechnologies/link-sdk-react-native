@@ -70,12 +70,13 @@ const LinkSDK = forwardRef((props, ref) => {
         originWhitelist={['*']}
         source={{uri: initializationURL}}
         allowsInlineMediaPlayback={true}
+        setSupportMultipleWindows={false}
         mediaPlaybackRequiresUserAction={false}
-        onShouldStartLoadWithRequest={request =>
-          LeanWebClient.handleOverrideUrlLoading(
-            request,
-            responseCallbackHandler,
-          )
+        onShouldStartLoadWithRequest={event =>
+          LeanWebClient.handleOverrideUrlLoading(event, responseCallbackHandler)
+        }
+        onNavigationStateChange={event =>
+          LeanWebClient.handleOverrideUrlLoading(event, responseCallbackHandler)
         }
         cacheEnabled={false}
         javaScriptEnabledAndroid={true}
