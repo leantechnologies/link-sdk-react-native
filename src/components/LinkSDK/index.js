@@ -78,6 +78,15 @@ const LinkSDK = forwardRef((props, ref) => {
         onNavigationStateChange={event =>
           LeanWebClient.handleOverrideUrlLoading(event, responseCallbackHandler)
         }
+        onOpenWindow={syntheticEvent => {
+          // This is required to manage iOS window.open events.
+          // We don't get onNavigationStateChange or onShouldStartLoadWithRequest in iOS for this particular event.
+          const {nativeEvent} = syntheticEvent;
+          return LeanWebClient.handleOverrideUrlLoading(
+            {url: nativeEvent.targetUrl},
+            responseCallbackHandler,
+          );
+        }}
         cacheEnabled={false}
         javaScriptEnabledAndroid={true}
         javaScriptCanOpenWindowsAutomatically
