@@ -244,6 +244,7 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
     access_token,
+    entity_id,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -280,6 +281,12 @@ class Lean {
     if (payment_destination_id) {
       initializationURL = initializationURL.concat(
         `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
+      );
+    }
+
+    if (entity_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ENTITY_ID}=${entity_id}`,
       );
     }
 
@@ -343,6 +350,7 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
     access_token,
+    entity_id,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -373,6 +381,12 @@ class Lean {
     if (end_user_id) {
       initializationURL = initializationURL.concat(
         `&${Params.END_USER_ID}=${end_user_id}`,
+      );
+    }
+
+    if (entity_id) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ENTITY_ID}=${entity_id}`,
       );
     }
 
