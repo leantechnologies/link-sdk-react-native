@@ -472,6 +472,27 @@ class Lean {
 
     return initializationURL;
   }
+
+  verifyAddress({permissions, customer_id, customer_name, access_token}) {
+    const permissionsParams = this.convertPermissionsToURLString(permissions);
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.VERIFY_ADDRESS}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&${Params.CUSTOMER_NAME}=${customer_name}`)
+      .concat(permissionsParams)
+      .concat(customizationParams);
+
+    // only include properties that are set
+    if (access_token) {
+      initializationURL = initializationURL.concat(
+        `&${Params.ACCESS_TOKEN}=${access_token}`,
+      );
+    }
+
+    return initializationURL;
+  }
 }
 
 export default Lean;
