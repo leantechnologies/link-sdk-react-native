@@ -39,6 +39,7 @@ export const Params = {
   SHOW_BALANCES: 'show_balances',
   RECONNECT_ID: 'reconnect_id',
   CUSTOMER_ID: 'customer_id',
+  CUSTOMER_NAME: 'customer_name',
   BANK_IDENTIFIER: 'bank_identifier',
   ACCOUNT_ID: 'account_id',
   PERMISSIONS: 'permissions',
@@ -63,4 +64,5 @@ export const Methods = {
   CREATE_BENEFICIARY: 'createBeneficiary',
   CREATE_PAYMENT_SOURCE: 'createPaymentSource',
   UPDATE_PAYMENT_SOURCE: 'updatePaymentSource',
+  VERIFY_ADDRESS: 'verifyAddress',
 };

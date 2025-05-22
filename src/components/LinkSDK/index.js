@@ -52,6 +52,10 @@ const LinkSDK = forwardRef((props, ref) => {
       setIsOpen(true);
       setInitializationURL(lean.pay(config));
     },
+    verifyAddress: config => {
+      setIsOpen(true);
+      setInitializationURL(lean.verifyAddress(config));
+    },
   }));
 
   // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
