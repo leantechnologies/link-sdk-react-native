@@ -54,6 +54,7 @@ export const Params = {
   END_USER_ID: 'end_user_id',
   ENTITY_ID: 'entity_id',
   ACCESS_TOKEN: 'access_token',
+  SHOW_CONSENT_EXPLANATION: 'show_consent_explanation',
 };
 
 export const Methods = {

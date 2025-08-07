@@ -93,6 +93,16 @@ class Lean {
     return customizationParams;
   }
 
+  appendOptionalConfigToURLParams(url, optionalParams) {
+    let result = url;
+    for (const [key, value] of Object.entries(optionalParams)) {
+      if (value) {
+        result = result.concat(`&${key}=${value}`);
+      }
+    }
+    return result;
+  }
+
   //  ================    Link methods    ================    //
 
   link({
@@ -112,32 +122,17 @@ class Lean {
       .concat(permissionsParams)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (bank_identifier) {
-      initializationURL = initializationURL.concat(
-        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
-      );
-    }
+    const optionalParams = {
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+    };
 
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
-
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
-
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   connect({
@@ -150,6 +145,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    show_consent_explanation,
     account_type,
     access_token,
   }) {
@@ -162,62 +158,23 @@ class Lean {
       .concat(permissionsParams)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (bank_identifier) {
-      initializationURL = initializationURL.concat(
-        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
-      );
-    }
+    const optionalParams = {
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.END_USER_ID]: end_user_id,
+      [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.ACCESS_TO]: access_to,
+      [Params.ACCESS_FROM]: access_from,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.ACCOUNT_TYPE]: account_type,
+      [Params.SHOW_CONSENT_EXPLANATION]: show_consent_explanation,
+    };
 
-    if (end_user_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.END_USER_ID}=${end_user_id}`,
-      );
-    }
-
-    if (payment_destination_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
-      );
-    }
-
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
-
-    if (access_to) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TO}=${access_to}`,
-      );
-    }
-
-    if (access_from) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_FROM}=${access_from}`,
-      );
-    }
-
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
-
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    if (account_type) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCOUNT_TYPE}=${account_type}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   reconnect({reconnect_id, access_token}) {
@@ -253,44 +210,19 @@ class Lean {
       .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
+    const optionalParams = {
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.PAYMENT_SOURCE_ID]: payment_source_id,
+      [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
+      [Params.ENTITY_ID]: entity_id,
+    };
 
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
-
-    if (payment_source_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
-      );
-    }
-
-    if (payment_destination_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
-      );
-    }
-
-    if (entity_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ENTITY_ID}=${entity_id}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   createPaymentSource({
@@ -308,38 +240,18 @@ class Lean {
       .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (bank_identifier) {
-      initializationURL = initializationURL.concat(
-        `&${Params.BANK_IDENTIFIER}=${bank_identifier}`,
-      );
-    }
+    const optionalParams = {
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+    };
 
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
-
-    if (payment_destination_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
-      );
-    }
-
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
-
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   updatePaymentSource({
@@ -359,50 +271,20 @@ class Lean {
       .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
+      [Params.PAYMENT_SOURCE_ID]: payment_source_id,
+      [Params.END_USER_ID]: end_user_id,
+      [Params.ENTITY_ID]: entity_id,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+    };
 
-    if (payment_destination_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_DESTINATION_ID}=${payment_destination_id}`,
-      );
-    }
-
-    if (payment_source_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_SOURCE_ID}=${payment_source_id}`,
-      );
-    }
-
-    if (end_user_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.END_USER_ID}=${end_user_id}`,
-      );
-    }
-
-    if (entity_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ENTITY_ID}=${entity_id}`,
-      );
-    }
-
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
-
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   pay({
@@ -421,56 +303,21 @@ class Lean {
       .concat(`&method=${Methods.PAY}`)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (payment_intent_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`,
-      );
-    }
+    const optionalParams = {
+      [Params.PAYMENT_INTENT_ID]: payment_intent_id,
+      [Params.BULK_PAYMENT_INTENT_ID]: bulk_payment_intent_id,
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.ACCOUNT_ID]: account_id,
+      [Params.END_USER_ID]: end_user_id,
+      [Params.SHOW_BALANCES]: show_balances,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+    };
 
-    if (bulk_payment_intent_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.BULK_PAYMENT_INTENT_ID}=${bulk_payment_intent_id}`,
-      );
-    }
-
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
-
-    if (account_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCOUNT_ID}=${account_id}`,
-      );
-    }
-
-    if (end_user_id) {
-      initializationURL = initializationURL.concat(
-        `&${Params.END_USER_ID}=${end_user_id}`,
-      );
-    }
-
-    if (show_balances) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SHOW_BALANCES}=${show_balances}`,
-      );
-    }
-
-    if (fail_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`,
-      );
-    }
-
-    if (success_redirect_url) {
-      initializationURL = initializationURL.concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`,
-      );
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   verifyAddress({permissions, customer_id, customer_name, access_token}) {
