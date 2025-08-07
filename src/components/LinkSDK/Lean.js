@@ -93,6 +93,16 @@ class Lean {
     return customizationParams;
   }
 
+  appendOptionalConfigToURLParams(url, optionalParams) {
+    let result = url;
+    for (const [key, value] of Object.entries(optionalParams)) {
+      if (value) {
+        result = result.concat(`&${key}=${value}`);
+      }
+    }
+    return result;
+  }
+
   //  ================    Link methods    ================    //
 
   link({
@@ -119,13 +129,10 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   connect({
@@ -164,13 +171,10 @@ class Lean {
       [Params.SHOW_CONSENT_EXPLANATION]: show_consent_explanation,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   reconnect({reconnect_id, access_token}) {
@@ -215,13 +219,10 @@ class Lean {
       [Params.ENTITY_ID]: entity_id,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   createPaymentSource({
@@ -247,13 +248,10 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   updatePaymentSource({
@@ -283,13 +281,10 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   pay({
@@ -319,13 +314,10 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
     };
 
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        initializationURL = initializationURL.concat(`&${key}=${value}`);
-      }
-    }
-
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   verifyAddress({permissions, customer_id, customer_name, access_token}) {
