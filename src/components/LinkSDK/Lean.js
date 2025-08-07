@@ -150,6 +150,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     payment_destination_id,
+    show_consent_explanation,
     account_type,
     access_token,
   }) {
@@ -214,6 +215,12 @@ class Lean {
     if (account_type) {
       initializationURL = initializationURL.concat(
         `&${Params.ACCOUNT_TYPE}=${account_type}`,
+      );
+    }
+
+    if (show_consent_explanation) {
+      initializationURL = initializationURL.concat(
+        `&${Params.SHOW_CONSENT_EXPLANATION}=${show_consent_explanation}`,
       );
     }
 
