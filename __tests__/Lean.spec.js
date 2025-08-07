@@ -61,7 +61,7 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&end_user_id=626715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&access_to=10-10-2023&access_from=10-05-2023&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success`;
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=connect&customer_id=dda80d32-4062-404c-abe7-ba9b9290c873&permissions=identity&permissions=accounts&permissions=balance&permissions=transactions&permissions=payments&bank_identifier=LEANMB1_SAU&end_user_id=626715d7-222f-4087-bcce-2832135e4981&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&access_to=10-10-2023&access_from=10-05-2023&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&show_consent_explanation=true`;
 
       const initializationURL = lean.connect({
         customer_id: config.customerId,
@@ -76,6 +76,7 @@ describe('Lean SDK', () => {
         access_to: '10-10-2023',
         access_from: '10-05-2023',
         end_user_id: '626715d7-222f-4087-bcce-2832135e4981',
+        show_consent_explanation: true,
         bank_identifier: 'LEANMB1_SAU',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
