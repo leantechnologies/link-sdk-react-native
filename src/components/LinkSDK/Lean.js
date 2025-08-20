@@ -148,6 +148,8 @@ class Lean {
     show_consent_explanation,
     account_type,
     access_token,
+    destination_alias,
+    destination_avatar,
   }) {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
@@ -169,6 +171,8 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.ACCOUNT_TYPE]: account_type,
       [Params.SHOW_CONSENT_EXPLANATION]: show_consent_explanation,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -177,7 +181,12 @@ class Lean {
     );
   }
 
-  reconnect({reconnect_id, access_token}) {
+  reconnect({
+    reconnect_id,
+    access_token,
+    destination_alias,
+    destination_avatar,
+  }) {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -185,13 +194,16 @@ class Lean {
       .concat(`&${Params.RECONNECT_ID}=${reconnect_id}`)
       .concat(customizationParams);
 
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
+    };
 
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   createBeneficiary({
@@ -202,6 +214,8 @@ class Lean {
     payment_destination_id,
     access_token,
     entity_id,
+    destination_alias,
+    destination_avatar,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -217,6 +231,8 @@ class Lean {
       [Params.PAYMENT_SOURCE_ID]: payment_source_id,
       [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
       [Params.ENTITY_ID]: entity_id,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -232,6 +248,8 @@ class Lean {
     success_redirect_url,
     payment_destination_id,
     access_token,
+    destination_alias,
+    destination_avatar,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -246,6 +264,8 @@ class Lean {
       [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -263,6 +283,8 @@ class Lean {
     payment_destination_id,
     access_token,
     entity_id,
+    destination_alias,
+    destination_avatar,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -279,6 +301,8 @@ class Lean {
       [Params.ENTITY_ID]: entity_id,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -296,6 +320,8 @@ class Lean {
     success_redirect_url,
     bulk_payment_intent_id,
     access_token,
+    destination_alias,
+    destination_avatar,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -312,6 +338,8 @@ class Lean {
       [Params.SHOW_BALANCES]: show_balances,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -320,7 +348,14 @@ class Lean {
     );
   }
 
-  verifyAddress({permissions, customer_id, customer_name, access_token}) {
+  verifyAddress({
+    permissions,
+    customer_id,
+    customer_name,
+    access_token,
+    destination_alias,
+    destination_avatar,
+  }) {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -331,14 +366,16 @@ class Lean {
       .concat(permissionsParams)
       .concat(customizationParams);
 
-    // only include properties that are set
-    if (access_token) {
-      initializationURL = initializationURL.concat(
-        `&${Params.ACCESS_TOKEN}=${access_token}`,
-      );
-    }
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
+    };
 
-    return initializationURL;
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 }
 
