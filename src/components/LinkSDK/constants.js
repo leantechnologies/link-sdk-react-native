@@ -55,6 +55,8 @@ export const Params = {
   ENTITY_ID: 'entity_id',
   ACCESS_TOKEN: 'access_token',
   SHOW_CONSENT_EXPLANATION: 'show_consent_explanation',
+  DESTINATION_ALIAS: 'destination_alias',
+  DESTINATION_AVATAR: 'destination_avatar',
 };
 
 export const Methods = {
