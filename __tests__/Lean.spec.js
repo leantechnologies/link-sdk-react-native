@@ -235,6 +235,37 @@ describe('Lean SDK', () => {
     });
   });
 
+  describe('authorizeConsent', () => {
+    it('partial params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=authorizeConsent&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success`;
+
+      const initializationURL = lean.authorizeConsent({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        consent_id: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
+        success_redirect_url: 'https://dev.leantech.me/success',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
+    it('all params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=authorizeConsent&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https://dev.leantech.me/fail&success_redirect_url=https://dev.leantech.me/success&access_token=test&destination_alias=Test Co.&destination_avatar=https://dev.leantech.me/success.png`;
+
+      const initializationURL = lean.authorizeConsent({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        consent_id: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        access_token: 'test',
+        destination_alias: 'Test Co.',
+        destination_avatar: 'https://dev.leantech.me/success.png',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+  });
+
   describe('link with customization params', () => {
     const leanWithCustomization = new Lean({
       appToken: config.appToken,

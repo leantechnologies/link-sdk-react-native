@@ -57,6 +57,7 @@ export const Params = {
   SHOW_CONSENT_EXPLANATION: 'show_consent_explanation',
   DESTINATION_ALIAS: 'destination_alias',
   DESTINATION_AVATAR: 'destination_avatar',
+  CONSENT_ID: 'consent_id',
 };
 
 export const Methods = {
@@ -68,4 +69,5 @@ export const Methods = {
   CREATE_PAYMENT_SOURCE: 'createPaymentSource',
   UPDATE_PAYMENT_SOURCE: 'updatePaymentSource',
   VERIFY_ADDRESS: 'verifyAddress',
+  AUTHORIZE_CONSENT: 'authorizeConsent',
 };

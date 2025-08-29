@@ -16,6 +16,14 @@ const App = () => {
   const [appToken, updateAppToken] = useState(null);
   const [customerID, updateCustomerID] = useState(null);
 
+  // Authorize Consent variables
+  const [authorize_customerID, updateAuthorizeCustomerID] = useState(null);
+  const [consentID, updateConsentID] = useState(null);
+  const [authorize_failRedirectURL, updateAuthorizeFailRedirectURL] =
+    useState(null);
+  const [authorize_successRedirectURL, updateAuthorizeSuccessRedirectURL] =
+    useState(null);
+
   // Simple view to demo functionality
   return (
     <View style={styles.container}>
@@ -102,6 +110,39 @@ const App = () => {
           })
         }>
         <Text style={styles.cta_text}>Pay</Text>
+      </TouchableOpacity>
+
+      <TextInput
+        placeholder="Authorize Customer ID"
+        value={authorize_customerID}
+        onChangeText={updateAuthorizeCustomerID}
+      />
+      <TextInput
+        placeholder="Consent ID"
+        value={consentID}
+        onChangeText={updateConsentID}
+      />
+      <TextInput
+        placeholder="Fail Redirect URL"
+        value={authorize_failRedirectURL}
+        onChangeText={updateAuthorizeFailRedirectURL}
+      />
+      <TextInput
+        placeholder="Success Redirect URL"
+        value={authorize_successRedirectURL}
+        onChangeText={updateAuthorizeSuccessRedirectURL}
+      />
+      <TouchableOpacity
+        style={styles.cta_container}
+        onPress={() =>
+          Lean.current.authorizeConsent({
+            customer_id: authorize_customerID,
+            consent_id: consentID,
+            fail_redirect_url: authorize_failRedirectURL,
+            success_redirect_url: authorize_successRedirectURL,
+          })
+        }>
+        <Text style={styles.cta_text}>Authorize Consent</Text>
       </TouchableOpacity>
 
       {/* The actual component that will need to be present for end users */}
