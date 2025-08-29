@@ -377,6 +377,37 @@ class Lean {
       optionalParams,
     );
   }
+
+  authorizeConsent({
+    customer_id,
+    consent_id,
+    fail_redirect_url,
+    success_redirect_url,
+    access_token,
+    destination_alias,
+    destination_avatar,
+  }) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.AUTHORIZE_CONSENT}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&${Params.CONSENT_ID}=${consent_id}`)
+      .concat(`&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`)
+      .concat(`&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.DESTINATION_ALIAS]: destination_alias,
+      [Params.DESTINATION_AVATAR]: destination_avatar,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
 }
 
 export default Lean;
