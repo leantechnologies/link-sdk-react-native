@@ -58,6 +58,9 @@ export const Params = {
   DESTINATION_ALIAS: 'destination_alias',
   DESTINATION_AVATAR: 'destination_avatar',
   CONSENT_ID: 'consent_id',
+  CONSENT_ATTEMPT_ID: 'consent_attempt_id',
+  GRANULAR_STATUS_CODE: 'granular_status_code',
+  STATUS_ADDITIONAL_INFO: 'status_additional_info',
 };
 
 export const Methods = {
@@ -70,4 +73,7 @@ export const Methods = {
   UPDATE_PAYMENT_SOURCE: 'updatePaymentSource',
   VERIFY_ADDRESS: 'verifyAddress',
   AUTHORIZE_CONSENT: 'authorizeConsent',
+  CHECKOUT: 'checkout',
+  MANAGE_CONSENTS: 'manageConsents',
+  CAPTURE_REDIRECT: 'captureRedirect',
 };

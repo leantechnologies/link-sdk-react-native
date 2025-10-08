@@ -408,6 +408,69 @@ class Lean {
       optionalParams,
     );
   }
+
+  checkout({
+    customer_name,
+    payment_intent_id,
+    access_token,
+    success_redirect_url,
+    fail_redirect_url,
+  }) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.CHECKOUT}`)
+      .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.CUSTOMER_NAME]: customer_name,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
+
+  manageConsents({customer_id}) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.MANAGE_CONSENTS}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(customizationParams);
+
+    return initializationURL;
+  }
+
+  captureRedirect({
+    customer_id,
+    consent_attempt_id,
+    granular_status_code,
+    status_additional_info,
+  }) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.CAPTURE_REDIRECT}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&${Params.CONSENT_ATTEMPT_ID}=${consent_attempt_id}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.GRANULAR_STATUS_CODE]: granular_status_code,
+      [Params.STATUS_ADDITIONAL_INFO]: status_additional_info,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
 }
 
 export default Lean;

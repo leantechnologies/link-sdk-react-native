@@ -60,6 +60,18 @@ const LinkSDK = forwardRef((props, ref) => {
       setIsOpen(true);
       setInitializationURL(lean.authorizeConsent(config));
     },
+    checkout: config => {
+      setIsOpen(true);
+      setInitializationURL(lean.checkout(config));
+    },
+    manageConsents: config => {
+      setIsOpen(true);
+      setInitializationURL(lean.manageConsents(config));
+    },
+    captureRedirect: config => {
+      setIsOpen(true);
+      setInitializationURL(lean.captureRedirect(config));
+    },
   }));
 
   // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.

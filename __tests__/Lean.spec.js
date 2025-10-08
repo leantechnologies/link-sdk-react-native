@@ -328,4 +328,69 @@ describe('Lean SDK', () => {
       expect(initializationURL).toBe(expectedUrl);
     });
   });
+
+  describe('checkout', () => {
+    it('partial params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+
+      const initializationURL = lean.checkout({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
+    it('all params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&customer_name=John Doe&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail`;
+
+      const initializationURL = lean.checkout({
+        customer_name: 'John Doe',
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        access_token: 'test',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+  });
+
+  describe('manageConsents', () => {
+    it('returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=manageConsents&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+
+      const initializationURL = lean.manageConsents({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+  });
+
+  describe('captureRedirect', () => {
+    it('partial params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=captureRedirect&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_attempt_id=7ebe7449-fd93-4657-be82-fcc3697262c4&granular_status_code=SUCCESS`;
+
+      const initializationURL = lean.captureRedirect({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        consent_attempt_id: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+        granular_status_code: 'SUCCESS',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
+    it('all params: returns the correct URL', () => {
+      const expectedUrl = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production&method=captureRedirect&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_attempt_id=7ebe7449-fd93-4657-be82-fcc3697262c4&granular_status_code=SUCCESS&status_additional_info=Additional information about the consent`;
+
+      const initializationURL = lean.captureRedirect({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        consent_attempt_id: '7ebe7449-fd93-4657-be82-fcc3697262c4',
+        granular_status_code: 'SUCCESS',
+        status_additional_info: 'Additional information about the consent',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+  });
 });
