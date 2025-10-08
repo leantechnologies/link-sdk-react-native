@@ -436,7 +436,7 @@ class Lean {
     );
   }
 
-  manageConsents({customer_id}) {
+  manageConsents({customer_id, access_token}) {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -444,10 +444,18 @@ class Lean {
       .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
       .concat(customizationParams);
 
-    return initializationURL;
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
   }
 
   captureRedirect({
+    access_token,
     customer_id,
     consent_attempt_id,
     granular_status_code,
@@ -462,6 +470,7 @@ class Lean {
       .concat(customizationParams);
 
     const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
       [Params.GRANULAR_STATUS_CODE]: granular_status_code,
       [Params.STATUS_ADDITIONAL_INFO]: status_additional_info,
     };
