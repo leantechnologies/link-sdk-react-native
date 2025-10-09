@@ -147,6 +147,7 @@ class Lean {
     payment_destination_id,
     show_consent_explanation,
     account_type,
+    customer_metadata,
     access_token,
     destination_alias,
     destination_avatar,
@@ -171,6 +172,7 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.ACCOUNT_TYPE]: account_type,
       [Params.SHOW_CONSENT_EXPLANATION]: show_consent_explanation,
+      [Params.CUSTOMER_METADATA]: customer_metadata,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
     };

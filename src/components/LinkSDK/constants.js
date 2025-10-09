@@ -61,6 +61,7 @@ export const Params = {
   CONSENT_ATTEMPT_ID: 'consent_attempt_id',
   GRANULAR_STATUS_CODE: 'granular_status_code',
   STATUS_ADDITIONAL_INFO: 'status_additional_info',
+  CUSTOMER_METADATA: 'customer_metadata',
 };
 
 export const Methods = {
