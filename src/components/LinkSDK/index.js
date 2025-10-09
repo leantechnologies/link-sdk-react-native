@@ -4,6 +4,7 @@ import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
 import Lean from './Lean';
+import {Methods} from './constants';
 
 const LinkSDK = forwardRef((props, ref) => {
   // create state to manage SDK visibility
@@ -23,55 +24,24 @@ const LinkSDK = forwardRef((props, ref) => {
     customization: props.customization || null,
   });
 
+  const callLeanMethod = method => config => {
+    setIsOpen(true);
+    setInitializationURL(lean[method](config));
+  };
+
   useImperativeHandle(ref, () => ({
-    link: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.link(config));
-    },
-    connect: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.connect(config));
-    },
-    reconnect: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.reconnect(config));
-    },
-    createBeneficiary: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.createBeneficiary(config));
-    },
-    createPaymentSource: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.createPaymentSource(config));
-    },
-    updatePaymentSource: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.updatePaymentSource(config));
-    },
-    pay: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.pay(config));
-    },
-    verifyAddress: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.verifyAddress(config));
-    },
-    authorizeConsent: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.authorizeConsent(config));
-    },
-    checkout: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.checkout(config));
-    },
-    manageConsents: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.manageConsents(config));
-    },
-    captureRedirect: config => {
-      setIsOpen(true);
-      setInitializationURL(lean.captureRedirect(config));
-    },
+    link: callLeanMethod(Methods.LINK),
+    connect: callLeanMethod(Methods.CONNECT),
+    reconnect: callLeanMethod(Methods.RECONNECT),
+    createBeneficiary: callLeanMethod(Methods.CREATE_BENEFICIARY),
+    createPaymentSource: callLeanMethod(Methods.CREATE_PAYMENT_SOURCE),
+    updatePaymentSource: callLeanMethod(Methods.UPDATE_PAYMENT_SOURCE),
+    pay: callLeanMethod(Methods.PAY),
+    verifyAddress: callLeanMethod(Methods.VERIFY_ADDRESS),
+    authorizeConsent: callLeanMethod(Methods.AUTHORIZE_CONSENT),
+    checkout: callLeanMethod(Methods.CHECKOUT),
+    manageConsents: callLeanMethod(Methods.MANAGE_CONSENTS),
+    captureRedirect: callLeanMethod(Methods.CAPTURE_REDIRECT),
   }));
 
   // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
