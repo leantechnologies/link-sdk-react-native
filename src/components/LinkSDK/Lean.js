@@ -147,6 +147,7 @@ class Lean {
     payment_destination_id,
     show_consent_explanation,
     account_type,
+    customer_metadata,
     access_token,
     destination_alias,
     destination_avatar,
@@ -171,6 +172,7 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.ACCOUNT_TYPE]: account_type,
       [Params.SHOW_CONSENT_EXPLANATION]: show_consent_explanation,
+      [Params.CUSTOMER_METADATA]: customer_metadata,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
     };
@@ -401,6 +403,78 @@ class Lean {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
+
+  checkout({
+    customer_name,
+    payment_intent_id,
+    access_token,
+    success_redirect_url,
+    fail_redirect_url,
+  }) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.CHECKOUT}`)
+      .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.CUSTOMER_NAME]: customer_name,
+      [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
+      [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
+
+  manageConsents({customer_id, access_token}) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.MANAGE_CONSENTS}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+    };
+
+    return this.appendOptionalConfigToURLParams(
+      initializationURL,
+      optionalParams,
+    );
+  }
+
+  captureRedirect({
+    access_token,
+    customer_id,
+    consent_attempt_id,
+    granular_status_code,
+    status_additional_info,
+  }) {
+    const customizationParams = this.convertCustomizationToURLString();
+
+    let initializationURL = this.baseUrl
+      .concat(`&method=${Methods.CAPTURE_REDIRECT}`)
+      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&${Params.CONSENT_ATTEMPT_ID}=${consent_attempt_id}`)
+      .concat(customizationParams);
+
+    const optionalParams = {
+      [Params.ACCESS_TOKEN]: access_token,
+      [Params.GRANULAR_STATUS_CODE]: granular_status_code,
+      [Params.STATUS_ADDITIONAL_INFO]: status_additional_info,
     };
 
     return this.appendOptionalConfigToURLParams(
