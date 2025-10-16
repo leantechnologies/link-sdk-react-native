@@ -25,6 +25,7 @@ class LeanWebClient {
       exit_point: urlParams.get('exit_point'),
       exit_intent_point: urlParams.get('exit_intent_point'),
       exit_survey_reason: urlParams.get('exit_survey_reason'),
+      user_exit_intent: urlParams.get('user_exit_intent'),
       lean_correlation_id: urlParams.get('lean_correlation_id'),
       secondary_status: urlParams.get('secondary_status'),
       bank: {
@@ -68,6 +69,7 @@ class LeanWebClient {
           exitPoint: null,
           exitIntentPoint: null,
           exitSurveyReason: null,
+          userExitIntent: null,
           leanCorrelationId: null,
           secondaryStatus: null,
           bank: {
