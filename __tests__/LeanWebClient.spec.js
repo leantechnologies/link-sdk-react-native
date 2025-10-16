@@ -183,16 +183,16 @@ describe('LeanWebClient', () => {
       expect(mockCallback).toHaveBeenCalledWith({
         status: 'SUCCESS',
         message: 'Link closed after redirect',
-        lastApiResponse: null,
-        exitPoint: null,
-        exitIntentPoint: null,
-        exitSurveyReason: null,
-        userExitIntent: null,
-        leanCorrelationId: null,
-        secondaryStatus: null,
+        last_api_response: null,
+        exit_point: null,
+        exit_intent_point: null,
+        exit_survey_reason: null,
+        user_exit_intent: null,
+        lean_correlation_id: null,
+        secondary_status: null,
         bank: {
-          bankId: null,
-          isSupported: null,
+          bank_identifier: null,
+          is_supported: false,
         },
       });
     });
