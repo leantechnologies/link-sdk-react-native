@@ -210,6 +210,10 @@ By providing a callback into the component, the LinkSDK will report back with an
     status: "SUCCESS",
     message: "Some message about the state of the application",
     exit_point: "SUCCESS",
+    exit_intent_point: "CONSENT",
+    exit_survey_reason: "user_cancelled",
+    user_exit_intent: "USER_CANCELLED_PAYMENT",
+    lean_correlation_id: "12345",
     secondary_status: "SUCCESS",
     bank: {
         bank_identifier: "DIB_UAE",
@@ -224,6 +228,10 @@ By providing a callback into the component, the LinkSDK will report back with an
 | status               | ENUM   | The status of the SDK at close. `SUCCESS` - completed successfully. `CANCELLED` - user cancelled the flow. `ERROR` - something went wrong |
 | message              | string | Further details on the status                                                                                                             |
 | exit_point           | String | The screen the user was on when they closed the SDK                                                                                       |
+| exit_intent_point    | String | The specific point where the user indicated exit intent                                                                                   |
+| exit_survey_reason   | String | The reason provided in the exit survey                                                                                                    |
+| user_exit_intent     | String | Indicates why a user exited a payment flow (`USER_CANCELLED_PAYMENT`, `USER_COMPLETED_PAYMENT`)                                             |
+| lean_correlation_id  | String | Unique identifier for correlating the session                                                                                             |
 | secondary_status     | String | Useful when `ERROR` is the status - correlates to the ERROR reason if known.                                                              |
 | bank.bank_identifier | String | The Lean identifier for the bank the user was trying to connect to                                                                        |
 | bank.is_supported    | Bool   | Whether the bank is supported by Lean                                                                                                     |

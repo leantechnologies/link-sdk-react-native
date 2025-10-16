@@ -25,6 +25,7 @@ class LeanWebClient {
       exit_point: urlParams.get('exit_point'),
       exit_intent_point: urlParams.get('exit_intent_point'),
       exit_survey_reason: urlParams.get('exit_survey_reason'),
+      user_exit_intent: urlParams.get('user_exit_intent'),
       lean_correlation_id: urlParams.get('lean_correlation_id'),
       secondary_status: urlParams.get('secondary_status'),
       bank: {
@@ -64,15 +65,16 @@ class LeanWebClient {
         this.onRedirectResponse({
           status: 'SUCCESS',
           message: 'Link closed after redirect',
-          lastApiResponse: null,
-          exitPoint: null,
-          exitIntentPoint: null,
-          exitSurveyReason: null,
-          leanCorrelationId: null,
-          secondaryStatus: null,
+          last_api_response: null,
+          exit_point: null,
+          exit_intent_point: null,
+          exit_survey_reason: null,
+          user_exit_intent: null,
+          lean_correlation_id: null,
+          secondary_status: null,
           bank: {
-            bankId: null,
-            isSupported: null,
+            bank_identifier: null,
+            is_supported: false,
           },
         });
 
