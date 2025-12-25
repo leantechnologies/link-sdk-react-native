@@ -103,6 +103,56 @@ class Lean {
     return result;
   }
 
+  cleanJSONObject(obj) {
+    if (obj === null || obj === undefined) {
+      return null;
+    }
+
+    if (Array.isArray(obj)) {
+      const cleaned = obj
+        .map(item => this.cleanJSONObject(item))
+        .filter(item => item !== null && item !== undefined);
+      return cleaned.length > 0 ? cleaned : null;
+    }
+
+    if (typeof obj === 'object') {
+      const cleaned = {};
+      let hasValues = false;
+
+      for (const [key, value] of Object.entries(obj)) {
+        const cleanedValue = this.cleanJSONObject(value);
+
+        if (cleanedValue !== null && cleanedValue !== undefined) {
+          cleaned[key] = cleanedValue;
+          hasValues = true;
+        }
+      }
+
+      return hasValues ? cleaned : null;
+    }
+
+    return obj;
+  }
+
+  serializeRiskDetails(riskDetails) {
+    if (!riskDetails) {
+      return null;
+    }
+
+    try {
+      const cleanedDetails = this.cleanJSONObject(riskDetails);
+
+      if (!cleanedDetails) {
+        return null;
+      }
+
+      const jsonString = JSON.stringify(cleanedDetails);
+      return encodeURIComponent(jsonString);
+    } catch (error) {
+      return null;
+    }
+  }
+
   //  ================    Link methods    ================    //
 
   link({
@@ -324,12 +374,20 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
+    risk_details,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
       .concat(`&method=${Methods.PAY}`)
       .concat(customizationParams);
+
+    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
+    if (serializedRiskDetails) {
+      initializationURL = initializationURL.concat(
+        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
+      );
+    }
 
     const optionalParams = {
       [Params.PAYMENT_INTENT_ID]: payment_intent_id,
@@ -388,6 +446,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
+    risk_details,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -398,6 +457,13 @@ class Lean {
       .concat(`&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`)
       .concat(`&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`)
       .concat(customizationParams);
+
+    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
+    if (serializedRiskDetails) {
+      initializationURL = initializationURL.concat(
+        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
+      );
+    }
 
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
@@ -417,6 +483,7 @@ class Lean {
     access_token,
     success_redirect_url,
     fail_redirect_url,
+    risk_details,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -424,6 +491,13 @@ class Lean {
       .concat(`&method=${Methods.CHECKOUT}`)
       .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
       .concat(customizationParams);
+
+    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
+    if (serializedRiskDetails) {
+      initializationURL = initializationURL.concat(
+        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
+      );
+    }
 
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,

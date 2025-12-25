@@ -62,6 +62,7 @@ export const Params = {
   GRANULAR_STATUS_CODE: 'granular_status_code',
   STATUS_ADDITIONAL_INFO: 'status_additional_info',
   CUSTOMER_METADATA: 'customer_metadata',
+  RISK_DETAILS: 'risk_details',
 };
 
 export const Methods = {
