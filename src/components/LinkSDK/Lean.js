@@ -375,6 +375,7 @@ class Lean {
     destination_alias,
     destination_avatar,
     risk_details,
+    bank_identifier,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -400,6 +401,7 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+      [Params.BANK_IDENTIFIER]: bank_identifier,
     };
 
     return this.appendOptionalConfigToURLParams(
