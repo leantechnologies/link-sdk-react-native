@@ -103,6 +103,56 @@ class Lean {
     return result;
   }
 
+  cleanJSONObject(obj) {
+    if (obj === null || obj === undefined) {
+      return null;
+    }
+
+    if (Array.isArray(obj)) {
+      const cleaned = obj
+        .map(item => this.cleanJSONObject(item))
+        .filter(item => item !== null && item !== undefined);
+      return cleaned.length > 0 ? cleaned : null;
+    }
+
+    if (Object.prototype.toString.call(obj) === '[object Object]') {
+      const cleaned = {};
+      let hasValues = false;
+
+      for (const [key, value] of Object.entries(obj)) {
+        const cleanedValue = this.cleanJSONObject(value);
+
+        if (cleanedValue !== null && cleanedValue !== undefined) {
+          cleaned[key] = cleanedValue;
+          hasValues = true;
+        }
+      }
+
+      return hasValues ? cleaned : null;
+    }
+
+    return obj;
+  }
+
+  serializeRiskDetails(riskDetails) {
+    if (!riskDetails) {
+      return null;
+    }
+
+    try {
+      const cleanedDetails = this.cleanJSONObject(riskDetails);
+
+      if (!cleanedDetails) {
+        return null;
+      }
+
+      const jsonString = JSON.stringify(cleanedDetails);
+      return encodeURIComponent(jsonString);
+    } catch (error) {
+      return null;
+    }
+  }
+
   //  ================    Link methods    ================    //
 
   link({
@@ -324,6 +374,8 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
+    risk_details,
+    bank_identifier,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -342,6 +394,8 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -388,6 +442,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
+    risk_details,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -403,6 +458,7 @@ class Lean {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -412,11 +468,13 @@ class Lean {
   }
 
   checkout({
-    customer_name,
     payment_intent_id,
     access_token,
+    customer_name,
+    bank_identifier,
     success_redirect_url,
     fail_redirect_url,
+    risk_details,
   }) {
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -430,6 +488,8 @@ class Lean {
       [Params.CUSTOMER_NAME]: customer_name,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(

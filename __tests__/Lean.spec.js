@@ -345,7 +345,7 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&customer_name=John Doe&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail`;
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&customer_name=John Doe&success_redirect_url=https://dev.leantech.me/success&fail_redirect_url=https://dev.leantech.me/fail&bank_identifier=LEANMB1_SAU`;
 
       const initializationURL = lean.checkout({
         customer_name: 'John Doe',
@@ -353,6 +353,29 @@ describe('Lean SDK', () => {
         access_token: 'test',
         success_redirect_url: 'https://dev.leantech.me/success',
         fail_redirect_url: 'https://dev.leantech.me/fail',
+        bank_identifier: 'LEANMB1_SAU',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
+    it('with customer_name only: returns the correct URL', () => {
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&customer_name=John Doe`;
+
+      const initializationURL = lean.checkout({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        customer_name: 'John Doe',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
+    it('with bank_identifier only: returns the correct URL', () => {
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&bank_identifier=LEANMB1_SAU`;
+
+      const initializationURL = lean.checkout({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        bank_identifier: 'LEANMB1_SAU',
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -406,6 +429,140 @@ describe('Lean SDK', () => {
       });
 
       expect(initializationURL).toBe(expectedUrl);
+    });
+  });
+
+  describe('cleanJSONObject', () => {
+    it('removes null, undefined, and empty values', () => {
+      const dirty = {
+        name: 'John',
+        age: null,
+        email: undefined,
+        address: {
+          street: '123 Main St',
+          city: null,
+        },
+        tags: [],
+        metadata: {},
+      };
+
+      const cleaned = lean.cleanJSONObject(dirty);
+
+      expect(cleaned).toEqual({
+        name: 'John',
+        address: {
+          street: '123 Main St',
+        },
+      });
+    });
+
+    it('preserves falsy primitives (0, false, empty string)', () => {
+      const data = {
+        count: 0,
+        active: false,
+        name: '',
+        valid: null,
+      };
+
+      const cleaned = lean.cleanJSONObject(data);
+
+      expect(cleaned).toEqual({
+        count: 0,
+        active: false,
+        name: '',
+      });
+    });
+
+    it('returns null for completely empty objects', () => {
+      expect(lean.cleanJSONObject({})).toBeNull();
+      expect(lean.cleanJSONObject({tags: [], meta: {}})).toBeNull();
+    });
+  });
+
+  describe('pay with risk_details', () => {
+    it('includes serialized risk_details', () => {
+      const riskDetails = {
+        debtor_indicators: {
+          geo_location: {
+            latitude: 37.774929,
+            longitude: -122.419418,
+          },
+        },
+      };
+
+      const initializationURL = lean.pay({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        risk_details: riskDetails,
+      });
+
+      expect(initializationURL).toContain('&risk_details=');
+      expect(initializationURL).toContain('%7B'); // URL-encoded {
+    });
+
+    it('omits parameter when risk_details is null', () => {
+      const initializationURL = lean.pay({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        risk_details: null,
+      });
+
+      expect(initializationURL).not.toContain('risk_details');
+    });
+  });
+
+  describe('authorizeConsent with risk_details', () => {
+    it('includes serialized risk_details', () => {
+      const riskDetails = {
+        debtor_indicators: {
+          authentication: {
+            authentication_channel: 'MOBILE',
+          },
+        },
+      };
+
+      const initializationURL = lean.authorizeConsent({
+        customer_id: 'cust-id',
+        consent_id: 'consent-id',
+        fail_redirect_url: 'https://fail.com',
+        success_redirect_url: 'https://success.com',
+        risk_details: riskDetails,
+      });
+
+      expect(initializationURL).toContain('&risk_details=');
+    });
+  });
+
+  describe('checkout with risk_details', () => {
+    it('includes serialized risk_details', () => {
+      const riskDetails = {
+        debtor_indicators: {
+          geo_location: {
+            latitude: 37.774929,
+            longitude: -122.419418,
+          },
+        },
+      };
+
+      const expectedSerilizedRiskDetails =
+        '%7B%22debtor_indicators%22%3A%7B%22geo_location%22%3A%7B%22latitude%22%3A37.774929%2C%22longitude%22%3A-122.419418%7D%7D%7D';
+
+      const initializationURL = lean.checkout({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        risk_details: riskDetails,
+      });
+
+      console.log(initializationURL);
+
+      expect(initializationURL).toContain('&risk_details=');
+      expect(initializationURL).toContain(expectedSerilizedRiskDetails);
+    });
+
+    it('omits parameter when risk_details is null', () => {
+      const initializationURL = lean.checkout({
+        payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        risk_details: null,
+      });
+
+      expect(initializationURL).not.toContain('risk_details');
     });
   });
 });
