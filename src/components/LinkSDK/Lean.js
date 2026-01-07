@@ -153,19 +153,6 @@ class Lean {
     }
   }
 
-  addRiskDetailsToURL(url, riskDetails) {
-    if (!riskDetails) {
-      return url;
-    }
-
-    const serializedRiskDetails = this.serializeRiskDetails(riskDetails);
-    if (!serializedRiskDetails) {
-      return url;
-    }
-
-    return url.concat(`&${Params.RISK_DETAILS}=${serializedRiskDetails}`);
-  }
-
   //  ================    Link methods    ================    //
 
   link({
@@ -396,11 +383,6 @@ class Lean {
       .concat(`&method=${Methods.PAY}`)
       .concat(customizationParams);
 
-    initializationURL = this.addRiskDetailsToURL(
-      initializationURL,
-      risk_details,
-    );
-
     const optionalParams = {
       [Params.PAYMENT_INTENT_ID]: payment_intent_id,
       [Params.BULK_PAYMENT_INTENT_ID]: bulk_payment_intent_id,
@@ -413,6 +395,7 @@ class Lean {
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
       [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -471,15 +454,11 @@ class Lean {
       .concat(`&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`)
       .concat(customizationParams);
 
-    initializationURL = this.addRiskDetailsToURL(
-      initializationURL,
-      risk_details,
-    );
-
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(
@@ -504,17 +483,13 @@ class Lean {
       .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
       .concat(customizationParams);
 
-    initializationURL = this.addRiskDetailsToURL(
-      initializationURL,
-      risk_details,
-    );
-
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.CUSTOMER_NAME]: customer_name,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     };
 
     return this.appendOptionalConfigToURLParams(
