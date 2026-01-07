@@ -115,7 +115,7 @@ class Lean {
       return cleaned.length > 0 ? cleaned : null;
     }
 
-    if (typeof obj === 'object') {
+    if (Object.prototype.toString.call(obj) === '[object Object]') {
       const cleaned = {};
       let hasValues = false;
 
@@ -151,6 +151,19 @@ class Lean {
     } catch (error) {
       return null;
     }
+  }
+
+  addRiskDetailsToURL(url, riskDetails) {
+    if (!riskDetails) {
+      return url;
+    }
+
+    const serializedRiskDetails = this.serializeRiskDetails(riskDetails);
+    if (!serializedRiskDetails) {
+      return url;
+    }
+
+    return url.concat(`&${Params.RISK_DETAILS}=${serializedRiskDetails}`);
   }
 
   //  ================    Link methods    ================    //
@@ -383,12 +396,10 @@ class Lean {
       .concat(`&method=${Methods.PAY}`)
       .concat(customizationParams);
 
-    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
-    if (serializedRiskDetails) {
-      initializationURL = initializationURL.concat(
-        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
-      );
-    }
+    initializationURL = this.addRiskDetailsToURL(
+      initializationURL,
+      risk_details,
+    );
 
     const optionalParams = {
       [Params.PAYMENT_INTENT_ID]: payment_intent_id,
@@ -460,12 +471,10 @@ class Lean {
       .concat(`&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`)
       .concat(customizationParams);
 
-    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
-    if (serializedRiskDetails) {
-      initializationURL = initializationURL.concat(
-        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
-      );
-    }
+    initializationURL = this.addRiskDetailsToURL(
+      initializationURL,
+      risk_details,
+    );
 
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
@@ -495,12 +504,10 @@ class Lean {
       .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
       .concat(customizationParams);
 
-    const serializedRiskDetails = this.serializeRiskDetails(risk_details);
-    if (serializedRiskDetails) {
-      initializationURL = initializationURL.concat(
-        `&${Params.RISK_DETAILS}=${serializedRiskDetails}`,
-      );
-    }
+    initializationURL = this.addRiskDetailsToURL(
+      initializationURL,
+      risk_details,
+    );
 
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
