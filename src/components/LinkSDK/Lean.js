@@ -480,9 +480,10 @@ class Lean {
   }
 
   checkout({
-    customer_name,
     payment_intent_id,
     access_token,
+    customer_name,
+    bank_identifier,
     success_redirect_url,
     fail_redirect_url,
     risk_details,
@@ -506,6 +507,7 @@ class Lean {
       [Params.CUSTOMER_NAME]: customer_name,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
+      [Params.BANK_IDENTIFIER]: bank_identifier,
     };
 
     return this.appendOptionalConfigToURLParams(
