@@ -97,7 +97,7 @@ class Lean {
     let result = url;
     for (const [key, value] of Object.entries(optionalParams)) {
       if (value) {
-        result = result.concat(`&${key}=${value}`);
+        result = result.concat(`&${key}=${encodeURIComponent(value)}`);
       }
     }
     return result;
@@ -146,8 +146,7 @@ class Lean {
         return null;
       }
 
-      const jsonString = JSON.stringify(cleanedDetails);
-      return encodeURIComponent(jsonString);
+      return JSON.stringify(cleanedDetails);
     } catch (error) {
       return null;
     }
