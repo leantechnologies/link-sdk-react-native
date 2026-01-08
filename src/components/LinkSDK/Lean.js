@@ -29,16 +29,20 @@ class Lean {
 
   //  ================    Members and helper methods    ================    //
 
+  encodeURLParam(value) {
+    return encodeURIComponent(String(value));
+  }
+
   get baseUrl() {
     return this.baseURL
       .concat(`?${Config.IMPLEMENTATION}=webview-hosted-html`)
       .concat(this.implementationParams)
-      .concat(`&${Config.APP_TOKEN}=${this.appToken}`)
-      .concat(`&${Config.SANDBOX}=${this.isSandbox}`)
-      .concat(`&${Config.LANGUAGE}=${this.language}`)
-      .concat(`&${Config.VERSION}=${this.version}`)
-      .concat(`&${Config.COUNTRY}=${this.country}`)
-      .concat(`&${Config.ENV}=${this.env}`);
+      .concat(`&${Config.APP_TOKEN}=${this.encodeURLParam(this.appToken)}`)
+      .concat(`&${Config.SANDBOX}=${this.encodeURLParam(this.isSandbox)}`)
+      .concat(`&${Config.LANGUAGE}=${this.encodeURLParam(this.language)}`)
+      .concat(`&${Config.VERSION}=${this.encodeURLParam(this.version)}`)
+      .concat(`&${Config.COUNTRY}=${this.encodeURLParam(this.country)}`)
+      .concat(`&${Config.ENV}=${this.encodeURLParam(this.env)}`);
   }
 
   get implementationParams() {
@@ -54,7 +58,9 @@ class Lean {
 
     for (const key in implementation) {
       implementationParams = implementationParams.concat(
-        `&${Config.IMPLEMENTATION_CONFIG}=${key}+${implementation[key]}`,
+        `&${Config.IMPLEMENTATION_CONFIG}=${this.encodeURLParam(
+          key,
+        )}+${this.encodeURLParam(implementation[key])}`,
       );
     }
 
@@ -70,7 +76,7 @@ class Lean {
 
     for (const permission of permissions) {
       permissionsParams = permissionsParams.concat(
-        `&${Params.PERMISSIONS}=${permission}`,
+        `&${Params.PERMISSIONS}=${this.encodeURLParam(permission)}`,
       );
     }
 
@@ -86,7 +92,9 @@ class Lean {
 
     for (const customizationOption in this.customization) {
       customizationParams = customizationParams.concat(
-        `&${Params.CUSTOMIZATION}=${customizationOption}+${this.customization[customizationOption]}`,
+        `&${Params.CUSTOMIZATION}=${this.encodeURLParam(
+          customizationOption,
+        )}+${this.encodeURLParam(this.customization[customizationOption])}`,
       );
     }
 
@@ -96,8 +104,8 @@ class Lean {
   appendOptionalConfigToURLParams(url, optionalParams) {
     let result = url;
     for (const [key, value] of Object.entries(optionalParams)) {
-      if (value) {
-        result = result.concat(`&${key}=${value}`);
+      if (value != null) {
+        result = result.concat(`&${key}=${this.encodeURLParam(value)}`);
       }
     }
     return result;
@@ -146,8 +154,7 @@ class Lean {
         return null;
       }
 
-      const jsonString = JSON.stringify(cleanedDetails);
-      return encodeURIComponent(jsonString);
+      return JSON.stringify(cleanedDetails);
     } catch (error) {
       return null;
     }
@@ -167,8 +174,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.LINK}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.LINK)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(permissionsParams)
       .concat(customizationParams);
 
@@ -206,8 +213,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.CONNECT}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.CONNECT)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(permissionsParams)
       .concat(customizationParams);
 
@@ -242,8 +249,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.RECONNECT}`)
-      .concat(`&${Params.RECONNECT_ID}=${reconnect_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.RECONNECT)}`)
+      .concat(`&${Params.RECONNECT_ID}=${this.encodeURLParam(reconnect_id)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -272,8 +279,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.CREATE_BENEFICIARY}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.CREATE_BENEFICIARY)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -306,8 +313,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.CREATE_PAYMENT_SOURCE}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.CREATE_PAYMENT_SOURCE)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -341,8 +348,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.UPDATE_PAYMENT_SOURCE}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.UPDATE_PAYMENT_SOURCE)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -380,7 +387,7 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.PAY}`)
+      .concat(`&method=${this.encodeURLParam(Methods.PAY)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -416,9 +423,9 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.VERIFY_ADDRESS}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
-      .concat(`&${Params.CUSTOMER_NAME}=${customer_name}`)
+      .concat(`&method=${this.encodeURLParam(Methods.VERIFY_ADDRESS)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
+      .concat(`&${Params.CUSTOMER_NAME}=${this.encodeURLParam(customer_name)}`)
       .concat(permissionsParams)
       .concat(customizationParams);
 
@@ -447,11 +454,19 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.AUTHORIZE_CONSENT}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
-      .concat(`&${Params.CONSENT_ID}=${consent_id}`)
-      .concat(`&${Params.FAIL_REDIRECT_URL}=${fail_redirect_url}`)
-      .concat(`&${Params.SUCCESS_REDIRECT_URL}=${success_redirect_url}`)
+      .concat(`&method=${this.encodeURLParam(Methods.AUTHORIZE_CONSENT)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
+      .concat(`&${Params.CONSENT_ID}=${this.encodeURLParam(consent_id)}`)
+      .concat(
+        `&${Params.FAIL_REDIRECT_URL}=${this.encodeURLParam(
+          fail_redirect_url,
+        )}`,
+      )
+      .concat(
+        `&${Params.SUCCESS_REDIRECT_URL}=${this.encodeURLParam(
+          success_redirect_url,
+        )}`,
+      )
       .concat(customizationParams);
 
     const optionalParams = {
@@ -479,8 +494,12 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.CHECKOUT}`)
-      .concat(`&${Params.PAYMENT_INTENT_ID}=${payment_intent_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.CHECKOUT)}`)
+      .concat(
+        `&${Params.PAYMENT_INTENT_ID}=${this.encodeURLParam(
+          payment_intent_id,
+        )}`,
+      )
       .concat(customizationParams);
 
     const optionalParams = {
@@ -502,8 +521,8 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.MANAGE_CONSENTS}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.MANAGE_CONSENTS)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
       .concat(customizationParams);
 
     const optionalParams = {
@@ -526,9 +545,13 @@ class Lean {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
-      .concat(`&method=${Methods.CAPTURE_REDIRECT}`)
-      .concat(`&${Params.CUSTOMER_ID}=${customer_id}`)
-      .concat(`&${Params.CONSENT_ATTEMPT_ID}=${consent_attempt_id}`)
+      .concat(`&method=${this.encodeURLParam(Methods.CAPTURE_REDIRECT)}`)
+      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
+      .concat(
+        `&${Params.CONSENT_ATTEMPT_ID}=${this.encodeURLParam(
+          consent_attempt_id,
+        )}`,
+      )
       .concat(customizationParams);
 
     const optionalParams = {
