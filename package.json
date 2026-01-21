@@ -1,7 +1,11 @@
 {
-  "main": "src/components/LinkSDK/index.js",
+  "main": "dist/components/LinkSDK/index.js",
+  "types": "dist/types/index.d.ts",
   "name": "lean-react-native",
-  "version": "3.0.17",
+  "version": "4.0.0",
+  "files": [
+    "dist/"
+  ],
   "description": "A React Native wrapper for Lean's LinkSDK",
   "repository": {
     "type": "git",
@@ -27,6 +31,9 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build",
     "build:ios": "bundle exec fastlane ios build_ios",
     "build:android": "bundle exec fastlane android build_android"
   },
@@ -60,6 +67,6 @@
     "prettier": "^2.4.1",
     "react-native-webview": "^13.12.2",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.8.4"
+    "typescript": "5.9.3"
   }
 }

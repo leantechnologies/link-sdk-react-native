@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    // Output
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Module system
+    "module": "commonjs",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+
+    // React Native
+    "jsx": "react-native",
+
+    // Strict checks
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Other
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "src/components/**/*",
+    "src/types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "src/JSExample.js",
+    "src/TSExample.tsx"
+  ]
+}

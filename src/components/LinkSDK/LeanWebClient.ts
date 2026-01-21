@@ -2,24 +2,29 @@ import {URL, URLSearchParams} from 'react-native-url-polyfill';
 import {Linking} from 'react-native';
 
 import Logger from './Logger';
+import {LeanCallbackResponse, ResponseStatus} from '../../types/sdk';
+
+interface NavigationEvent {
+  url: string;
+}
 
 class LeanWebClient {
-  static responseListener = null;
+  static responseListener: ((response: LeanCallbackResponse) => void) | null = null;
 
-  static onPageStarted() {
+  static onPageStarted(): void {
     Logger.info('SDK initialization started');
   }
 
-  static onPageFinished() {
+  static onPageFinished(): void {
     Logger.info('SDK initialization completed');
   }
 
-  static getResponseFromParams(url) {
+  static getResponseFromParams(url: string): LeanCallbackResponse {
     const urlObject = new URL(url);
     const urlParams = new URLSearchParams(urlObject.search);
 
     return {
-      status: urlParams.get('status'),
+      status: urlParams.get('status') as ResponseStatus | null,
       message: urlParams.get('message'),
       last_api_response: urlParams.get('last_api_response'),
       exit_point: urlParams.get('exit_point'),
@@ -30,12 +35,15 @@ class LeanWebClient {
       secondary_status: urlParams.get('secondary_status'),
       bank: {
         bank_identifier: urlParams.get('bank_identifier'),
-        is_supported: Boolean(urlParams.get('bank_is_supported')),
+        is_supported: urlParams.get('bank_is_supported')?.toLowerCase() === 'true',
       },
     };
   }
 
-  static handleOverrideUrlLoading(event, callback) {
+  static handleOverrideUrlLoading(
+    event: NavigationEvent,
+    callback?: (response: LeanCallbackResponse) => void,
+  ): boolean {
     Logger.info('handleOverrideUrlLoading', event.url);
 
     if (event.url.startsWith('file://') || event.url === 'about:blank') {
@@ -96,9 +104,11 @@ class LeanWebClient {
     return false;
   }
 
-  static onRedirectResponse(response) {
+  static onRedirectResponse(response: LeanCallbackResponse): void {
     Logger.info('Response received', response);
-    this.responseListener(response);
+    if (this.responseListener) {
+      this.responseListener(response);
+    }
   }
 }
 

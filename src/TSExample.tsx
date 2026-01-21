@@ -11,21 +11,17 @@ import {
   View,
 } from 'react-native';
 
-import LinkSDK from './components/LinkSDK';
-
-interface LeanMethods {
-  link: (p: object) => void;
-  connect: (p: object) => void;
-  reconnect: (p: object) => void;
-  createPaymentSource: (p: object) => void;
-  updatePaymentSource: (p: object) => void;
-  pay: (p: object) => void;
-  authorizeConsent: (p: object) => void;
-}
+import LinkSDK, {
+  LinkSDKRef,
+  LeanPermission,
+  LeanCallbackResponse,
+  LeanEnvironment,
+  LeanCountry,
+} from './components/LinkSDK';
 
 const App = () => {
   // Create a ref so we can use the SDK component
-  const Lean = useRef<LeanMethods>();
+  const Lean = useRef<LinkSDKRef>(null);
 
   const [appToken, updateAppToken] = useState('');
   // Link
@@ -99,10 +95,10 @@ const App = () => {
                 Lean?.current?.link({
                   customer_id: link_customerID,
                   permissions: [
-                    'identity',
-                    'accounts',
-                    'balance',
-                    'transactions',
+                    LeanPermission.Identity,
+                    LeanPermission.Accounts,
+                    LeanPermission.Balance,
+                    LeanPermission.Transactions,
                   ],
                   bank_identifier: link_bankIdentifier,
                   success_redirect_url: 'https://www.google.com',
@@ -145,11 +141,11 @@ const App = () => {
                 Lean?.current?.connect({
                   customer_id: connect_customerID,
                   permissions: [
-                    'identity',
-                    'accounts',
-                    'balance',
-                    'transactions',
-                    'payments',
+                    LeanPermission.Identity,
+                    LeanPermission.Accounts,
+                    LeanPermission.Balance,
+                    LeanPermission.Transactions,
+                    LeanPermission.Payments,
                   ],
                   bank_identifier: connect_bankIdentifier,
                   payment_destination_id: connect_paymentDestinationID,
@@ -318,9 +314,8 @@ const App = () => {
           {/* The actual component that will need to be present for end users */}
           <LinkSDK
             ref={Lean}
-            // @ts-ignore
             appToken={appToken}
-            callback={(data: unknown) => {
+            callback={(data: LeanCallbackResponse) => {
               console.log('DATA SENT TO CALLBACK:', data);
               Alert.alert('Callback data', `${JSON.stringify(data)}`);
             }}
@@ -334,9 +329,9 @@ const App = () => {
               overlay_color: 'rgb(175,182,182)',
             }}
             sandbox
-            env="staging"
+            env={LeanEnvironment.Staging}
             // version="latest"
-            // country="ae | sa"
+            country={LeanCountry.AE}
           />
         </ScrollView>
       </View>

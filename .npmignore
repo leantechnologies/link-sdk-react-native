@@ -1,0 +1,69 @@
+# Source files
+src/
+tsconfig.json
+tsconfig.build.json
+
+# Development files
+.eslintrc.js
+.prettierrc.js
+.prettierignore
+.watchmanconfig
+.editorconfig
+
+# Tests
+**/__tests__/
+**/__mocks__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Examples (don't ship these)
+src/JSExample.js
+src/TSExample.tsx
+
+# Build artifacts from React Native
+android/
+ios/
+.buckconfig
+metro.config.js
+babel.config.js
+app.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation (optional - include if you want)
+*.md
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Fastlane
+fastlane/
+Gemfile
+Gemfile.lock
+
+# Only include dist/ folder in npm package

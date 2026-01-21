@@ -1,10 +1,107 @@
 import {Platform} from 'react-native';
-import {Config, Methods, Params} from './constants';
 import Logger from './Logger';
+import {CustomizationOptions} from '../../types/sdk';
+import {RiskDetails} from '../../types/risk-details';
+import {
+  LinkParams,
+  ConnectParams,
+  ReconnectParams,
+  CreateBeneficiaryParams,
+  CreatePaymentSourceParams,
+  UpdatePaymentSourceParams,
+  PayParams,
+  VerifyAddressParams,
+  AuthorizeConsentParams,
+  CheckoutParams,
+  ManageConsentsParams,
+  CaptureRedirectParams,
+} from '../../types/methods';
+import { LeanPermission } from '../../types';
+import pkg from '../../../package.json';
 
-const pkg = require('../../../package.json');
+// Internal constants (not exported)
+const Config = {
+  ENV: 'env',
+  SANDBOX: 'sandbox',
+  VERSION: 'version',
+  COUNTRY: 'country',
+  LANGUAGE: 'language',
+  APP_TOKEN: 'app_token',
+  SHOW_LOGS: 'show_logs',
+  IMPLEMENTATION: 'implementation',
+  IMPLEMENTATION_CONFIG: 'implementation_config',
+};
+
+const Params = {
+  INITIALIZATION_URL: 'initialization_url',
+  PAYMENT_INTENT_ID: 'payment_intent_id',
+  PAYMENT_INTENT_IDS: 'payment_intent_ids',
+  BULK_PAYMENT_INTENT_ID: 'bulk_payment_intent_id',
+  SHOW_BALANCES: 'show_balances',
+  RECONNECT_ID: 'reconnect_id',
+  CUSTOMER_ID: 'customer_id',
+  CUSTOMER_NAME: 'customer_name',
+  BANK_IDENTIFIER: 'bank_identifier',
+  ACCOUNT_ID: 'account_id',
+  PERMISSIONS: 'permissions',
+  PAYMENT_SOURCE_ID: 'payment_source_id',
+  PAYMENT_DESTINATION_ID: 'payment_destination_id',
+  CUSTOMIZATION: 'customization',
+  FAIL_REDIRECT_URL: 'fail_redirect_url',
+  SUCCESS_REDIRECT_URL: 'success_redirect_url',
+  ACCESS_TO: 'access_to',
+  ACCESS_FROM: 'access_from',
+  ACCOUNT_TYPE: 'account_type',
+  END_USER_ID: 'end_user_id',
+  ENTITY_ID: 'entity_id',
+  ACCESS_TOKEN: 'access_token',
+  SHOW_CONSENT_EXPLANATION: 'show_consent_explanation',
+  DESTINATION_ALIAS: 'destination_alias',
+  DESTINATION_AVATAR: 'destination_avatar',
+  CONSENT_ID: 'consent_id',
+  CONSENT_ATTEMPT_ID: 'consent_attempt_id',
+  GRANULAR_STATUS_CODE: 'granular_status_code',
+  STATUS_ADDITIONAL_INFO: 'status_additional_info',
+  CUSTOMER_METADATA: 'customer_metadata',
+  RISK_DETAILS: 'risk_details',
+};
+
+export const Methods = {
+  PAY: 'pay',
+  LINK: 'link',
+  CONNECT: 'connect',
+  RECONNECT: 'reconnect',
+  CREATE_BENEFICIARY: 'createBeneficiary',
+  CREATE_PAYMENT_SOURCE: 'createPaymentSource',
+  UPDATE_PAYMENT_SOURCE: 'updatePaymentSource',
+  VERIFY_ADDRESS: 'verifyAddress',
+  AUTHORIZE_CONSENT: 'authorizeConsent',
+  CHECKOUT: 'checkout',
+  MANAGE_CONSENTS: 'manageConsents',
+  CAPTURE_REDIRECT: 'captureRedirect',
+} as const;
+
+interface LeanConstructorParams {
+  env: string;
+  version: string;
+  country: string;
+  appToken: string;
+  language: string;
+  showLogs: boolean;
+  isSandbox: boolean;
+  customization: CustomizationOptions | null;
+}
 
 class Lean {
+  private env: string;
+  private version: string;
+  private country: string;
+  private language: string;
+  private appToken: string;
+  private isSandbox: boolean;
+  private customization: CustomizationOptions | null;
+  private baseURL: string;
+
   constructor({
     env,
     version,
@@ -14,7 +111,7 @@ class Lean {
     showLogs,
     isSandbox,
     customization,
-  }) {
+  }: LeanConstructorParams) {
     this.env = env;
     this.version = version;
     this.country = country;
@@ -29,11 +126,11 @@ class Lean {
 
   //  ================    Members and helper methods    ================    //
 
-  encodeURLParam(value) {
+  private encodeURLParam(value: string | number | boolean): string {
     return encodeURIComponent(String(value));
   }
 
-  get baseUrl() {
+  private get baseUrl(): string {
     return this.baseURL
       .concat(`?${Config.IMPLEMENTATION}=webview-hosted-html`)
       .concat(this.implementationParams)
@@ -45,8 +142,8 @@ class Lean {
       .concat(`&${Config.ENV}=${this.encodeURLParam(this.env)}`);
   }
 
-  get implementationParams() {
-    const implementation = {
+  private get implementationParams(): string {
+    const implementation: Record<string, string | boolean> = {
       platform: 'mobile',
       sdk: 'react_native',
       os: Platform.OS,
@@ -67,7 +164,7 @@ class Lean {
     return implementationParams;
   }
 
-  convertPermissionsToURLString(permissions) {
+  private convertPermissionsToURLString(permissions?: Array<LeanPermission>): string {
     let permissionsParams = '';
 
     if (!Array.isArray(permissions)) {
@@ -83,7 +180,7 @@ class Lean {
     return permissionsParams;
   }
 
-  convertCustomizationToURLString() {
+  private convertCustomizationToURLString(): string {
     let customizationParams = '';
 
     if (this.customization && !Object.keys(this.customization).length) {
@@ -91,27 +188,35 @@ class Lean {
     }
 
     for (const customizationOption in this.customization) {
-      customizationParams = customizationParams.concat(
-        `&${Params.CUSTOMIZATION}=${this.encodeURLParam(
-          customizationOption,
-        )}+${this.encodeURLParam(this.customization[customizationOption])}`,
-      );
+      const value = this.customization[customizationOption];
+      if (value !== undefined) {
+        customizationParams = customizationParams.concat(
+          `&${Params.CUSTOMIZATION}=${this.encodeURLParam(
+            customizationOption,
+          )}+${this.encodeURLParam(value)}`,
+        );
+      }
     }
 
     return customizationParams;
   }
 
-  appendOptionalConfigToURLParams(url, optionalParams) {
+  private appendOptionalConfigToURLParams(
+    url: string,
+    optionalParams: Record<string, unknown>,
+  ): string {
     let result = url;
     for (const [key, value] of Object.entries(optionalParams)) {
       if (value != null) {
-        result = result.concat(`&${key}=${this.encodeURLParam(value)}`);
+        result = result.concat(
+          `&${key}=${this.encodeURLParam(value as string | number | boolean)}`,
+        );
       }
     }
     return result;
   }
 
-  cleanJSONObject(obj) {
+  private cleanJSONObject(obj: unknown): unknown {
     if (obj === null || obj === undefined) {
       return null;
     }
@@ -124,10 +229,12 @@ class Lean {
     }
 
     if (Object.prototype.toString.call(obj) === '[object Object]') {
-      const cleaned = {};
+      const cleaned: Record<string, unknown> = {};
       let hasValues = false;
 
-      for (const [key, value] of Object.entries(obj)) {
+      for (const [key, value] of Object.entries(
+        obj as Record<string, unknown>,
+      )) {
         const cleanedValue = this.cleanJSONObject(value);
 
         if (cleanedValue !== null && cleanedValue !== undefined) {
@@ -142,7 +249,7 @@ class Lean {
     return obj;
   }
 
-  serializeRiskDetails(riskDetails) {
+  private serializeRiskDetails(riskDetails?: RiskDetails): string | null {
     if (!riskDetails) {
       return null;
     }
@@ -155,7 +262,7 @@ class Lean {
       }
 
       return JSON.stringify(cleanedDetails);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -169,7 +276,7 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     access_token,
-  }) {
+  }: LinkParams): string {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -208,7 +315,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
-  }) {
+  }: ConnectParams): string {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -245,7 +352,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
-  }) {
+  }: ReconnectParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -275,7 +382,7 @@ class Lean {
     entity_id,
     destination_alias,
     destination_avatar,
-  }) {
+  }: CreateBeneficiaryParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -309,7 +416,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
-  }) {
+  }: CreatePaymentSourceParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -344,7 +451,7 @@ class Lean {
     entity_id,
     destination_alias,
     destination_avatar,
-  }) {
+  }: UpdatePaymentSourceParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -383,7 +490,7 @@ class Lean {
     destination_avatar,
     risk_details,
     bank_identifier,
-  }) {
+  }: PayParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -418,7 +525,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
-  }) {
+  }: VerifyAddressParams): string {
     const permissionsParams = this.convertPermissionsToURLString(permissions);
     const customizationParams = this.convertCustomizationToURLString();
 
@@ -450,7 +557,7 @@ class Lean {
     destination_alias,
     destination_avatar,
     risk_details,
-  }) {
+  }: AuthorizeConsentParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -490,7 +597,7 @@ class Lean {
     success_redirect_url,
     fail_redirect_url,
     risk_details,
-  }) {
+  }: CheckoutParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -517,7 +624,7 @@ class Lean {
     );
   }
 
-  manageConsents({customer_id, access_token}) {
+  manageConsents({customer_id, access_token}: ManageConsentsParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -539,9 +646,10 @@ class Lean {
     access_token,
     customer_id,
     consent_attempt_id,
+    consent_id,
     granular_status_code,
     status_additional_info,
-  }) {
+  }: CaptureRedirectParams): string {
     const customizationParams = this.convertCustomizationToURLString();
 
     let initializationURL = this.baseUrl
@@ -556,6 +664,7 @@ class Lean {
 
     const optionalParams = {
       [Params.ACCESS_TOKEN]: access_token,
+      [Params.CONSENT_ID]: consent_id,
       [Params.GRANULAR_STATUS_CODE]: granular_status_code,
       [Params.STATUS_ADDITIONAL_INFO]: status_additional_info,
     };
