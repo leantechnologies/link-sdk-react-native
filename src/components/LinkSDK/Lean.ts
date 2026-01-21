@@ -130,19 +130,7 @@ class Lean {
     return encodeURIComponent(String(value));
   }
 
-  private get baseUrl(): string {
-    return this.baseURL
-      .concat(`?${Config.IMPLEMENTATION}=webview-hosted-html`)
-      .concat(this.implementationParams)
-      .concat(`&${Config.APP_TOKEN}=${this.encodeURLParam(this.appToken)}`)
-      .concat(`&${Config.SANDBOX}=${this.encodeURLParam(this.isSandbox)}`)
-      .concat(`&${Config.LANGUAGE}=${this.encodeURLParam(this.language)}`)
-      .concat(`&${Config.VERSION}=${this.encodeURLParam(this.version)}`)
-      .concat(`&${Config.COUNTRY}=${this.encodeURLParam(this.country)}`)
-      .concat(`&${Config.ENV}=${this.encodeURLParam(this.env)}`);
-  }
-
-  private get implementationParams(): string {
+  private getImplementationConfigString(): string {
     const implementation: Record<string, string | boolean> = {
       platform: 'mobile',
       sdk: 'react_native',
@@ -151,69 +139,83 @@ class Lean {
       is_version_pinned: this.version !== 'latest',
     };
 
-    let implementationParams = '';
-
+    // Custom format: implementation_config=key+value with literal '+'
+    let result = '';
     for (const key in implementation) {
-      implementationParams = implementationParams.concat(
-        `&${Config.IMPLEMENTATION_CONFIG}=${this.encodeURLParam(
-          key,
-        )}+${this.encodeURLParam(implementation[key])}`,
-      );
+      const encodedKey = this.encodeURLParam(key);
+      const encodedValue = this.encodeURLParam(implementation[key]);
+      result += `&${Config.IMPLEMENTATION_CONFIG}=${encodedKey}+${encodedValue}`;
     }
-
-    return implementationParams;
+    return result;
   }
 
-  private convertPermissionsToURLString(permissions?: Array<LeanPermission>): string {
-    let permissionsParams = '';
-
-    if (!Array.isArray(permissions)) {
-      return permissionsParams;
+  private getCustomizationString(): string {
+    if (!this.customization || !Object.keys(this.customization).length) {
+      return '';
     }
 
-    for (const permission of permissions) {
-      permissionsParams = permissionsParams.concat(
-        `&${Params.PERMISSIONS}=${this.encodeURLParam(permission)}`,
-      );
-    }
-
-    return permissionsParams;
-  }
-
-  private convertCustomizationToURLString(): string {
-    let customizationParams = '';
-
-    if (this.customization && !Object.keys(this.customization).length) {
-      return customizationParams;
-    }
-
+    // Custom format: customization=key+value with literal '+'
+    let result = '';
     for (const customizationOption in this.customization) {
       const value = this.customization[customizationOption];
       if (value !== undefined) {
-        customizationParams = customizationParams.concat(
-          `&${Params.CUSTOMIZATION}=${this.encodeURLParam(
-            customizationOption,
-          )}+${this.encodeURLParam(value)}`,
-        );
-      }
-    }
-
-    return customizationParams;
-  }
-
-  private appendOptionalConfigToURLParams(
-    url: string,
-    optionalParams: Record<string, unknown>,
-  ): string {
-    let result = url;
-    for (const [key, value] of Object.entries(optionalParams)) {
-      if (value != null) {
-        result = result.concat(
-          `&${key}=${this.encodeURLParam(value as string | number | boolean)}`,
-        );
+        const encodedKey = this.encodeURLParam(customizationOption);
+        const encodedValue = this.encodeURLParam(value);
+        result += `&${Params.CUSTOMIZATION}=${encodedKey}+${encodedValue}`;
       }
     }
     return result;
+  }
+
+  private appendPermissions(
+    params: URLSearchParams,
+    permissions?: Array<LeanPermission>,
+  ): void {
+    if (!Array.isArray(permissions)) {
+      return;
+    }
+
+    // URLSearchParams naturally handles repeated keys for arrays
+    for (const permission of permissions) {
+      params.append(Params.PERMISSIONS, permission);
+    }
+  }
+
+  private appendOptionalParams(
+    params: URLSearchParams,
+    optionalParams: Record<string, unknown>,
+  ): void {
+    for (const [key, value] of Object.entries(optionalParams)) {
+      if (value != null) {
+        params.append(key, String(value));
+      }
+    }
+  }
+
+  private toURLString(params: URLSearchParams): string {
+    // URLSearchParams.toString() encodes spaces as '+' but we need '%20'
+    return params.toString().replace(/\+/g, '%20');
+  }
+
+  private get baseUrl(): string {
+    // Build URL manually to maintain exact parameter order
+    let url = `${this.baseURL}?${Config.IMPLEMENTATION}=${this.encodeURLParam('webview-hosted-html')}`;
+
+    // Add implementation_config with literal '+'
+    url += this.getImplementationConfigString();
+
+    // Add standard params using URLSearchParams for proper encoding
+    const params = new URLSearchParams();
+    params.append(Config.APP_TOKEN, this.appToken);
+    params.append(Config.SANDBOX, String(this.isSandbox));
+    params.append(Config.LANGUAGE, this.language);
+    params.append(Config.VERSION, this.version);
+    params.append(Config.COUNTRY, this.country);
+    params.append(Config.ENV, this.env);
+
+    url += `&${this.toURLString(params)}`;
+
+    return url;
   }
 
   private cleanJSONObject(obj: unknown): unknown {
@@ -277,26 +279,34 @@ class Lean {
     success_redirect_url,
     access_token,
   }: LinkParams): string {
-    const permissionsParams = this.convertPermissionsToURLString(permissions);
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.LINK)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(permissionsParams)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.LINK);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    // Add permissions array
+    this.appendPermissions(methodParams, permissions);
+
+    url += `&${this.toURLString(methodParams)}`;
+
+    // Add customization (literal '+' format) before optional params
+    url += this.getCustomizationString();
+
+    // Add optional params
+    const optionalParams = new URLSearchParams();
+    this.appendOptionalParams(optionalParams, {
       [Params.BANK_IDENTIFIER]: bank_identifier,
       [Params.ACCESS_TOKEN]: access_token,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    if (optionalParams.toString()) {
+      url += `&${this.toURLString(optionalParams)}`;
+    }
+
+    return url;
   }
 
   connect({
@@ -316,16 +326,17 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: ConnectParams): string {
-    const permissionsParams = this.convertPermissionsToURLString(permissions);
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.CONNECT)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(permissionsParams)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.CONNECT);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    // Add permissions array
+    this.appendPermissions(methodParams, permissions);
+
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.BANK_IDENTIFIER]: bank_identifier,
       [Params.END_USER_ID]: end_user_id,
       [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
@@ -339,12 +350,12 @@ class Lean {
       [Params.CUSTOMER_METADATA]: customer_metadata,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   reconnect({
@@ -353,23 +364,28 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: ReconnectParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    // Start with baseUrl which has proper param order
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.RECONNECT)}`)
-      .concat(`&${Params.RECONNECT_ID}=${this.encodeURLParam(reconnect_id)}`)
-      .concat(customizationParams);
+    // Add method-specific params
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.RECONNECT);
+    methodParams.append(Params.RECONNECT_ID, reconnect_id);
 
-    const optionalParams = {
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+
+    // Add customization (literal '+' format)
+    const customizationString = this.getCustomizationString();
+    url += customizationString;
+
+    return url;
   }
 
   createBeneficiary({
@@ -383,14 +399,13 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: CreateBeneficiaryParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.CREATE_BENEFICIARY)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.CREATE_BENEFICIARY);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    this.appendOptionalParams(methodParams, {
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.ACCESS_TOKEN]: access_token,
@@ -399,12 +414,12 @@ class Lean {
       [Params.ENTITY_ID]: entity_id,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   createPaymentSource({
@@ -417,14 +432,13 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: CreatePaymentSourceParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.CREATE_PAYMENT_SOURCE)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.CREATE_PAYMENT_SOURCE);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    this.appendOptionalParams(methodParams, {
       [Params.BANK_IDENTIFIER]: bank_identifier,
       [Params.ACCESS_TOKEN]: access_token,
       [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
@@ -432,12 +446,12 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   updatePaymentSource({
@@ -452,14 +466,13 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: UpdatePaymentSourceParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.UPDATE_PAYMENT_SOURCE)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.UPDATE_PAYMENT_SOURCE);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.PAYMENT_DESTINATION_ID]: payment_destination_id,
       [Params.PAYMENT_SOURCE_ID]: payment_source_id,
@@ -469,12 +482,12 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   pay({
@@ -491,13 +504,12 @@ class Lean {
     risk_details,
     bank_identifier,
   }: PayParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.PAY)}`)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.PAY);
 
-    const optionalParams = {
+    this.appendOptionalParams(methodParams, {
       [Params.PAYMENT_INTENT_ID]: payment_intent_id,
       [Params.BULK_PAYMENT_INTENT_ID]: bulk_payment_intent_id,
       [Params.ACCESS_TOKEN]: access_token,
@@ -510,12 +522,12 @@ class Lean {
       [Params.DESTINATION_AVATAR]: destination_avatar,
       [Params.BANK_IDENTIFIER]: bank_identifier,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   verifyAddress({
@@ -526,26 +538,27 @@ class Lean {
     destination_alias,
     destination_avatar,
   }: VerifyAddressParams): string {
-    const permissionsParams = this.convertPermissionsToURLString(permissions);
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.VERIFY_ADDRESS)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(`&${Params.CUSTOMER_NAME}=${this.encodeURLParam(customer_name)}`)
-      .concat(permissionsParams)
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.VERIFY_ADDRESS);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
+    methodParams.append(Params.CUSTOMER_NAME, customer_name);
 
-    const optionalParams = {
+    // Add permissions array
+    this.appendPermissions(methodParams, permissions);
+
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   authorizeConsent({
@@ -558,35 +571,27 @@ class Lean {
     destination_avatar,
     risk_details,
   }: AuthorizeConsentParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.AUTHORIZE_CONSENT)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(`&${Params.CONSENT_ID}=${this.encodeURLParam(consent_id)}`)
-      .concat(
-        `&${Params.FAIL_REDIRECT_URL}=${this.encodeURLParam(
-          fail_redirect_url,
-        )}`,
-      )
-      .concat(
-        `&${Params.SUCCESS_REDIRECT_URL}=${this.encodeURLParam(
-          success_redirect_url,
-        )}`,
-      )
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.AUTHORIZE_CONSENT);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
+    methodParams.append(Params.CONSENT_ID, consent_id);
+    methodParams.append(Params.FAIL_REDIRECT_URL, fail_redirect_url);
+    methodParams.append(Params.SUCCESS_REDIRECT_URL, success_redirect_url);
 
-    const optionalParams = {
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   checkout({
@@ -598,48 +603,49 @@ class Lean {
     fail_redirect_url,
     risk_details,
   }: CheckoutParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.CHECKOUT)}`)
-      .concat(
-        `&${Params.PAYMENT_INTENT_ID}=${this.encodeURLParam(
-          payment_intent_id,
-        )}`,
-      )
-      .concat(customizationParams);
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.CHECKOUT);
+    methodParams.append(Params.PAYMENT_INTENT_ID, payment_intent_id);
 
-    const optionalParams = {
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.CUSTOMER_NAME]: customer_name,
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.BANK_IDENTIFIER]: bank_identifier,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+    url += this.getCustomizationString();
+
+    return url;
   }
 
   manageConsents({customer_id, access_token}: ManageConsentsParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    // Start with baseUrl which has proper param order
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.MANAGE_CONSENTS)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(customizationParams);
+    // Add method-specific params
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.MANAGE_CONSENTS);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+
+    // Add customization (literal '+' format)
+    const customizationString = this.getCustomizationString();
+    url += customizationString;
+
+    return url;
   }
 
   captureRedirect({
@@ -650,29 +656,30 @@ class Lean {
     granular_status_code,
     status_additional_info,
   }: CaptureRedirectParams): string {
-    const customizationParams = this.convertCustomizationToURLString();
+    // Start with baseUrl which has proper param order
+    let url = this.baseUrl;
 
-    let initializationURL = this.baseUrl
-      .concat(`&method=${this.encodeURLParam(Methods.CAPTURE_REDIRECT)}`)
-      .concat(`&${Params.CUSTOMER_ID}=${this.encodeURLParam(customer_id)}`)
-      .concat(
-        `&${Params.CONSENT_ATTEMPT_ID}=${this.encodeURLParam(
-          consent_attempt_id,
-        )}`,
-      )
-      .concat(customizationParams);
+    // Add method-specific params
+    const methodParams = new URLSearchParams();
+    methodParams.append('method', Methods.CAPTURE_REDIRECT);
+    methodParams.append(Params.CUSTOMER_ID, customer_id);
 
-    const optionalParams = {
+    // Add optional params
+    this.appendOptionalParams(methodParams, {
+      [Params.CONSENT_ATTEMPT_ID]: consent_attempt_id,
       [Params.ACCESS_TOKEN]: access_token,
       [Params.CONSENT_ID]: consent_id,
       [Params.GRANULAR_STATUS_CODE]: granular_status_code,
       [Params.STATUS_ADDITIONAL_INFO]: status_additional_info,
-    };
+    });
 
-    return this.appendOptionalConfigToURLParams(
-      initializationURL,
-      optionalParams,
-    );
+    url += `&${this.toURLString(methodParams)}`;
+
+    // Add customization (literal '+' format)
+    const customizationString = this.getCustomizationString();
+    url += customizationString;
+
+    return url;
   }
 }
 
