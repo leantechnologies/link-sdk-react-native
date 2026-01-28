@@ -1,11 +1,12 @@
-import {it} from '@jest/globals';
+import {it, describe, beforeAll} from '@jest/globals';
 import Lean from '../src/components/LinkSDK/Lean';
 import {config} from './fixtures/config';
-
-const pkg = require('../package.json');
+import {LeanPermission} from '../src/types';
+import {AuthenticationChannel} from '../src/types/risk-details';
+import pkg from '../package.json';
 
 describe('Lean SDK', () => {
-  let lean = null;
+  let lean: Lean;
 
   // Base URL constant to reduce repetition
   const BASE_URL = `https://cdn.leantech.me/link/loader/prod/ae/latest/lean-sdk.html?implementation=webview-hosted-html&implementation_config=platform+mobile&implementation_config=sdk+react_native&implementation_config=os+ios&implementation_config=sdk_version+${pkg.version}&implementation_config=is_version_pinned+false&app_token=9fb9e934-9efb-4e7e-a508-de67c0839be0&sandbox=false&language=en&version=latest&country=ae&env=production`;
@@ -29,7 +30,12 @@ describe('Lean SDK', () => {
 
       const initializationURL = lean.link({
         customer_id: config.customerId,
-        permissions: ['identity', 'accounts', 'balance', 'transactions'],
+        permissions: [
+          LeanPermission.Identity,
+          LeanPermission.Accounts,
+          LeanPermission.Balance,
+          LeanPermission.Transactions,
+        ],
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -40,7 +46,12 @@ describe('Lean SDK', () => {
 
       const initializationURL = lean.link({
         customer_id: config.customerId,
-        permissions: ['identity', 'accounts', 'balance', 'transactions'],
+        permissions: [
+          LeanPermission.Identity,
+          LeanPermission.Accounts,
+          LeanPermission.Balance,
+          LeanPermission.Transactions,
+        ],
         bank_identifier: 'LEANMB1_SAU',
         access_token: 'test',
         fail_redirect_url: 'https://dev.leantech.me/fail',
@@ -57,7 +68,12 @@ describe('Lean SDK', () => {
 
       const initializationURL = lean.connect({
         customer_id: config.customerId,
-        permissions: ['identity', 'accounts', 'balance', 'transactions'],
+        permissions: [
+          LeanPermission.Identity,
+          LeanPermission.Accounts,
+          LeanPermission.Balance,
+          LeanPermission.Transactions,
+        ],
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -69,11 +85,11 @@ describe('Lean SDK', () => {
       const initializationURL = lean.connect({
         customer_id: config.customerId,
         permissions: [
-          'identity',
-          'accounts',
-          'balance',
-          'transactions',
-          'payments',
+          LeanPermission.Identity,
+          LeanPermission.Accounts,
+          LeanPermission.Balance,
+          LeanPermission.Transactions,
+          LeanPermission.Payments,
         ],
         access_token: 'test',
         access_to: '10-10-2023',
@@ -120,10 +136,11 @@ describe('Lean SDK', () => {
 
   describe('createBeneficiary', () => {
     it('partial params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=createBeneficiary&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+      const expectedUrl = `${BASE_URL}&method=createBeneficiary&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
 
       const initializationURL = lean.createBeneficiary({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        payment_destination_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -168,7 +185,6 @@ describe('Lean SDK', () => {
         customer_id: '726715d7-222f-4087-bcce-2832135e4981',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
-        payment_source_id: '8b3b7960-c4a1-41da-8ad0-5df36cf67540',
         payment_destination_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         destination_alias: 'Test Co.',
         destination_avatar: 'https://dev.leantech.me/success.png',
@@ -180,10 +196,11 @@ describe('Lean SDK', () => {
 
   describe('updatePaymentSource', () => {
     it('partial params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=updatePaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+      const expectedUrl = `${BASE_URL}&method=updatePaymentSource&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&payment_destination_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
 
       const initializationURL = lean.updatePaymentSource({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        payment_destination_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -294,7 +311,12 @@ describe('Lean SDK', () => {
 
       const initializationURL = leanWithCustomization.link({
         customer_id: config.customerId,
-        permissions: ['identity', 'accounts', 'balance', 'transactions'],
+        permissions: [
+          LeanPermission.Identity,
+          LeanPermission.Accounts,
+          LeanPermission.Balance,
+          LeanPermission.Transactions,
+        ],
         bank_identifier: 'LEANMB1_SAU',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
@@ -311,7 +333,7 @@ describe('Lean SDK', () => {
       const initializationURL = lean.verifyAddress({
         customer_id: 'test-customer-id',
         customer_name: 'test-customer-name',
-        permissions: ['identity'],
+        permissions: [LeanPermission.Identity],
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -323,7 +345,7 @@ describe('Lean SDK', () => {
       const initializationURL = lean.verifyAddress({
         customer_id: 'test-customer-id',
         customer_name: 'test-customer-name',
-        permissions: ['identity'],
+        permissions: [LeanPermission.Identity],
         access_token: 'test-access-token',
         destination_alias: 'Test Co.',
         destination_avatar: 'https://dev.leantech.me/success.png',
@@ -335,10 +357,12 @@ describe('Lean SDK', () => {
 
   describe('checkout', () => {
     it('partial params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail`;
 
       const initializationURL = lean.checkout({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -360,22 +384,26 @@ describe('Lean SDK', () => {
     });
 
     it('with customer_name only: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&customer_name=John%20Doe`;
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&customer_name=John%20Doe&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail`;
 
       const initializationURL = lean.checkout({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         customer_name: 'John Doe',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
       });
 
       expect(initializationURL).toBe(expectedUrl);
     });
 
     it('with bank_identifier only: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&bank_identifier=LEANMB1_SAU`;
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&bank_identifier=LEANMB1_SAU`;
 
       const initializationURL = lean.checkout({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         bank_identifier: 'LEANMB1_SAU',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
       });
 
       expect(initializationURL).toBe(expectedUrl);
@@ -406,6 +434,16 @@ describe('Lean SDK', () => {
   });
 
   describe('captureRedirect', () => {
+    it('minimal params: returns the correct URL without consent_attempt_id', () => {
+      const expectedUrl = `${BASE_URL}&method=captureRedirect&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0`;
+
+      const initializationURL = lean.captureRedirect({
+        customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+      });
+
+      expect(initializationURL).toBe(expectedUrl);
+    });
+
     it('partial params: returns the correct URL', () => {
       const expectedUrl = `${BASE_URL}&method=captureRedirect&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_attempt_id=7ebe7449-fd93-4657-be82-fcc3697262c4`;
 
@@ -446,7 +484,7 @@ describe('Lean SDK', () => {
         metadata: {},
       };
 
-      const cleaned = lean.cleanJSONObject(dirty);
+      const cleaned = (lean as any).cleanJSONObject(dirty);
 
       expect(cleaned).toEqual({
         name: 'John',
@@ -464,7 +502,7 @@ describe('Lean SDK', () => {
         valid: null,
       };
 
-      const cleaned = lean.cleanJSONObject(data);
+      const cleaned = (lean as any).cleanJSONObject(data);
 
       expect(cleaned).toEqual({
         count: 0,
@@ -474,8 +512,8 @@ describe('Lean SDK', () => {
     });
 
     it('returns null for completely empty objects', () => {
-      expect(lean.cleanJSONObject({})).toBeNull();
-      expect(lean.cleanJSONObject({tags: [], meta: {}})).toBeNull();
+      expect((lean as any).cleanJSONObject({})).toBeNull();
+      expect((lean as any).cleanJSONObject({tags: [], meta: {}})).toBeNull();
     });
   });
 
@@ -502,7 +540,7 @@ describe('Lean SDK', () => {
     it('omits parameter when risk_details is null', () => {
       const initializationURL = lean.pay({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
-        risk_details: null,
+        risk_details: undefined,
       });
 
       expect(initializationURL).not.toContain('risk_details');
@@ -514,7 +552,7 @@ describe('Lean SDK', () => {
       const riskDetails = {
         debtor_indicators: {
           authentication: {
-            authentication_channel: 'MOBILE',
+            authentication_channel: AuthenticationChannel.MOBILE,
           },
         },
       };
@@ -547,6 +585,8 @@ describe('Lean SDK', () => {
 
       const initializationURL = lean.checkout({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
         risk_details: riskDetails,
       });
 
@@ -559,7 +599,9 @@ describe('Lean SDK', () => {
     it('omits parameter when risk_details is null', () => {
       const initializationURL = lean.checkout({
         payment_intent_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
-        risk_details: null,
+        success_redirect_url: 'https://dev.leantech.me/success',
+        fail_redirect_url: 'https://dev.leantech.me/fail',
+        risk_details: undefined,
       });
 
       expect(initializationURL).not.toContain('risk_details');

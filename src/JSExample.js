@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import LinkSDK from './components/LinkSDK';
+import LinkSDK, {LeanPermission, LeanEnvironment, LeanCountry} from './components/LinkSDK';
 
 const App = () => {
   // Create a ref so we can use the SDK component
@@ -45,7 +45,12 @@ const App = () => {
         onPress={() =>
           Lean.current.link({
             customer_id: customerID,
-            permissions: ['identity', 'accounts', 'balance', 'transactions'], // bank_identifier: "LEAN_MB1",
+            permissions: [
+              LeanPermission.Identity,
+              LeanPermission.Accounts,
+              LeanPermission.Balance,
+              LeanPermission.Transactions,
+            ],
             success_redirect_url: 'https://www.google.com',
             fail_redirect_url: 'https://www.twitter.com',
           })
@@ -59,12 +64,12 @@ const App = () => {
           Lean.current.connect({
             customer_id: customerID,
             permissions: [
-              'identity',
-              'accounts',
-              'balance',
-              'transactions',
-              'payments',
-            ], // bank_identifier: "LEAN_MB1",
+              LeanPermission.Identity,
+              LeanPermission.Accounts,
+              LeanPermission.Balance,
+              LeanPermission.Transactions,
+            ],
+            // bank_identifier: "LEAN_MB1",
           })
         }>
         <Text style={styles.cta_text}>Connect</Text>
@@ -150,9 +155,10 @@ const App = () => {
         ref={Lean}
         appToken={appToken}
         callback={data => console.log('DATA SENT TO CALLBACK:', data)}
+        env={LeanEnvironment.Staging}
+        sandbox={true}
         // version="1.0.0"
-        // country="SaudiArabia"
-        // sandbox
+        country={LeanCountry.AE}
       />
     </View>
   );

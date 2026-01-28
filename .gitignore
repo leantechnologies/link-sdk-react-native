@@ -75,3 +75,6 @@ yarn-error.log
 
 # Fastlane
 /fastlane/.env
+
+# Build output
+dist/

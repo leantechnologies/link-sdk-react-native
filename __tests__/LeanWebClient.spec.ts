@@ -1,4 +1,5 @@
 import {it, describe, beforeEach, jest} from '@jest/globals';
+import {LeanCallbackResponse} from '../src/types/sdk';
 
 // Mock the dependencies
 jest.mock('react-native-url-polyfill', () => ({
@@ -107,10 +108,20 @@ describe('LeanWebClient', () => {
       const mockCallback = jest.fn();
       LeanWebClient.responseListener = mockCallback;
 
-      const testResponse = {
+      const testResponse: LeanCallbackResponse = {
         status: 'SUCCESS',
         message: 'Test message',
         user_exit_intent: 'true',
+        last_api_response: null,
+        exit_point: null,
+        exit_intent_point: null,
+        exit_survey_reason: null,
+        lean_correlation_id: null,
+        secondary_status: null,
+        bank: {
+          bank_identifier: null,
+          is_supported: false,
+        },
       };
 
       LeanWebClient.onRedirectResponse(testResponse);
@@ -122,11 +133,20 @@ describe('LeanWebClient', () => {
       const mockCallback = jest.fn();
       LeanWebClient.responseListener = mockCallback;
 
-      const testResponse = {
+      const testResponse: LeanCallbackResponse = {
         status: 'CANCELLED',
         message: 'User cancelled payment',
         user_exit_intent: 'USER_CANCELLED_PAYMENT',
         exit_point: 'PAYMENT',
+        last_api_response: null,
+        exit_intent_point: null,
+        exit_survey_reason: null,
+        lean_correlation_id: null,
+        secondary_status: null,
+        bank: {
+          bank_identifier: null,
+          is_supported: false,
+        },
       };
 
       LeanWebClient.onRedirectResponse(testResponse);
@@ -198,4 +218,3 @@ describe('LeanWebClient', () => {
     });
   });
 });
-
