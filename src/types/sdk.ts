@@ -26,6 +26,7 @@ export interface CustomizationOptions {
   link_color?: string;
   overlay_color?: string;
   dialog_mode?: string;
+  bottom_inset?: number;
   [key: string]: string | number | boolean | undefined;
 }
 
