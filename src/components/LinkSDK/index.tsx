@@ -4,7 +4,7 @@ import React, {
   useState,
   ForwardedRef,
 } from 'react';
-import {Modal, StyleSheet} from 'react-native';
+import {Modal, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
@@ -70,41 +70,44 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
 
     return (
       <Modal visible={isOpen} transparent>
-        <WebView
-          {...props.webViewProps}
-          style={styles.webView}
-          originWhitelist={['*']}
-          source={{uri: initializationURL}}
-          allowsInlineMediaPlayback={true}
-          setSupportMultipleWindows={false}
-          mediaPlaybackRequiresUserAction={false}
-          onShouldStartLoadWithRequest={event =>
-            LeanWebClient.handleOverrideUrlLoading(
-              event,
-              responseCallbackHandler,
-            )
-          }
-          onNavigationStateChange={event =>
-            LeanWebClient.handleOverrideUrlLoading(
-              event,
-              responseCallbackHandler,
-            )
-          }
-          onOpenWindow={syntheticEvent => {
-            // This is required to manage iOS window.open events.
-            // We don't get onNavigationStateChange or onShouldStartLoadWithRequest in iOS for this particular event.
-            const {nativeEvent} = syntheticEvent;
-            return LeanWebClient.handleOverrideUrlLoading(
-              {url: nativeEvent.targetUrl},
-              responseCallbackHandler,
-            );
-          }}
-          cacheEnabled={false}
-          javaScriptEnabledAndroid={true}
-          javaScriptCanOpenWindowsAutomatically
-          onLoadStart={LeanWebClient.onPageStarted}
-          onLoadEnd={LeanWebClient.onPageFinished}
-        />
+        <View
+          style={[styles.container, {paddingBottom: props.bottomInset ?? 0}]}>
+          <WebView
+            {...props.webViewProps}
+            style={styles.webView}
+            originWhitelist={['*']}
+            source={{uri: initializationURL}}
+            allowsInlineMediaPlayback={true}
+            setSupportMultipleWindows={false}
+            mediaPlaybackRequiresUserAction={false}
+            onShouldStartLoadWithRequest={event =>
+              LeanWebClient.handleOverrideUrlLoading(
+                event,
+                responseCallbackHandler,
+              )
+            }
+            onNavigationStateChange={event =>
+              LeanWebClient.handleOverrideUrlLoading(
+                event,
+                responseCallbackHandler,
+              )
+            }
+            onOpenWindow={syntheticEvent => {
+              // This is required to manage iOS window.open events.
+              // We don't get onNavigationStateChange or onShouldStartLoadWithRequest in iOS for this particular event.
+              const {nativeEvent} = syntheticEvent;
+              return LeanWebClient.handleOverrideUrlLoading(
+                {url: nativeEvent.targetUrl},
+                responseCallbackHandler,
+              );
+            }}
+            cacheEnabled={false}
+            javaScriptEnabledAndroid={true}
+            javaScriptCanOpenWindowsAutomatically
+            onLoadStart={LeanWebClient.onPageStarted}
+            onLoadEnd={LeanWebClient.onPageFinished}
+          />
+        </View>
       </Modal>
     );
   },
@@ -113,14 +116,17 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
 LinkSDK.displayName = 'LinkSDK';
 
 const styles = StyleSheet.create({
-  webView: {
+  container: {
     position: 'absolute',
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'transparent',
+    right: 0,
+    bottom: 0,
     zIndex: 100,
+  },
+  webView: {
+    flex: 1,
+    backgroundColor: 'transparent',
   },
 });
 
