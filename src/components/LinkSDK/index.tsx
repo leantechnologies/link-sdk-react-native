@@ -71,7 +71,10 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
     return (
       <Modal visible={isOpen} transparent>
         <View
-          style={[styles.container, {paddingBottom: props.bottomInset ?? 0}]}>
+          style={[
+            styles.container,
+            {paddingBottom: props.customization?.bottom_inset ?? 0},
+          ]}>
           <WebView
             {...props.webViewProps}
             style={styles.webView}
