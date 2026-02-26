@@ -2,7 +2,7 @@
   "main": "dist/src/components/LinkSDK/index.js",
   "types": "dist/src/components/LinkSDK/index.d.ts",
   "name": "lean-react-native",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "files": [
     "dist/"
   ],
