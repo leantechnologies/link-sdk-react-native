@@ -363,6 +363,7 @@ class Lean {
     access_token,
     destination_alias,
     destination_avatar,
+    customer_metadata,
   }: ReconnectParams): string {
     // Start with baseUrl which has proper param order
     let url = this.baseUrl;
@@ -377,6 +378,7 @@ class Lean {
       [Params.ACCESS_TOKEN]: access_token,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
+      [Params.CUSTOMER_METADATA]: customer_metadata,
     });
 
     url += `&${this.toURLString(methodParams)}`;
