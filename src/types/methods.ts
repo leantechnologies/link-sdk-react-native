@@ -33,6 +33,7 @@ export interface ReconnectParams {
   access_token?: string;
   destination_alias?: string;
   destination_avatar?: string;
+  customer_metadata?: string;
 }
 
 export interface CreateBeneficiaryParams {
