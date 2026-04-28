@@ -9,7 +9,8 @@ interface NavigationEvent {
 }
 
 class LeanWebClient {
-  static responseListener: ((response: LeanCallbackResponse) => void) | null = null;
+  static responseListener: ((response: LeanCallbackResponse) => void) | null =
+    null;
 
   static onPageStarted(): void {
     Logger.info('SDK initialization started');
@@ -35,7 +36,8 @@ class LeanWebClient {
       secondary_status: urlParams.get('secondary_status'),
       bank: {
         bank_identifier: urlParams.get('bank_identifier'),
-        is_supported: urlParams.get('bank_is_supported')?.toLowerCase() === 'true',
+        is_supported:
+          urlParams.get('bank_is_supported')?.toLowerCase() === 'true',
       },
     };
   }
@@ -70,20 +72,11 @@ class LeanWebClient {
     if (urlObject.protocol === 'leanlink:') {
       // Close SDK if it's an internal OpenBanking redirect
       if (urlObject.hostname === 'redirect') {
+        const response = this.getResponseFromParams(event.url);
         this.onRedirectResponse({
+          ...response,
           status: 'SUCCESS',
           message: 'Link closed after redirect',
-          last_api_response: null,
-          exit_point: null,
-          exit_intent_point: null,
-          exit_survey_reason: null,
-          user_exit_intent: null,
-          lean_correlation_id: null,
-          secondary_status: null,
-          bank: {
-            bank_identifier: null,
-            is_supported: false,
-          },
         });
 
         // Do not override URL loading
