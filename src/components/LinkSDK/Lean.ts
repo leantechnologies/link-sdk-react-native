@@ -569,6 +569,8 @@ class Lean {
     fail_redirect_url,
     success_redirect_url,
     access_token,
+    bank_identifier,
+    account_id,
     destination_alias,
     destination_avatar,
     risk_details,
@@ -585,6 +587,8 @@ class Lean {
     // Add optional params
     this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
+      [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.ACCOUNT_ID]: account_id,
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
@@ -601,6 +605,7 @@ class Lean {
     access_token,
     customer_name,
     bank_identifier,
+    account_id,
     success_redirect_url,
     fail_redirect_url,
     risk_details,
@@ -618,6 +623,7 @@ class Lean {
       [Params.SUCCESS_REDIRECT_URL]: success_redirect_url,
       [Params.FAIL_REDIRECT_URL]: fail_redirect_url,
       [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.ACCOUNT_ID]: account_id,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     });
 

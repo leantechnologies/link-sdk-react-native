@@ -102,6 +102,8 @@ export interface AuthorizeConsentParams {
   fail_redirect_url: string;
   success_redirect_url: string;
   access_token?: string;
+  bank_identifier?: string;
+  account_id?: string;
   destination_alias?: string;
   destination_avatar?: string;
   risk_details?: RiskDetails;
@@ -114,6 +116,7 @@ export interface CheckoutParams {
   access_token?: string;
   customer_name?: string;
   bank_identifier?: string;
+  account_id?: string;
   risk_details?: RiskDetails;
 }
 
