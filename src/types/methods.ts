@@ -78,6 +78,7 @@ export interface PayParams {
   account_id?: string;
   end_user_id?: string;
   show_balances?: boolean;
+  allow_payment_source_change?: boolean;
   fail_redirect_url?: string;
   success_redirect_url?: string;
   access_token?: string;
@@ -104,6 +105,7 @@ export interface AuthorizeConsentParams {
   access_token?: string;
   bank_identifier?: string;
   account_id?: string;
+  allow_payment_source_change?: boolean;
   destination_alias?: string;
   destination_avatar?: string;
   risk_details?: RiskDetails;
@@ -117,6 +119,7 @@ export interface CheckoutParams {
   customer_name?: string;
   bank_identifier?: string;
   account_id?: string;
+  allow_payment_source_change?: boolean;
   risk_details?: RiskDetails;
 }
 

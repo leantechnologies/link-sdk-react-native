@@ -76,8 +76,6 @@ class LeanWebClient {
         this.onRedirectResponse({
           ...response,
           status: 'SUCCESS',
-          // Do not change this message text without first aligning with integrating
-          // clients (e.g. OKX) via SEs — they pattern-match on the exact string.
           message: 'Link closed after redirect',
         });
 
