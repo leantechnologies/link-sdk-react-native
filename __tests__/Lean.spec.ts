@@ -238,10 +238,11 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&end_user_id=626715d7-222f-4087-bcce-2832135e4981&show_balances=true&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&destination_alias=Test%20Co.&destination_avatar=https%3A%2F%2Fdev.leantech.me%2Fsuccess.png`;
+      const expectedUrl = `${BASE_URL}&method=pay&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&account_id=8b3b7960-c4a1-41da-8ad0-5df36cf67540&end_user_id=626715d7-222f-4087-bcce-2832135e4981&show_balances=true&allow_payment_source_change=true&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&destination_alias=Test%20Co.&destination_avatar=https%3A%2F%2Fdev.leantech.me%2Fsuccess.png`;
 
       const initializationURL = lean.pay({
         show_balances: true,
+        allow_payment_source_change: true,
         access_token: 'test',
         account_id: '8b3b7960-c4a1-41da-8ad0-5df36cf67540',
         end_user_id: '626715d7-222f-4087-bcce-2832135e4981',
@@ -271,7 +272,7 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=authorizeConsent&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&access_token=test&destination_alias=Test%20Co.&destination_avatar=https%3A%2F%2Fdev.leantech.me%2Fsuccess.png`;
+      const expectedUrl = `${BASE_URL}&method=authorizeConsent&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&consent_id=7ebe7449-fd93-4657-be82-fcc3697262c4&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&access_token=test&allow_payment_source_change=true&destination_alias=Test%20Co.&destination_avatar=https%3A%2F%2Fdev.leantech.me%2Fsuccess.png`;
 
       const initializationURL = lean.authorizeConsent({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
@@ -279,6 +280,7 @@ describe('Lean SDK', () => {
         fail_redirect_url: 'https://dev.leantech.me/fail',
         success_redirect_url: 'https://dev.leantech.me/success',
         access_token: 'test',
+        allow_payment_source_change: true,
         destination_alias: 'Test Co.',
         destination_avatar: 'https://dev.leantech.me/success.png',
       });
@@ -369,7 +371,7 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&customer_name=John%20Doe&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&bank_identifier=LEANMB1_SAU`;
+      const expectedUrl = `${BASE_URL}&method=checkout&payment_intent_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&customer_name=John%20Doe&success_redirect_url=https%3A%2F%2Fdev.leantech.me%2Fsuccess&fail_redirect_url=https%3A%2F%2Fdev.leantech.me%2Ffail&bank_identifier=LEANMB1_SAU&allow_payment_source_change=true`;
 
       const initializationURL = lean.checkout({
         customer_name: 'John Doe',
@@ -378,6 +380,7 @@ describe('Lean SDK', () => {
         success_redirect_url: 'https://dev.leantech.me/success',
         fail_redirect_url: 'https://dev.leantech.me/fail',
         bank_identifier: 'LEANMB1_SAU',
+        allow_payment_source_change: true,
       });
 
       expect(initializationURL).toBe(expectedUrl);
