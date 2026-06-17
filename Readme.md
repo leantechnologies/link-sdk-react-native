@@ -303,6 +303,7 @@ lean.current?.pay({
 | bulk_payment_intent_id | `string`      | False    | Bulk payment intent ID                                                                                         |
 | account_id             | `string`      | False    | Allows you to use a specific account for a customer payment source (available at payment_source.account[n].id) |
 | show_balances          | `boolean`     | False    | Whether to show account balances                                                                               |
+| allow_payment_source_change | `boolean` | False    | Whether to allow the user to change the payment source                                                         |
 | fail_redirect_url      | `string`      | False    | The URI to redirect to after failure                                                                           |
 | success_redirect_url   | `string`      | False    | The URI to redirect to after completion                                                                        |
 | access_token           | `string`      | False    | Access token for authentication                                                                                |
@@ -380,6 +381,9 @@ lean.current?.authorizeConsent({
 | success_redirect_url | `string`      | True     | Redirect URL on success         |
 | fail_redirect_url    | `string`      | True     | Redirect URL on failure         |
 | access_token         | `string`      | False    | Access token for authentication |
+| bank_identifier      | `string`      | False    | Bank identifier to pre-select   |
+| account_id           | `string`      | False    | Specific account to use for the payment source |
+| allow_payment_source_change | `boolean` | False | Whether to allow the user to change the payment source |
 | destination_alias    | `string`      | False    | Alias for the destination       |
 | destination_avatar   | `string`      | False    | Avatar URL for the destination  |
 | risk_details         | `RiskDetails` | False    | Risk assessment details         |
@@ -406,6 +410,8 @@ lean.current?.checkout({
 | access_token         | `string`      | False    | Access token for authentication |
 | customer_name        | `string`      | False    | Customer name                   |
 | bank_identifier      | `string`      | False    | Bank identifier                 |
+| account_id           | `string`      | False    | Specific account to use for the payment source |
+| allow_payment_source_change | `boolean` | False | Whether to allow the user to change the payment source |
 | risk_details         | `RiskDetails` | False    | Risk assessment details         |
 
 ---
@@ -417,6 +423,8 @@ Use manageConsents to manage user consents.
 ```typescript
 lean.current?.manageConsents({
   customer_id: 'CUSTOMER_ID',
+  consent_id: 'CONSENT_ID',
+  consent_type: 'CONSENT_TYPE',
 });
 ```
 
@@ -424,6 +432,8 @@ lean.current?.manageConsents({
 | ------------ | -------- | -------- | ------------------------------- |
 | customer_id  | `string` | True     | The Customer ID                 |
 | access_token | `string` | False    | Access token for authentication |
+| consent_id   | `string` | False    | The Consent ID                  |
+| consent_type | `string` | False    | The Consent type                |
 
 ---
 
