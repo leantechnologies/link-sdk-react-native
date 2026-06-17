@@ -425,11 +425,13 @@ describe('Lean SDK', () => {
     });
 
     it('all params: returns the correct URL', () => {
-      const expectedUrl = `${BASE_URL}&method=manageConsents&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test`;
+      const expectedUrl = `${BASE_URL}&method=manageConsents&customer_id=617207b3-a4d4-4413-ba1b-b8d32efd58a0&access_token=test&consent_id=test-consent-id&consent_type=test-consent-type`;
 
       const initializationURL = lean.manageConsents({
         customer_id: '617207b3-a4d4-4413-ba1b-b8d32efd58a0',
         access_token: 'test',
+        consent_id: 'test-consent-id',
+        consent_type: 'test-consent-type',
       });
 
       expect(initializationURL).toBe(expectedUrl);

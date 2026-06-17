@@ -60,6 +60,7 @@ const Params = {
   DESTINATION_ALIAS: 'destination_alias',
   DESTINATION_AVATAR: 'destination_avatar',
   CONSENT_ID: 'consent_id',
+  CONSENT_TYPE: 'consent_type',
   CONSENT_ATTEMPT_ID: 'consent_attempt_id',
   GRANULAR_STATUS_CODE: 'granular_status_code',
   STATUS_ADDITIONAL_INFO: 'status_additional_info',
@@ -640,7 +641,12 @@ class Lean {
     return url;
   }
 
-  manageConsents({customer_id, access_token}: ManageConsentsParams): string {
+  manageConsents({
+    customer_id,
+    access_token,
+    consent_id,
+    consent_type,
+  }: ManageConsentsParams): string {
     // Start with baseUrl which has proper param order
     let url = this.baseUrl;
 
@@ -652,6 +658,8 @@ class Lean {
     // Add optional params
     this.appendOptionalParams(methodParams, {
       [Params.ACCESS_TOKEN]: access_token,
+      [Params.CONSENT_ID]: consent_id,
+      [Params.CONSENT_TYPE]: consent_type,
     });
 
     url += `&${this.toURLString(methodParams)}`;

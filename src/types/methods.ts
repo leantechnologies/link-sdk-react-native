@@ -126,6 +126,8 @@ export interface CheckoutParams {
 export interface ManageConsentsParams {
   customer_id: string;
   access_token?: string;
+  consent_id?: string;
+  consent_type?: string;
 }
 
 export interface CaptureRedirectParams {
