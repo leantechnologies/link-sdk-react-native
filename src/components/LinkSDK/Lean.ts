@@ -508,6 +508,7 @@ class Lean {
     destination_avatar,
     risk_details,
     bank_identifier,
+    consent_id,
   }: PayParams): string {
     let url = this.baseUrl;
 
@@ -527,6 +528,7 @@ class Lean {
       [Params.DESTINATION_ALIAS]: destination_alias,
       [Params.DESTINATION_AVATAR]: destination_avatar,
       [Params.BANK_IDENTIFIER]: bank_identifier,
+      [Params.CONSENT_ID]: consent_id,
       [Params.RISK_DETAILS]: this.serializeRiskDetails(risk_details),
     });
 

@@ -311,6 +311,7 @@ lean.current?.pay({
 | destination_avatar     | `string`      | False    | Avatar URL for the destination                                                                                 |
 | risk_details           | `RiskDetails` | False    | Risk assessment details for                                                                                    |
 | bank_identifier        | `string`      | False    | Bank identifier to pre-select                                                                                  |
+| consent_id             | `string`      | False    | The Consent ID to use for the payment                                                                          |
 
 ---
 

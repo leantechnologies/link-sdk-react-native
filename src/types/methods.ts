@@ -86,6 +86,7 @@ export interface PayParams {
   destination_avatar?: string;
   risk_details?: RiskDetails;
   bank_identifier?: string;
+  consent_id?: string;
 }
 
 export interface VerifyAddressParams {
