@@ -5,6 +5,11 @@ import {Linking, Modal, Platform} from 'react-native';
 
 const mockInjectJavaScript = jest.fn();
 
+jest.mock('react-native-url-polyfill', () => ({
+  URL: global.URL,
+  URLSearchParams: global.URLSearchParams,
+}));
+
 jest.mock('react-native-webview', () => {
   const {forwardRef, useImperativeHandle, createElement} =
     jest.requireActual<typeof import('react')>('react');
@@ -191,6 +196,10 @@ describe('UaePassSheet', () => {
       true,
     );
     expect(shouldStart({url: 'about:blank'})).toBe(true);
+    expect(shouldStart({url: 'data:text/html,<p>hi</p>'})).toBe(true);
+    expect(shouldStart({url: 'blob:https://idenfo.test/1234'})).toBe(true);
+    // eslint-disable-next-line no-script-url
+    expect(shouldStart({url: 'javascript:void(0)'})).toBe(true);
     expect(shouldStart({url: 'uaepass://digitalid/login'})).toBe(false);
     expect(Linking.openURL).toHaveBeenCalledWith('uaepass://digitalid/login');
   });

@@ -1,5 +1,10 @@
 import {it, describe, expect, jest} from '@jest/globals';
 
+jest.mock('react-native-url-polyfill', () => ({
+  URL: global.URL,
+  URLSearchParams: global.URLSearchParams,
+}));
+
 import UaePass from '../src/components/LinkSDK/UaePass';
 
 const ACTIVATION_URL =
@@ -41,6 +46,12 @@ describe('UaePass', () => {
       expect(
         UaePass.getTargetUrl(request('https://idenfo.test/a?x=50%off&y=%20')),
       ).toBe('https://idenfo.test/a?x=50%25off&y=%20');
+    });
+
+    it('keeps a plus sign in the link', () => {
+      expect(UaePass.getTargetUrl(request('https://idenfo.test/a?q=1+2'))).toBe(
+        'https://idenfo.test/a?q=1+2',
+      );
     });
 
     it('keeps an already valid link unchanged', () => {

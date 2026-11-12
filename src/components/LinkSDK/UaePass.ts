@@ -1,3 +1,5 @@
+import {URL} from 'react-native-url-polyfill';
+
 export type UaePassStatus = 'success' | 'cancelled' | 'failed';
 
 const REQUEST_PATTERN = /^leanlink:\/\/uae_pass\/?(\?|$)/;
@@ -19,16 +21,9 @@ class UaePass {
    * Returns null when the link is missing, malformed or not http(s).
    */
   static getTargetUrl(url: string): string | null {
-    // The URL polyfill does not implement searchParams.get, so parse by hand
-    const query = url.split('?').slice(1).join('?');
-    const param = query.split('&').find(pair => pair.startsWith('url='));
-    if (!param) {
-      return null;
-    }
-
     let target: string;
     try {
-      target = decodeURIComponent(param.slice('url='.length)).trim();
+      target = new URL(url).searchParams.get('url')?.trim() ?? '';
     } catch {
       return null;
     }

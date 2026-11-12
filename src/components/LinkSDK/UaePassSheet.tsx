@@ -144,7 +144,8 @@ const UaePassSheet = ({url, onComplete}: UaePassSheetProps) => {
                 }
               }}
               onShouldStartLoadWithRequest={event => {
-                if (/^(https?|about):/i.test(event.url)) {
+                // Web schemes load in the sheet, frames can navigate to data: and blob: URLs
+                if (/^(https?|about|data|blob|javascript):/i.test(event.url)) {
                   return true;
                 }
                 // App links such as uaepass:// belong to the OS, not the WebView
