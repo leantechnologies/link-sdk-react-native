@@ -2,6 +2,7 @@ import {URL, URLSearchParams} from 'react-native-url-polyfill';
 import {Linking} from 'react-native';
 
 import Logger from './Logger';
+import UaePass from './UaePass';
 import {LeanCallbackResponse, ResponseStatus} from '../../types/sdk';
 
 interface NavigationEvent {
@@ -45,6 +46,7 @@ class LeanWebClient {
   static handleOverrideUrlLoading(
     event: NavigationEvent,
     callback?: (response: LeanCallbackResponse) => void,
+    onUaePassRequest?: (url: string) => void,
   ): boolean {
     Logger.info('handleOverrideUrlLoading', event.url);
 
@@ -59,6 +61,12 @@ class LeanWebClient {
     if (callback) {
       // Set value for response listener
       this.responseListener = callback;
+    }
+
+    // The SDK asks for UAE PASS to open in a sheet over it
+    if (UaePass.isRequest(event.url)) {
+      onUaePassRequest?.(event.url);
+      return false;
     }
 
     const urlObject = new URL(event.url);
