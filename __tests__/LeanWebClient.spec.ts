@@ -1,4 +1,5 @@
 import {it, describe, beforeEach, jest} from '@jest/globals';
+import {Linking} from 'react-native';
 import {LeanCallbackResponse} from '../src/types/sdk';
 
 // Mock the dependencies
@@ -215,6 +216,52 @@ describe('LeanWebClient', () => {
           is_supported: false,
         },
       });
+    });
+
+    it('should hand UAE PASS requests to the delegate without calling back', () => {
+      jest.mocked(Linking.openURL).mockClear();
+      const mockCallback = jest.fn();
+      const onUaePassRequest = jest.fn();
+      const url = 'leanlink://uae_pass?url=https%3A%2F%2Fidenfo.test';
+
+      const result = LeanWebClient.handleOverrideUrlLoading(
+        {url},
+        mockCallback,
+        onUaePassRequest,
+      );
+
+      expect(result).toBe(false);
+      expect(onUaePassRequest).toHaveBeenCalledWith(url);
+      expect(mockCallback).not.toHaveBeenCalled();
+      expect(Linking.openURL).not.toHaveBeenCalled();
+    });
+
+    it('should ignore UAE PASS requests without a delegate', () => {
+      jest.mocked(Linking.openURL).mockClear();
+      const mockCallback = jest.fn();
+
+      const result = LeanWebClient.handleOverrideUrlLoading(
+        {url: 'leanlink://uae_pass?url=x'},
+        mockCallback,
+      );
+
+      expect(result).toBe(false);
+      expect(mockCallback).not.toHaveBeenCalled();
+      expect(Linking.openURL).not.toHaveBeenCalled();
+    });
+
+    it('should not hand regular callbacks to the UAE PASS delegate', () => {
+      const mockCallback = jest.fn();
+      const onUaePassRequest = jest.fn();
+
+      LeanWebClient.handleOverrideUrlLoading(
+        {url: 'leanlink://cancelled?status=CANCELLED'},
+        mockCallback,
+        onUaePassRequest,
+      );
+
+      expect(onUaePassRequest).not.toHaveBeenCalled();
+      expect(mockCallback).toHaveBeenCalled();
     });
   });
 });

@@ -565,6 +565,12 @@ lean.current?.connect({
 
 ---
 
+## UAE PASS
+
+From v4.3.0, the LinkSDK can let users fetch their Emirates ID from UAE PASS instead of typing it. The wrapper opens UAE PASS in a sheet over the LinkSDK and returns the result to it, so no integration changes are needed.
+
+---
+
 ## Troubleshooting
 
 ### Webview crashes on Android

@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useImperativeHandle,
+  useRef,
   useState,
   ForwardedRef,
 } from 'react';
@@ -9,6 +10,9 @@ import {WebView} from 'react-native-webview';
 
 import LeanWebClient from './LeanWebClient';
 import Lean, {Methods} from './Lean';
+import Logger from './Logger';
+import UaePass from './UaePass';
+import UaePassSheet from './UaePassSheet';
 import {LinkSDKProps, LinkSDKRef, LeanCallbackResponse} from '../../types/sdk';
 import {LeanCountry, LeanEnvironment, LeanLanguage} from '../../types';
 
@@ -21,6 +25,37 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
 
     // Dynamically set URL for start SDK methods
     const [initializationURL, setInitializationURL] = useState<string>('');
+
+    // UAE PASS opens in a second WebView over the SDK, which stays mounted underneath
+    const sdkWebView = useRef<WebView>(null);
+    const [uaePassUrl, setUaePassUrl] = useState<string | null>(null);
+    // A ref, so a request fired twice in the same tick is still seen as a duplicate
+    const isUaePassOpen = useRef<boolean>(false);
+
+    const closeUaePass = (): void => {
+      isUaePassOpen.current = false;
+      setUaePassUrl(null);
+    };
+
+    // The SDK waits for exactly one answer per UAE PASS request
+    const answerUaePass = (message: string): void => {
+      closeUaePass();
+      sdkWebView.current?.injectJavaScript(UaePass.buildInjection(message));
+    };
+
+    const handleUaePassRequest = (url: string): void => {
+      if (isUaePassOpen.current) {
+        Logger.info('UAE PASS request ignored, sheet already open', url);
+        return;
+      }
+      const target = UaePass.getTargetUrl(url);
+      if (target) {
+        isUaePassOpen.current = true;
+        setUaePassUrl(target);
+      } else {
+        answerUaePass(UaePass.buildMessage('failed'));
+      }
+    };
 
     const lean = new Lean({
       appToken: props.appToken,
@@ -63,6 +98,7 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
     // The callback fired internally by the SDK to propagate to the user supplied callback and close the webview.
     const responseCallbackHandler = (data: LeanCallbackResponse): void => {
       setTimeout(() => setIsOpen(false), 300);
+      closeUaePass();
       if (props.callback) {
         props.callback(data);
       }
@@ -76,6 +112,7 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
             {paddingBottom: props.customization?.bottom_inset ?? 0},
           ]}>
           <WebView
+            ref={sdkWebView}
             {...props.webViewProps}
             style={styles.webView}
             originWhitelist={['*']}
@@ -87,9 +124,11 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
               LeanWebClient.handleOverrideUrlLoading(
                 event,
                 responseCallbackHandler,
+                handleUaePassRequest,
               )
             }
             onNavigationStateChange={event =>
+              // UAE PASS requests are already handled by onShouldStartLoadWithRequest
               LeanWebClient.handleOverrideUrlLoading(
                 event,
                 responseCallbackHandler,
@@ -102,6 +141,7 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
               return LeanWebClient.handleOverrideUrlLoading(
                 {url: nativeEvent.targetUrl},
                 responseCallbackHandler,
+                handleUaePassRequest,
               );
             }}
             cacheEnabled={false}
@@ -110,6 +150,7 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
             onLoadStart={LeanWebClient.onPageStarted}
             onLoadEnd={LeanWebClient.onPageFinished}
           />
+          <UaePassSheet url={uaePassUrl} onComplete={answerUaePass} />
         </View>
       </Modal>
     );
