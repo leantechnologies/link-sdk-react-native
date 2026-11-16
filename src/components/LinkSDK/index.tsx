@@ -120,6 +120,7 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
             allowsInlineMediaPlayback={true}
             setSupportMultipleWindows={false}
             mediaPlaybackRequiresUserAction={false}
+            mediaCapturePermissionGrantType="grantIfSameHostElsePrompt"
             onShouldStartLoadWithRequest={event =>
               LeanWebClient.handleOverrideUrlLoading(
                 event,
