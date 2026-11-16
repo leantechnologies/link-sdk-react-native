@@ -246,7 +246,7 @@ describe('UaePassSheet', () => {
 
   it('hides the loader on errors and full progress', () => {
     const loaders = () =>
-      tree.root.findAll(node => node.type === 'ActivityIndicator');
+      tree.root.findAll(node => (node.type as string) === 'ActivityIndicator');
     render(URL);
     act(() =>
       webView().props.onError({nativeEvent: {code: -6, canGoBack: true}}),
@@ -261,7 +261,7 @@ describe('UaePassSheet', () => {
   it('shows a loader until the page loads', () => {
     render(URL);
     const loaders = () =>
-      tree.root.findAll(node => node.type === 'ActivityIndicator');
+      tree.root.findAll(node => (node.type as string) === 'ActivityIndicator');
     expect(loaders().length).toBeGreaterThan(0);
     act(() => webView().props.onLoadEnd());
     expect(loaders()).toHaveLength(0);

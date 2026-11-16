@@ -145,7 +145,6 @@ const LinkSDK = forwardRef<LinkSDKRef, LinkSDKProps>(
               );
             }}
             cacheEnabled={false}
-            javaScriptEnabledAndroid={true}
             javaScriptCanOpenWindowsAutomatically
             onLoadStart={LeanWebClient.onPageStarted}
             onLoadEnd={LeanWebClient.onPageFinished}
