@@ -1,7 +1,7 @@
 import React from 'react';
 import {it, describe, beforeEach, afterEach, expect, jest} from '@jest/globals';
 import renderer, {act, ReactTestRenderer} from 'react-test-renderer';
-import {Linking, Modal, Platform} from 'react-native';
+import {ActivityIndicator, Linking, Modal, Platform} from 'react-native';
 
 const mockInjectJavaScript = jest.fn();
 
@@ -245,8 +245,7 @@ describe('UaePassSheet', () => {
   });
 
   it('hides the loader on errors and full progress', () => {
-    const loaders = () =>
-      tree.root.findAll(node => (node.type as string) === 'ActivityIndicator');
+    const loaders = () => tree.root.findAllByType(ActivityIndicator);
     render(URL);
     act(() =>
       webView().props.onError({nativeEvent: {code: -6, canGoBack: true}}),
@@ -260,8 +259,7 @@ describe('UaePassSheet', () => {
 
   it('shows a loader until the page loads', () => {
     render(URL);
-    const loaders = () =>
-      tree.root.findAll(node => (node.type as string) === 'ActivityIndicator');
+    const loaders = () => tree.root.findAllByType(ActivityIndicator);
     expect(loaders().length).toBeGreaterThan(0);
     act(() => webView().props.onLoadEnd());
     expect(loaders()).toHaveLength(0);
