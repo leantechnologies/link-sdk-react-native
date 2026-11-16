@@ -571,6 +571,27 @@ From v4.3.0, the LinkSDK can let users fetch their Emirates ID from UAE PASS ins
 
 ---
 
+## Camera
+
+Some LinkSDK steps can use the camera, for example to scan an Emirates ID instead of typing it. To allow it, declare the camera permission in your app. Without it, the LinkSDK falls back to manual entry.
+
+Android, in `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+iOS, in `Info.plist`:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Scan your Emirates ID instead of typing the number.</string>
+```
+
+The user is asked for camera access the first time a step needs it.
+
+---
+
 ## Troubleshooting
 
 ### Webview crashes on Android
